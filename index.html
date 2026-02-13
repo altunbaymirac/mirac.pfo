@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIRAÇ ALTUNBAY // TACTICAL ARCHIVE</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="overlay"></div>
+    <div class="terminal">
+        <header>
+            <div class="system-meta">
+                [UNIT: AGÜ MECHANICAL ENGINEERING] <br>
+                [OPERATOR: MIRAÇ ALTUNBAY] <br>
+                [STATUS: ACTIVE // MISSION: FLARE_PROJECT]
+            </div>
+            <div id="clock">00:00:00</div>
+        </header>
+
+        <nav>
+            <button onclick="showSection('projects')">[PROJELER]</button>
+            <button onclick="showSection('logs')">[ARŞİV/ŞİİR]</button>
+            <button onclick="showSection('comms')">[TELSIZ]</button>
+        </nav>
+
+        <main id="main-display">
+            <section id="projects" class="content-block">
+                <h3>> MISSION: FLARE (EMERGENCY MESH NETWORK)</h3>
+                <p>Deprem gibi acil durumlarda LoRa altyapısı kullanarak kesintisiz iletişim sağlayan ağ projesi.</p>
+                <p>TECH_STACK: Raspberry Pi Pico, LoRa Mesh, AES-256.</p>
+            </section>
+
+            <section id="logs" class="content-block" style="display:none;">
+                <h3>> DATA LOGS & POETRY</h3>
+                <p>// Obsidian notları ve kişisel şiirler buraya aktarılacak.</p>
+            </section>
+
+            <section id="comms" class="content-block" style="display:none;">
+                <h3>> COMMS CHANNEL [UNSECURED]</h3>
+                <div id="comms-log"></div>
+                <div class="input-group">
+                    <input type="text" id="callsign" placeholder="CALLSIGN">
+                    <input type="text" id="signal" placeholder="SIGNAL...">
+                    <button onclick="sendSignal()">SEND</button>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
