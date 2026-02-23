@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MIRAÇ ALTUNBAY</title>
+    <title>MİRAÇ ALTUNBAY</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,7 +12,7 @@
         <header>
             <div class="system-meta">
                 [UNIT: AGU MECHANICAL ENGINEERING] <br>
-                [OPERATOR: MIRAÇ ALTUNBAY] <br>
+                [OPERATOR: MİRAÇ ALTUNBAY] <br>
                 [STATUS: ACTIVE ]
             </div>
             <div id="clock">00:00:00</div>
@@ -27,7 +27,6 @@
         <main id="main-display">
             <section id="projects" class="content-block">
                 
-                <!-- FLARE PROJESİ -->
                 <div class="project-card">
                     <h3>> MISSION: FLARE (EMERGENCY MESH NETWORK)</h3>
                     <p>Deprem gibi acil durumlarda LoRa altyapısı kullanarak kesintisiz iletişim sağlayan ağ projesi.</p>
@@ -42,7 +41,6 @@
                     </div>
                 </div>
 
-                <!-- DCE-SOFC HİBRİT SİSTEM -->
                 <div class="project-card featured">
                     <h3>> MISSION: DCE-SOFC HYBRID PROPULSION</h3>
                     <p>Amonyak yakıtlı hibrit deniz tahrik sistemi. Doğrudan Kimyasal Genleşme (DCE) motoru + SOFC yakıt pili entegrasyonu.</p>
@@ -65,12 +63,16 @@
             </section>
 
             <section id="logs" class="content-block" style="display:none;">
-                <h3>> DATA LOGS</h3>
+                <h3>> ARŞİV</h3>
                 <p>// Obsidian notları ve kişisel şiirler buraya aktarılacak.</p>
             </section>
 
             <section id="comms" class="content-block" style="display:none;">
                 <h3>> COMMS CHANNEL [UNSECURED]</h3>
+                
+                <div id="connection-status" class="disconnected">DISCONNECTED</div>
+                <div id="online-count" style="font-size: 10px; color: var(--text-dim); margin-bottom: 10px;">0 OPERATORS ONLINE</div>
+                
                 <div id="comms-log"></div>
                 <div class="input-group">
                     <input type="text" id="callsign" placeholder="CALLSIGN">
@@ -80,6 +82,10 @@
             </section>
         </main>
     </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    
     <script src="script.js"></script>
 </body>
 </html>
