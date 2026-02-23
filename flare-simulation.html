@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FLARE MESH SIMULATOR | MIRAÇ ALTUNBAY</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="flare-simulation.css">
+</head>
+<body>
+    <div class="overlay"></div>
+    <div class="terminal flare-terminal">
+        <header>
+            <div class="system-meta">
+                [SYSTEM: FLARE EMERGENCY MESH NETWORK] <br>
+                [UNIT: AGU MECHANICAL ENGINEERING] <br>
+                [STATUS: <span id="system-status">STANDBY</span>]
+            </div>
+            <div class="header-right">
+                <div id="clock">00:00:00</div>
+                <a href="index.html" class="back-btn">[← ANA SAYFA]</a>
+            </div>
+        </header>
+
+        <!-- SCENARIO BAR -->
+        <div class="scenario-bar">
+            <div class="scenario-info">
+                <span class="scenario-label">SENARYO:</span>
+                <span id="scenario-name" class="scenario-name">NORMAL OPERASYON</span>
+            </div>
+            <div class="scenario-buttons">
+                <button class="scenario-btn active" onclick="setScenario('normal')">
+                    [📶 NORMAL]
+                </button>
+                <button class="scenario-btn danger" onclick="setScenario('earthquake')">
+                    [🔴 DEPREM - GSM ÇÖKTÜ]
+                </button>
+                <button class="scenario-btn" onclick="setScenario('flood')">
+                    [🌊 SEL]
+                </button>
+            </div>
+            <div class="network-status">
+                <span class="status-item">
+                    <span class="status-dot" id="gsm-dot"></span>
+                    GSM: <span id="gsm-status">ONLINE</span>
+                </span>
+                <span class="status-item">
+                    <span class="status-dot active" id="mesh-dot"></span>
+                    MESH: <span id="mesh-status">AKTIF</span>
+                </span>
+            </div>
+        </div>
+
+        <!-- MAIN GRID -->
+        <main class="flare-grid">
+            
+            <!-- LEFT: CONTROLS -->
+            <section class="panel controls-panel">
+                <h3>> KONTROL PANELİ</h3>
+                
+                <!-- LoRa Parameters -->
+                <div class="param-section">
+                    <h4>// LORA PARAMETRELERİ</h4>
+                    
+                    <div class="control-group">
+                        <label>SPREADING FACTOR (SF)</label>
+                        <div class="btn-row">
+                            <button class="param-btn" onclick="setParam('sf', 7)">7</button>
+                            <button class="param-btn" onclick="setParam('sf', 9)">9</button>
+                            <button class="param-btn active" onclick="setParam('sf', 10)">10</button>
+                            <button class="param-btn" onclick="setParam('sf', 12)">12</button>
+                        </div>
+                        <span class="param-info">SF↑ = Menzil↑, Hız↓</span>
+                    </div>
+
+                    <div class="control-group">
+                        <label>BANDWIDTH (kHz)</label>
+                        <div class="btn-row">
+                            <button class="param-btn" onclick="setParam('bw', 125)">125</button>
+                            <button class="param-btn active" onclick="setParam('bw', 250)">250</button>
+                            <button class="param-btn" onclick="setParam('bw', 500)">500</button>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label>TX POWER (dBm)</label>
+                        <div class="slider-container">
+                            <input type="range" id="tx-power" min="2" max="20" value="14">
+                            <span class="slider-value" id="tx-power-val">14 dBm</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Node Actions -->
+                <div class="param-section">
+                    <h4>// NODE İŞLEMLERİ</h4>
+                    
+                    <button class="action-btn" onclick="addNode()">
+                        [+ NODE EKLE]
+                    </button>
+                    
+                    <button class="action-btn danger" onclick="toggleNodeMode()">
+                        <span id="node-mode-text">[🔴 NODE KAPAT MODU]</span>
+                    </button>
+                    
+                    <button class="action-btn" onclick="resetNetwork()">
+                        [↺ AĞI SIFIRLA]
+                    </button>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="stats-section">
+                    <h4>// AĞ İSTATİSTİKLERİ</h4>
+                    <div class="stat-row">
+                        <span>AKTİF NODE:</span>
+                        <span id="stat-nodes" class="stat-value">0/0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>ORTALAMA HOP:</span>
+                        <span id="stat-hops" class="stat-value">0.0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>AĞ KAPSAMI:</span>
+                        <span id="stat-coverage" class="stat-value">0%</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>MESAJ TESLİM:</span>
+                        <span id="stat-delivery" class="stat-value">0%</span>
+                    </div>
+                </div>
+
+                <!-- Info -->
+                <div class="info-box">
+                    <span class="info-label">// FLARE NEDİR?</span>
+                    <p>Afet durumlarında GSM altyapısı çöktüğünde LoRa tabanlı mesh ağ ile haberleşme sağlar.</p>
+                    <p>Her node hem alıcı hem verici görevi görür.</p>
+                </div>
+            </section>
+
+            <!-- CENTER: NETWORK MAP -->
+            <section class="panel map-panel">
+                <h3>> AĞ TOPOLOJİSİ <span id="map-mode-indicator"></span></h3>
+                <div class="map-container">
+                    <canvas id="network-canvas"></canvas>
+                    <!-- Mesaj gönderme overlay -->
+                    <div id="message-overlay" class="message-overlay" style="display:none;">
+                        <div class="message-popup">
+                            <h4>[📡 MESAJ GÖNDER]</h4>
+                            <input type="text" id="msg-input" placeholder="ACİL MESAJINIZI YAZIN..." maxlength="100">
+                            <div class="popup-buttons">
+                                <button onclick="sendMessage()">[GÖNDER]</button>
+                                <button onclick="closeMessagePopup()">[İPTAL]</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="map-legend">
+                    <span class="legend-item"><span class="legend-dot node-active"></span> AKTİF NODE</span>
+                    <span class="legend-item"><span class="legend-dot node-inactive"></span> DEVRE DIŞI</span>
+                    <span class="legend-item"><span class="legend-dot node-survivor"></span> KURBAN/KULLANICI</span>
+                    <span class="legend-item"><span class="legend-line"></span> BAĞLANTI</span>
+                </div>
+                <div class="map-instructions">
+                    // TIKLA: Node seç | ÇİFT TIKLA: Mesaj gönder | SÜRÜKLE: Taşı
+                </div>
+            </section>
+
+            <!-- RIGHT: LOGS & METRICS -->
+            <section class="panel logs-panel">
+                <h3>> İLETİŞİM LOGLARI</h3>
+                
+                <!-- Message propagation visualization -->
+                <div class="propagation-display">
+                    <div class="prop-header">
+                        <span>SON MESAJ YAYILIMI</span>
+                        <span id="prop-progress">0%</span>
+                    </div>
+                    <div class="prop-bar">
+                        <div class="prop-fill" id="prop-fill"></div>
+                    </div>
+                    <div class="prop-stats">
+                        <span>HOP: <span id="prop-hops">-</span></span>
+                        <span>SÜRE: <span id="prop-time">-</span></span>
+                        <span>ULAŞAN: <span id="prop-reached">-</span></span>
+                    </div>
+                </div>
+
+                <!-- Log display -->
+                <div id="log-display" class="log-display">
+                    <div class="log-entry system">[SYSTEM] FLARE Mesh Simulator başlatıldı...</div>
+                    <div class="log-entry system">[SYSTEM] Node eklemek için sol paneli kullanın.</div>
+                </div>
+
+                <!-- Selected node info -->
+                <div class="node-info-panel" id="node-info" style="display:none;">
+                    <h4>> SEÇİLİ NODE: <span id="selected-node-id">-</span></h4>
+                    <div class="node-stats">
+                        <div class="node-stat">
+                            <span class="label">RSSI</span>
+                            <span class="value" id="node-rssi">-</span>
+                        </div>
+                        <div class="node-stat">
+                            <span class="label">SNR</span>
+                            <span class="value" id="node-snr">-</span>
+                        </div>
+                        <div class="node-stat">
+                            <span class="label">BAĞLANTI</span>
+                            <span class="value" id="node-connections">-</span>
+                        </div>
+                        <div class="node-stat">
+                            <span class="label">MESAJ</span>
+                            <span class="value" id="node-messages">-</span>
+                        </div>
+                    </div>
+                    <div class="node-actions">
+                        <button onclick="sendFromSelected()">[📡 MESAJ GÖNDER]</button>
+                        <button onclick="toggleSelectedNode()">[🔴 DEVRE DIŞI]</button>
+                    </div>
+                </div>
+
+                <!-- RSSI Scale -->
+                <div class="rssi-scale">
+                    <h4>// SİNYAL KALİTESİ (RSSI)</h4>
+                    <div class="scale-bar">
+                        <div class="scale-section excellent">-50</div>
+                        <div class="scale-section good">-70</div>
+                        <div class="scale-section fair">-90</div>
+                        <div class="scale-section weak">-110</div>
+                        <div class="scale-section none">-130</div>
+                    </div>
+                    <div class="scale-labels">
+                        <span>MÜKEMMEl</span>
+                        <span>ZAYIF</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="flare-footer">
+            <span>[AGÜ MAKİNE MÜHENDİSLİĞİ]</span>
+            <span>[FLARE EMERGENCY MESH NETWORK]</span>
+            <span>[v1.0 TACTICAL SIMULATOR]</span>
+        </footer>
+    </div>
+
+    <script src="flare-simulation.js"></script>
+</body>
+</html>

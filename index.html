@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MİRAÇ ALTUNBAY</title>
+    <meta name="description" content="Miraç Altunbay - AGÜ Makine Mühendisliği öğrencisi. FLARE, DCE-SOFC ve diğer projeler.">
+    <title>MIRAÇ ALTUNBAY</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,14 +13,14 @@
         <header>
             <div class="system-meta">
                 [UNIT: AGU MECHANICAL ENGINEERING] <br>
-                [OPERATOR: MİRAÇ ALTUNBAY] <br>
-                [STATUS: ACTIVE ]
+                [OPERATOR: MIRAÇ ALTUNBAY] <br>
+                [STATUS: <span class="status-active">ACTIVE</span>]
             </div>
             <div id="clock">00:00:00</div>
         </header>
 
         <nav>
-            <button onclick="showSection('operator')">[OPERATOR]</button>
+            <button onclick="showSection('about')">[OPERATOR]</button>
             <button onclick="showSection('projects')">[PROJELER]</button>
             <button onclick="showSection('logs')">[ARŞİV]</button>
             <button onclick="showSection('comms')">[TELSİZ]</button>
@@ -27,88 +28,198 @@
 
         <main id="main-display">
             
-            <section id="operator" class="content-block" style="display:none;">
-                <h3>> OPERATOR PROFILE: MİRAÇ ALTUNBAY</h3>
-                <div class="project-card" style="border-color: var(--cyan);">
-                    <p><strong>[SYSTEM LOG]</strong></p>
-                    
-                    <div style="margin-top: 20px; border-left: 2px solid var(--cyan); padding-left: 10px;">
-                        <p><span style="color: var(--text-dim);">// Konum:</span> Kayseri / AGÜ</p>
-                        <p><span style="color: var(--text-dim);">// Sınıf:</span> Makine Mühendisliği </p>
-                        <p><span style="color: var(--text-dim);">// Hakkında: </span> </p>
+            <!-- ABOUT / OPERATOR -->
+            <section id="about" class="content-block">
+                <h3>> OPERATOR PROFILE: MIRAÇ ALTUNBAY</h3>
+                
+                <div class="profile-grid">
+                    <div class="profile-info">
+                        <div class="info-row">
+                            <span class="info-label">KONUM:</span>
+                            <span class="info-value">Kayseri / AGÜ</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">BÖLÜM:</span>
+                            <span class="info-value">Makine Mühendisliği (1. Sınıf)</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">DURUM:</span>
+                            <span class="info-value status-active">Aktif</span>
+                        </div>
                     </div>
+                    
+                    <div class="profile-bio">
+                        <p>// Mühendislik ve yazılım arasında köprü kuran bir maker.</p>
+                        <p>// "Anything that moves with an engine"</p>
+                    </div>
+                </div>
 
-                    <h4 style="color: var(--neon-green); margin-top: 20px;">> BACKGROUND PROCESSES</h4>
-                    <div class="tech-stack">
-                        <span class="tech-tag" style="border-color: var(--alert-orange); color: var(--alert-orange);">İlgi alanları</span>
-                        <span class="tech-tag" style="border-color: #ff00ff; color: #ff00ff;">Havacılık ve Roketler </span>
-                        <span class="tech-tag" style="border-color: #00ff88; color: #00ff88;">"Anything that moves with an engine"</span>
-                        <span class="tech-tag" style="border-color: #ffee00; color: #ffee00;">Bilim Kurgu </span>
-                        <span class="tech-tag" style="border-color: #00aaff; color: #00aaff;">Yazılım </span>
+                <div class="skills-section">
+                    <h4>> TECH_STACK</h4>
+                    <div class="skills-grid">
+                        <div class="skill-category">
+                            <span class="category-label">// SOFTWARE</span>
+                            <div class="skill-tags">
+                                <span class="skill-tag">React Native</span>
+                                <span class="skill-tag">Firebase</span>
+                                <span class="skill-tag">Python-Java</span>
+                            </div>
+                        </div>
+                        <div class="skill-category">
+                            <span class="category-label">// HARDWARE</span>
+                            <div class="skill-tags">
+                                <span class="skill-tag">ESP32</span>
+                                <span class="skill-tag">LoRa</span>
+                            </div>
+                        </div>
+                        <div class="skill-category">
+                            <span class="category-label">// INTERESTS</span>
+                            <div class="skill-tags">
+                                <span class="skill-tag">Havacılık</span>
+                                <span class="skill-tag">Roketler</span>
+                                <span class="skill-tag">Bilim Kurgu</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="social-links">
+                    <h4>> EXTERNAL_LINKS</h4>
+                    <div class="links-row">
+                        <a href="https://github.com/miracaltunbay" target="_blank" class="social-btn">[GITHUB]</a>
+                        <a href="https://linkedin.com/in/miracaltunbay" target="_blank" class="social-btn">[LINKEDIN]</a>
+                        <a href="mailto:altunbaymirac544@gmail.com" class="social-btn">[EMAIL]</a>
                     </div>
                 </div>
             </section>
 
-            <section id="projects" class="content-block">
+            <!-- PROJECTS -->
+            <section id="projects" class="content-block" style="display:none;">
+                <h3>> ACTIVE MISSIONS</h3>
                 
-                <div class="project-card">
-                    <h3>> MISSION: FLARE (EMERGENCY MESH NETWORK)</h3>
-                    <p>Deprem gibi acil durumlarda LoRa altyapısı kullanarak kesintisiz iletişim sağlayan ağ projesi.</p>
+                <!-- FLARE -->
+                <div class="project-card featured">
+                    <div class="project-badge">★ PRIORITY</div>
+                    <h4>> MISSION: FLARE</h4>
+                    <p class="project-subtitle">Emergency Mesh Network System</p>
+                    <p class="project-desc">Deprem gibi acil durumlarda GSM altyapısı çöktüğünde LoRa tabanlı mesh ağ ile kesintisiz iletişim sağlayan sistem.</p>
+                    
                     <div class="tech-stack">
                         <span class="tech-tag">LoRa</span>
                         <span class="tech-tag">ESP32</span>
                         <span class="tech-tag">Mesh Network</span>
+                        <span class="tech-tag">Emergency Comms</span>
                     </div>
+                    
+                    <div class="project-meta">
+                        // Her node hem alıcı hem verici → Tek bir baz istasyonuna bağımlılık yok
+                    </div>
+                    
+                    <a href="flare-simulation.html" class="project-link">[📡 MESH SİMÜLATÖRÜ AÇ]</a>
+                    
                     <div class="project-status">
                         <span class="status-indicator active"></span>
                         <span>IN DEVELOPMENT</span>
                     </div>
                 </div>
 
-                <div class="project-card featured">
-                    <h3>> MISSION: DCE-SOFC HYBRID PROPULSION</h3>
-                    <p>Amonyak yakıtlı hibrit deniz tahrik sistemi. Doğrudan Kimyasal Genleşme (DCE) motoru + SOFC yakıt pili entegrasyonu.</p>
+                <!-- DCE-SOFC -->
+                <div class="project-card">
+                    <h4>> MISSION: DCE-SOFC HYBRID PROPULSION</h4>
+                    <p class="project-subtitle">Ammonia-Fueled Marine Engine</p>
+                    <p class="project-desc">Amonyak yakıtlı hibrit deniz tahrik sistemi. Doğrudan Kimyasal Genleşme (DCE) motoru + SOFC yakıt pili entegrasyonu.</p>
+                    
                     <div class="tech-stack">
                         <span class="tech-tag">NH₃ Fuel</span>
                         <span class="tech-tag">SOFC</span>
                         <span class="tech-tag">Digital Twin</span>
                         <span class="tech-tag">IMO Compliant</span>
                     </div>
+                    
                     <div class="project-meta">
-                        <span>// 2NH₃ → N₂ + 3H₂ (YANMA YOK)</span>
+                        // 2NH₃ → N₂ + 3H₂ | Molar genleşme ile güç üretimi (YANMA YOK)
                     </div>
-                    <a href="dce-simulation.html" class="project-link">[▶ SİMÜLASYONU BAŞLAT]</a>
+                    
+                    <a href="dce-simulation.html" class="project-link">[⚡ DİJİTAL İKİZ SİMÜLASYONU]</a>
+                    
                     <div class="project-status">
                         <span class="status-indicator active"></span>
-                        <span>SIMULATION READY</span>
+                        <span>TTO PRESENTATION READY</span>
                     </div>
                 </div>
 
+                <!-- Future Projects Placeholder -->
+                <div class="project-card inactive">
+                    <h4>> MISSION: [CLASSIFIED]</h4>
+                    <p class="project-desc">// Yeni proje geliştirme aşamasında...</p>
+                    <div class="project-status">
+                        <span class="status-indicator"></span>
+                        <span>PENDING</span>
+                    </div>
+                </div>
             </section>
 
+            <!-- ARCHIVE / LOGS -->
             <section id="logs" class="content-block" style="display:none;">
-                <h3>> ARŞİV</h3>
-                <p>// Under Construction.</p>
+                <h3>> DATA LOGS / ARŞİV</h3>
+                
+                <div class="archive-notice">
+                    <p>// Bu bölüm yapım aşamasında.</p>
+                    <p>// Obsidian notları, teknik yazılar ve kişisel içerikler yakında eklenecek.</p>
+                </div>
+                
+                <div class="archive-categories">
+                    <div class="archive-cat">
+                        <span class="cat-icon">[📝]</span>
+                        <span class="cat-label">Teknik Notlar</span>
+                        <span class="cat-count">COMING SOON</span>
+                    </div>
+                    <div class="archive-cat">
+                        <span class="cat-icon">[🔬]</span>
+                        <span class="cat-label">Araştırmalar</span>
+                        <span class="cat-count">COMING SOON</span>
+                    </div>
+                    <div class="archive-cat">
+                        <span class="cat-icon">[✍️]</span>
+                        <span class="cat-label">Kişisel</span>
+                        <span class="cat-count">COMING SOON</span>
+                    </div>
+                </div>
             </section>
 
+            <!-- COMMS / RADIO -->
             <section id="comms" class="content-block" style="display:none;">
-                <h3>> COMMS CHANNEL [UNSECURED]</h3>
-                
-                <div id="connection-status" class="disconnected">DISCONNECTED</div>
-                <div id="online-count" style="font-size: 10px; color: var(--text-dim); margin-bottom: 10px;">0 OPERATORS ONLINE</div>
-                
+                <h3>> COMMS CHANNEL [LIVE]</h3>
+                <div class="comms-header">
+                    <span class="live-indicator">
+                        <span class="live-dot"></span>
+                        LIVE FEED
+                    </span>
+                    <span id="online-count">0 OPERATORS ONLINE</span>
+                </div>
                 <div id="comms-log"></div>
                 <div class="input-group">
-                    <input type="text" id="callsign" placeholder="CALLSIGN">
-                    <input type="text" id="signal" placeholder="SIGNAL...">
-                    <button onclick="sendSignal()">SEND</button>
+                    <input type="text" id="callsign" placeholder="CALLSIGN" maxlength="20">
+                    <input type="text" id="signal" placeholder="SIGNAL..." maxlength="500" onkeypress="handleEnter(event)">
+                    <button onclick="sendSignal()">[TX]</button>
+                </div>
+                <div class="comms-footer">
+                    <span>// TÜM İLETİŞİMLER KAYIT ALTINDADIR</span>
+                    <span id="connection-status">◉ CONNECTING...</span>
                 </div>
             </section>
         </main>
+
+        <footer class="terminal-footer">
+            <span>© 2025 MIRAÇ ALTUNBAY</span>
+            <span>[AGÜ MAKİNE MÜHENDİSLİĞİ]</span>
+            <span class="version">v2.1</span>
+        </footer>
     </div>
 
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     
     <script src="script.js"></script>
 </body>
