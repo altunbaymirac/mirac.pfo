@@ -8,7 +8,7 @@
 // ─────────────────────────────────────────────────────────────────────────────────
 
 const firebaseConfig = {
-    apiKey:,
+    apiKey: "AIzaSyDXZtq63Ef1YUkZHuG78UKlTVCs53FBJvY",
     authDomain: "chat-mirac.firebaseapp.com",
     databaseURL: "https://chat-mirac-default-rtdb.europe-west1.firebasedatabase.app",
     projectId: "chat-mirac",
