@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MIRAÇ ALTUNBAY </title>
+    <title>MIRAÇ ALTUNBAY</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -21,18 +21,51 @@
         <nav>
             <button onclick="showSection('projects')">[PROJELER]</button>
             <button onclick="showSection('logs')">[ARŞİV]</button>
-            <button onclick="showSection('comms')">[TELSIZ]</button>
+            <button onclick="showSection('comms')">[TELSİZ]</button>
         </nav>
 
         <main id="main-display">
             <section id="projects" class="content-block">
-                <h3>> MISSION: FLARE (EMERGENCY MESH NETWORK)</h3>
-                <p>Deprem gibi acil durumlarda LoRa altyapısı kullanarak kesintisiz iletişim sağlayan ağ projesi.</p>
-                <p>TECH_STACK:.</p>
+                
+                <!-- FLARE PROJESİ -->
+                <div class="project-card">
+                    <h3>> MISSION: FLARE (EMERGENCY MESH NETWORK)</h3>
+                    <p>Deprem gibi acil durumlarda LoRa altyapısı kullanarak kesintisiz iletişim sağlayan ağ projesi.</p>
+                    <div class="tech-stack">
+                        <span class="tech-tag">LoRa</span>
+                        <span class="tech-tag">ESP32</span>
+                        <span class="tech-tag">Mesh Network</span>
+                    </div>
+                    <div class="project-status">
+                        <span class="status-indicator active"></span>
+                        <span>IN DEVELOPMENT</span>
+                    </div>
+                </div>
+
+                <!-- DCE-SOFC HİBRİT SİSTEM -->
+                <div class="project-card featured">
+                    <h3>> MISSION: DCE-SOFC HYBRID PROPULSION</h3>
+                    <p>Amonyak yakıtlı hibrit deniz tahrik sistemi. Doğrudan Kimyasal Genleşme (DCE) motoru + SOFC yakıt pili entegrasyonu.</p>
+                    <div class="tech-stack">
+                        <span class="tech-tag">NH₃ Fuel</span>
+                        <span class="tech-tag">SOFC</span>
+                        <span class="tech-tag">Digital Twin</span>
+                        <span class="tech-tag">IMO Compliant</span>
+                    </div>
+                    <div class="project-meta">
+                        <span>// 2NH₃ → N₂ + 3H₂ (YANMA YOK)</span>
+                    </div>
+                    <a href="dce-simulation.html" class="project-link">[▶ SİMÜLASYONU BAŞLAT]</a>
+                    <div class="project-status">
+                        <span class="status-indicator active"></span>
+                        <span>SIMULATION READY</span>
+                    </div>
+                </div>
+
             </section>
 
             <section id="logs" class="content-block" style="display:none;">
-                <h3>> DATA LOGS </h3>
+                <h3>> DATA LOGS</h3>
                 <p>// Obsidian notları ve kişisel şiirler buraya aktarılacak.</p>
             </section>
 

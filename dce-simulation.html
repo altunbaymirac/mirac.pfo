@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DCE-SOFC HİBRİT SİSTEM | MIRAÇ ALTUNBAY</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dce-simulation.css">
+</head>
+<body>
+    <div class="overlay"></div>
+    <div class="terminal dce-terminal">
+        <header>
+            <div class="system-meta">
+                [SYSTEM: DCE-SOFC HYBRID PROPULSION] <br>
+                [UNIT: AGU MECHANICAL ENGINEERING] <br>
+                [STATUS: <span id="system-status">STANDBY</span>]
+            </div>
+            <div class="header-right">
+                <div id="clock">00:00:00</div>
+                <a href="index.html" class="back-btn">[← ANA SAYFA]</a>
+            </div>
+        </header>
+
+        <!-- CONTROL BAR -->
+        <div class="control-bar">
+            <button id="btn-start" class="ctrl-btn primary" onclick="toggleSystem()">
+                [▶ SİSTEMİ BAŞLAT]
+            </button>
+            <button class="ctrl-btn" onclick="resetSystem()">[↺ RESET]</button>
+            <div class="status-leds">
+                <span class="led" id="led-sofc" title="SOFC">SOFC</span>
+                <span class="led" id="led-reactor" title="REAKTÖR">RXN</span>
+                <span class="led" id="led-motor" title="MOTOR">MTR</span>
+                <span class="led" id="led-battery" title="BATARYA">BAT</span>
+            </div>
+        </div>
+
+        <!-- MAIN 3-COLUMN GRID -->
+        <main class="dce-grid">
+            
+            <!-- LEFT: CONTROLS -->
+            <section class="panel controls-panel">
+                <h3>> KONTROL PANELİ</h3>
+                
+                <div class="control-group">
+                    <label>MOTOR YÜKÜ</label>
+                    <div class="slider-container">
+                        <input type="range" id="motor-load" min="0" max="100" value="75">
+                        <span class="slider-value" id="motor-load-val">75%</span>
+                    </div>
+                    <div class="slider-ticks">
+                        <span>0</span><span>25</span><span>50</span><span>75</span><span>100</span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label>REZİDANS SÜRESİ (τ)</label>
+                    <div class="slider-container">
+                        <input type="range" id="residence-time" min="5" max="50" value="25">
+                        <span class="slider-value" id="residence-time-val">2.5s</span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label>SICAKLIK HEDEFİ</label>
+                    <div class="slider-container">
+                        <input type="range" id="target-temp" min="400" max="850" value="700">
+                        <span class="slider-value" id="target-temp-val">700°C</span>
+                    </div>
+                    <div class="slider-ticks">
+                        <span>400</span><span>600</span><span>800</span>
+                    </div>
+                </div>
+
+                <div class="switch-group">
+                    <label>SOFC YAKIT PİLİ</label>
+                    <button id="sw-sofc" class="switch-btn active" onclick="toggleSwitch('sofc')">
+                        <span class="sw-status">ON</span>
+                        <span class="sw-indicator"></span>
+                    </button>
+                </div>
+
+                <div class="switch-group">
+                    <label>ATIK ISI GERİ KAZANIMI</label>
+                    <button id="sw-whr" class="switch-btn active" onclick="toggleSwitch('whr')">
+                        <span class="sw-status">ON</span>
+                        <span class="sw-indicator"></span>
+                    </button>
+                </div>
+
+                <div class="control-group">
+                    <label>KATALİZÖR TİPİ</label>
+                    <div class="btn-group">
+                        <button id="cat-Ru" class="cat-btn active" onclick="setCatalyst('Ru')">Ru</button>
+                        <button id="cat-Ni" class="cat-btn" onclick="setCatalyst('Ni')">Ni</button>
+                    </div>
+                    <div class="catalyst-info" id="catalyst-info">Eₐ = 80 kJ/mol</div>
+                </div>
+
+                <div class="info-box">
+                    <span class="info-label">// SİSTEM BİLGİSİ</span>
+                    <p>2NH₃ → N₂ + 3H₂</p>
+                    <p>MOLAR GENİŞLEME: 2x</p>
+                    <p>YANMA: YOK</p>
+                </div>
+            </section>
+
+            <!-- CENTER: P&ID DIAGRAM -->
+            <section class="panel pid-panel">
+                <h3>> P&ID AKIŞ DİYAGRAMI</h3>
+                <div class="pid-container">
+                    <svg id="pid-svg" viewBox="0 0 600 400">
+                        <!-- Grid background -->
+                        <defs>
+                            <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                                <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#1a1a00" stroke-width="0.5"/>
+                            </pattern>
+                            <!-- Flow animation -->
+                            <linearGradient id="flowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#d1ff00;stop-opacity:0"/>
+                                <stop offset="50%" style="stop-color:#d1ff00;stop-opacity:1"/>
+                                <stop offset="100%" style="stop-color:#d1ff00;stop-opacity:0"/>
+                            </linearGradient>
+                        </defs>
+                        <rect width="600" height="400" fill="url(#grid)"/>
+                        
+                        <!-- PIPES (Flow Lines) -->
+                        <!-- NH3 Tank → Reactor -->
+                        <path id="pipe-nh3" class="pipe" d="M 80 200 L 150 200 L 150 200 L 200 200"/>
+                        <path id="flow-nh3" class="flow-line" d="M 80 200 L 150 200 L 150 200 L 200 200"/>
+                        
+                        <!-- SOFC Heat → Reactor -->
+                        <path id="pipe-heat" class="pipe heat" d="M 300 100 L 300 140 L 260 140 L 260 170"/>
+                        <path id="flow-heat" class="flow-line heat" d="M 300 100 L 300 140 L 260 140 L 260 170"/>
+                        
+                        <!-- Reactor → Motor -->
+                        <path id="pipe-product" class="pipe product" d="M 300 280 L 300 320 L 420 320 L 420 280"/>
+                        <path id="flow-product" class="flow-line product" d="M 300 280 L 300 320 L 420 320 L 420 280"/>
+                        
+                        <!-- Motor → Output -->
+                        <path id="pipe-output" class="pipe output" d="M 470 230 L 550 230"/>
+                        <path id="flow-output" class="flow-line output" d="M 470 230 L 550 230"/>
+                        
+                        <!-- SOFC → Battery -->
+                        <path id="pipe-electric" class="pipe electric" d="M 350 70 L 450 70 L 450 130"/>
+                        <path id="flow-electric" class="flow-line electric" d="M 350 70 L 450 70 L 450 130"/>
+
+                        <!-- NH3 TANK -->
+                        <g id="tank-nh3" class="equipment">
+                            <rect x="30" y="160" width="50" height="80" fill="#0a0a00" stroke="#333300"/>
+                            <rect id="tank-level" x="33" y="200" width="44" height="37" fill="#00aaff" opacity="0.6"/>
+                            <ellipse cx="55" cy="160" rx="25" ry="8" fill="#111100" stroke="#333300"/>
+                            <ellipse cx="55" cy="240" rx="25" ry="8" fill="#111100" stroke="#333300"/>
+                            <text x="55" y="250" class="equip-label">TK-101</text>
+                            <text x="55" y="195" class="equip-value" id="tank-percent">85%</text>
+                        </g>
+
+                        <!-- SOFC STACK -->
+                        <g id="sofc-unit" class="equipment">
+                            <rect x="250" y="30" width="100" height="70" fill="#0a0a00" stroke="#333300"/>
+                            <!-- Cell layers -->
+                            <rect x="258" y="40" width="84" height="8" fill="#1a1a00" class="sofc-cell"/>
+                            <rect x="258" y="52" width="84" height="8" fill="#1a1a00" class="sofc-cell"/>
+                            <rect x="258" y="64" width="84" height="8" fill="#1a1a00" class="sofc-cell"/>
+                            <rect x="258" y="76" width="84" height="8" fill="#1a1a00" class="sofc-cell"/>
+                            <!-- Glow overlay -->
+                            <rect id="sofc-glow" x="258" y="40" width="84" height="44" fill="#ffaa00" opacity="0"/>
+                            <text x="300" y="20" class="equip-label">SOFC-101</text>
+                            <text x="300" y="58" class="equip-value" id="sofc-power">0 kW</text>
+                            <text x="300" y="72" class="equip-sub" id="sofc-temp">25°C</text>
+                        </g>
+
+                        <!-- REACTOR -->
+                        <g id="reactor-unit" class="equipment">
+                            <rect x="220" y="170" width="120" height="110" fill="#0a0a00" stroke="#333300" stroke-width="2"/>
+                            <!-- Catalyst bed pattern -->
+                            <rect x="230" y="185" width="100" height="80" fill="#111100"/>
+                            <g id="catalyst-dots">
+                                <!-- Dots will be generated -->
+                            </g>
+                            <!-- Reactor glow -->
+                            <rect id="reactor-glow" x="230" y="185" width="100" height="80" fill="#ff6600" opacity="0"/>
+                            <!-- Flanges -->
+                            <rect x="210" y="165" width="140" height="8" fill="#222200"/>
+                            <rect x="210" y="277" width="140" height="8" fill="#222200"/>
+                            <text x="280" y="160" class="equip-label">R-101 CRACKER</text>
+                            <text x="280" y="220" class="equip-value" id="reactor-temp">25°C</text>
+                            <text x="280" y="240" class="equip-sub" id="reactor-pressure">0.1 MPa</text>
+                            <text x="280" y="258" class="equip-sub conversion" id="reactor-conv">X = 0%</text>
+                        </g>
+
+                        <!-- BATTERY -->
+                        <g id="battery-unit" class="equipment">
+                            <rect x="420" y="130" width="60" height="80" fill="#0a0a00" stroke="#333300"/>
+                            <rect x="440" y="122" width="20" height="10" fill="#222200"/>
+                            <rect id="battery-level" x="425" y="170" width="50" height="35" fill="#00ff88" opacity="0.6"/>
+                            <text x="450" y="118" class="equip-label">BAT-101</text>
+                            <text x="450" y="165" class="equip-value" id="battery-soc">65%</text>
+                            <text x="450" y="195" class="equip-sub" id="battery-power">0 kW</text>
+                        </g>
+
+                        <!-- MOTOR -->
+                        <g id="motor-unit" class="equipment">
+                            <circle cx="420" cy="230" r="45" fill="#0a0a00" stroke="#333300" stroke-width="2"/>
+                            <circle cx="420" cy="230" r="35" fill="#111100" stroke="#222200"/>
+                            <!-- Rotor -->
+                            <g id="motor-rotor">
+                                <line x1="395" y1="230" x2="445" y2="230" stroke="#d1ff00" stroke-width="4"/>
+                                <line x1="420" y1="205" x2="420" y2="255" stroke="#d1ff00" stroke-width="4"/>
+                            </g>
+                            <circle cx="420" cy="230" r="10" fill="#222200"/>
+                            <!-- Shaft -->
+                            <rect x="463" y="222" width="25" height="16" fill="#222200" stroke="#333300"/>
+                            <text x="420" y="290" class="equip-label">M-101 DCE</text>
+                            <text x="420" y="195" class="equip-value" id="motor-power">0 kW</text>
+                        </g>
+
+                        <!-- OUTPUT ARROW -->
+                        <g id="output-arrow">
+                            <polygon points="555,215 580,230 555,245" fill="#333300" id="output-indicator"/>
+                            <text x="567" y="260" class="equip-label">PERVANE</text>
+                        </g>
+
+                        <!-- VALVES -->
+                        <g class="valve" transform="translate(130, 200)">
+                            <polygon points="-8,-8 8,0 -8,8" fill="#333300" id="valve-1"/>
+                            <polygon points="8,-8 -8,0 8,8" fill="#333300"/>
+                            <text x="0" y="18" class="valve-label">V-101</text>
+                        </g>
+                        <g class="valve" transform="translate(300, 300)">
+                            <polygon points="-8,-8 8,0 -8,8" fill="#333300" id="valve-2"/>
+                            <polygon points="8,-8 -8,0 8,8" fill="#333300"/>
+                            <text x="0" y="18" class="valve-label">V-102</text>
+                        </g>
+
+                        <!-- LEGEND -->
+                        <g transform="translate(20, 370)">
+                            <rect x="0" y="-8" width="10" height="10" fill="#00aaff"/>
+                            <text x="15" y="0" class="legend-text">NH₃</text>
+                            <rect x="60" y="-8" width="10" height="10" fill="#00ff88"/>
+                            <text x="75" y="0" class="legend-text">N₂+H₂</text>
+                            <rect x="130" y="-8" width="10" height="10" fill="#ff6600"/>
+                            <text x="145" y="0" class="legend-text">ISI</text>
+                            <rect x="180" y="-8" width="10" height="10" fill="#ffee00"/>
+                            <text x="195" y="0" class="legend-text">ELEKTRİK</text>
+                        </g>
+                    </svg>
+                </div>
+            </section>
+
+            <!-- RIGHT: DATA & FORMULAS -->
+            <section class="panel data-panel">
+                <h3>> TERMODİNAMİK VERİLER</h3>
+
+                <!-- Formulas -->
+                <div class="formula-box">
+                    <span class="formula-title">// ARRHENİUS KİNETİĞİ</span>
+                    <div class="formula">
+                        <span class="var-k">k</span> = 
+                        <span class="var-a">A</span> · exp(
+                        <span class="var-neg">−Eₐ</span> / 
+                        <span class="var-rt">RT</span>)
+                    </div>
+                    <div class="formula-params">
+                        <span>A = <span id="param-A">1.2×10¹²</span></span>
+                        <span>Eₐ = <span id="param-Ea">80</span> kJ/mol</span>
+                    </div>
+                </div>
+
+                <div class="formula-box">
+                    <span class="formula-title">// DCE REAKSİYONU</span>
+                    <div class="formula reaction">
+                        <span class="reactant">2NH₃</span>
+                        <span class="arrow">→</span>
+                        <span class="product-n2">N₂</span> + 
+                        <span class="product-h2">3H₂</span>
+                    </div>
+                    <div class="formula-note">ΔV = +100% (2 mol → 4 mol)</div>
+                </div>
+
+                <div class="formula-box">
+                    <span class="formula-title">// DÖNÜŞÜM ORANI</span>
+                    <div class="formula">
+                        <span class="var-x">X</span> = 1 − exp(−kτ)
+                    </div>
+                    <div class="formula-result">
+                        τ = <span id="param-tau">2.5</span>s → 
+                        <span class="var-x" id="result-x">X = 0%</span>
+                    </div>
+                </div>
+
+                <!-- Live Data Displays -->
+                <div class="data-grid">
+                    <div class="data-cell">
+                        <span class="data-label">REAKTÖR SICAKLIK</span>
+                        <span class="data-value" id="data-temp">25</span>
+                        <span class="data-unit">°C</span>
+                        <div class="data-bar"><div class="data-bar-fill temp" id="bar-temp"></div></div>
+                    </div>
+                    <div class="data-cell">
+                        <span class="data-label">BASINÇ</span>
+                        <span class="data-value" id="data-pressure">0.1</span>
+                        <span class="data-unit">MPa</span>
+                        <div class="data-bar"><div class="data-bar-fill pressure" id="bar-pressure"></div></div>
+                    </div>
+                    <div class="data-cell">
+                        <span class="data-label">DÖNÜŞÜM</span>
+                        <span class="data-value" id="data-conv">0</span>
+                        <span class="data-unit">%</span>
+                        <div class="data-bar"><div class="data-bar-fill conv" id="bar-conv"></div></div>
+                    </div>
+                    <div class="data-cell">
+                        <span class="data-label">MOTOR GÜCÜ</span>
+                        <span class="data-value" id="data-power">0</span>
+                        <span class="data-unit">kW</span>
+                        <div class="data-bar"><div class="data-bar-fill power" id="bar-power"></div></div>
+                    </div>
+                    <div class="data-cell">
+                        <span class="data-label">SOFC ELEKTRİK</span>
+                        <span class="data-value" id="data-sofc">0</span>
+                        <span class="data-unit">kW</span>
+                        <div class="data-bar"><div class="data-bar-fill sofc" id="bar-sofc"></div></div>
+                    </div>
+                    <div class="data-cell">
+                        <span class="data-label">WtW VERİM</span>
+                        <span class="data-value" id="data-wtw">0</span>
+                        <span class="data-unit">%</span>
+                        <div class="data-bar"><div class="data-bar-fill wtw" id="bar-wtw"></div></div>
+                    </div>
+                </div>
+
+                <!-- Mini Chart -->
+                <div class="chart-container">
+                    <span class="chart-title">// CANLI VERİ AKIŞI</span>
+                    <canvas id="live-chart" width="280" height="100"></canvas>
+                    <div class="chart-legend">
+                        <span class="legend-temp">■ SICAKLIK</span>
+                        <span class="legend-conv">■ DÖNÜŞÜM</span>
+                    </div>
+                </div>
+
+                <!-- IMO Compliance -->
+                <div class="compliance-box">
+                    <span class="compliance-title">// UYUMLULUK</span>
+                    <p>◆ IMO MSC.1/Circ.1687</p>
+                    <p>◆ IGF KOD SERTİFİKASYONU</p>
+                    <p>◆ SOLAS II-1</p>
+                </div>
+            </section>
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="dce-footer">
+            <span>[AGÜ MAKİNE MÜHENDİSLİĞİ]</span>
+            <span>[DCE-SOFC HİBRİT TAHRİK SİSTEMİ]</span>
+            <span>[DİJİTAL İKİZ v2.0]</span>
+        </footer>
+    </div>
+
+    <script src="dce-simulation.js"></script>
+</body>
+</html>
