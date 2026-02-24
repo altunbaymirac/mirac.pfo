@@ -22,11 +22,101 @@
             </div>
         </header>
 
+        <!-- TUTORIAL OVERLAY -->
+        <div id="tutorial-overlay" class="tutorial-overlay">
+            <div class="tutorial-content">
+                <div class="tutorial-header">
+                    <h2>🎓 FLARE SİMÜLATÖR REHBERİ</h2>
+                    <button class="tutorial-skip" onclick="skipTutorial()">[ATLA]</button>
+                </div>
+                
+                <div class="tutorial-steps">
+                    <div class="tutorial-step active" data-step="1">
+                        <div class="step-icon">📡</div>
+                        <h3>FLARE Nedir?</h3>
+                        <p>FLARE, deprem gibi afetlerde GSM altyapısı çöktüğünde <strong>LoRa tabanlı mesh ağ</strong> ile haberleşme sağlayan bir acil durum sistemidir.</p>
+                        <div class="step-detail">
+                            <strong>Gerçek Dünya Örneği:</strong><br>
+                            6 Şubat 2023 depreminde GSM kuleleri saatlerce çalışmadı. FLARE ile her telefon/cihaz bir "mini kule" olur ve mesajlar zincir şeklinde iletilir.
+                        </div>
+                    </div>
+                    
+                    <div class="tutorial-step" data-step="2">
+                        <div class="step-icon">🔗</div>
+                        <h3>Mesh Ağ Nasıl Çalışır?</h3>
+                        <p>Geleneksel ağlarda tüm cihazlar TEK bir baz istasyonuna bağlıdır. O düşerse → herkes kopuk.</p>
+                        <p>Mesh ağda her cihaz hem ALICI hem VERİCİ. Bir yol kapanırsa → alternatif yol bulunur.</p>
+                        <div class="comparison-box">
+                            <div class="comp-item bad">
+                                <span>❌ GSM</span>
+                                <small>Tek nokta bağımlılığı</small>
+                            </div>
+                            <div class="comp-item good">
+                                <span>✅ MESH</span>
+                                <small>Dağıtık, dayanıklı</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tutorial-step" data-step="3">
+                        <div class="step-icon">📻</div>
+                        <h3>LoRa Parametreleri</h3>
+                        <p><strong>SF (Spreading Factor):</strong> Sinyal yayılma faktörü</p>
+                        <ul>
+                            <li>SF↑ = Menzil↑ ama Hız↓</li>
+                            <li>SF7: ~2km, hızlı | SF12: ~15km, yavaş</li>
+                        </ul>
+                        <p><strong>BW (Bandwidth):</strong> Bant genişliği</p>
+                        <ul>
+                            <li>BW↓ = Menzil↑ ama daha az veri</li>
+                        </ul>
+                        <p><strong>TX Power:</strong> Verici gücü (dBm)</p>
+                    </div>
+                    
+                    <div class="tutorial-step" data-step="4">
+                        <div class="step-icon">🎮</div>
+                        <h3>Simülasyonu Kullanma</h3>
+                        <ul>
+                            <li><strong>Node Ekle:</strong> Sol panelden butona bas</li>
+                            <li><strong>Node Seç:</strong> Haritada tıkla</li>
+                            <li><strong>Mesaj Gönder:</strong> Node'a çift tıkla</li>
+                            <li><strong>Node Taşı:</strong> Sürükle-bırak</li>
+                            <li><strong>Senaryo:</strong> Deprem modunu dene!</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tutorial-step" data-step="5">
+                        <div class="step-icon">🚀</div>
+                        <h3>Hazırsın!</h3>
+                        <p>Şimdi mesh ağı simüle edebilirsin. Dene:</p>
+                        <ol>
+                            <li>"DEPREM" senaryosuna geç</li>
+                            <li>Bir node'a çift tıkla ve mesaj gönder</li>
+                            <li>Mesajın hop-by-hop yayılışını izle</li>
+                            <li>Bir node'u kapat, ağın adapte oluşunu gör</li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <div class="tutorial-nav">
+                    <button class="tutorial-btn" id="prev-btn" onclick="prevStep()" disabled>[← GERİ]</button>
+                    <div class="tutorial-dots" id="tutorial-dots"></div>
+                    <button class="tutorial-btn primary" id="next-btn" onclick="nextStep()">[İLERİ →]</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- INFO TOOLTIP -->
+        <div id="info-tooltip" class="info-tooltip" style="display:none;">
+            <div class="tooltip-content" id="tooltip-content"></div>
+        </div>
+
         <!-- SCENARIO BAR -->
         <div class="scenario-bar">
             <div class="scenario-info">
                 <span class="scenario-label">SENARYO:</span>
                 <span id="scenario-name" class="scenario-name">NORMAL OPERASYON</span>
+                <button class="help-btn" onclick="showInfo('scenario')">?</button>
             </div>
             <div class="scenario-buttons">
                 <button class="scenario-btn active" onclick="setScenario('normal')">
@@ -46,9 +136,10 @@
                 </span>
                 <span class="status-item">
                     <span class="status-dot active" id="mesh-dot"></span>
-                    MESH: <span id="mesh-status">AKTIF</span>
+                    MESH: <span id="mesh-status">AKTİF</span>
                 </span>
             </div>
+            <button class="tutorial-reopen" onclick="reopenTutorial()">[📖 REHBER]</button>
         </div>
 
         <!-- MAIN GRID -->
@@ -60,30 +151,39 @@
                 
                 <!-- LoRa Parameters -->
                 <div class="param-section">
-                    <h4>// LORA PARAMETRELERİ</h4>
+                    <h4>// LORA PARAMETRELERİ <button class="help-btn small" onclick="showInfo('lora')">?</button></h4>
                     
                     <div class="control-group">
-                        <label>SPREADING FACTOR (SF)</label>
+                        <label>
+                            SPREADING FACTOR (SF)
+                            <span class="info-icon" data-info="SF arttıkça menzil artar, hız düşer. Afet durumunda yüksek SF tercih edilir.">ⓘ</span>
+                        </label>
                         <div class="btn-row">
-                            <button class="param-btn" onclick="setParam('sf', 7)">7</button>
-                            <button class="param-btn" onclick="setParam('sf', 9)">9</button>
-                            <button class="param-btn active" onclick="setParam('sf', 10)">10</button>
-                            <button class="param-btn" onclick="setParam('sf', 12)">12</button>
+                            <button class="param-btn" onclick="setParam('sf', 7)" title="~2km, hızlı veri">7</button>
+                            <button class="param-btn" onclick="setParam('sf', 9)" title="~5km, orta hız">9</button>
+                            <button class="param-btn active" onclick="setParam('sf', 10)" title="~8km, dengeli">10</button>
+                            <button class="param-btn" onclick="setParam('sf', 12)" title="~15km, yavaş">12</button>
                         </div>
                         <span class="param-info">SF↑ = Menzil↑, Hız↓</span>
                     </div>
 
                     <div class="control-group">
-                        <label>BANDWIDTH (kHz)</label>
+                        <label>
+                            BANDWIDTH (kHz)
+                            <span class="info-icon" data-info="Düşük BW = uzun menzil ama yavaş. Yüksek BW = kısa menzil ama hızlı.">ⓘ</span>
+                        </label>
                         <div class="btn-row">
-                            <button class="param-btn" onclick="setParam('bw', 125)">125</button>
-                            <button class="param-btn active" onclick="setParam('bw', 250)">250</button>
-                            <button class="param-btn" onclick="setParam('bw', 500)">500</button>
+                            <button class="param-btn" onclick="setParam('bw', 125)" title="Uzun menzil">125</button>
+                            <button class="param-btn active" onclick="setParam('bw', 250)" title="Dengeli">250</button>
+                            <button class="param-btn" onclick="setParam('bw', 500)" title="Hızlı veri">500</button>
                         </div>
                     </div>
 
                     <div class="control-group">
-                        <label>TX POWER (dBm)</label>
+                        <label>
+                            TX POWER (dBm)
+                            <span class="info-icon" data-info="Verici gücü. Yüksek güç = uzun menzil ama pil tüketimi artar.">ⓘ</span>
+                        </label>
                         <div class="slider-container">
                             <input type="range" id="tx-power" min="2" max="20" value="14">
                             <span class="slider-value" id="tx-power-val">14 dBm</span>
@@ -97,6 +197,10 @@
                     
                     <button class="action-btn" onclick="addNode()">
                         [+ NODE EKLE]
+                    </button>
+                    
+                    <button class="action-btn" onclick="addSurvivor()">
+                        [👤 KURBAN EKLE]
                     </button>
                     
                     <button class="action-btn danger" onclick="toggleNodeMode()">
@@ -116,24 +220,24 @@
                         <span id="stat-nodes" class="stat-value">0/0</span>
                     </div>
                     <div class="stat-row">
-                        <span>ORTALAMA HOP:</span>
-                        <span id="stat-hops" class="stat-value">0.0</span>
+                        <span>BAĞLANTI:</span>
+                        <span id="stat-connections" class="stat-value">0</span>
                     </div>
                     <div class="stat-row">
-                        <span>AĞ KAPSAMI:</span>
-                        <span id="stat-coverage" class="stat-value">0%</span>
+                        <span>MENZİL:</span>
+                        <span id="stat-range" class="stat-value">0 px</span>
                     </div>
                     <div class="stat-row">
                         <span>MESAJ TESLİM:</span>
-                        <span id="stat-delivery" class="stat-value">0%</span>
+                        <span id="stat-delivery" class="stat-value">-</span>
                     </div>
                 </div>
 
-                <!-- Info -->
+                <!-- Info Box -->
                 <div class="info-box">
                     <span class="info-label">// FLARE NEDİR?</span>
-                    <p>Afet durumlarında GSM altyapısı çöktüğünde LoRa tabanlı mesh ağ ile haberleşme sağlar.</p>
-                    <p>Her node hem alıcı hem verici görevi görür.</p>
+                    <p>Afet durumlarında GSM çöktüğünde LoRa mesh ağ ile haberleşme sağlar.</p>
+                    <p>Her node hem alıcı hem verici → Tek noktaya bağımlılık yok!</p>
                 </div>
             </section>
 
@@ -145,23 +249,25 @@
                     <!-- Mesaj gönderme overlay -->
                     <div id="message-overlay" class="message-overlay" style="display:none;">
                         <div class="message-popup">
-                            <h4>[📡 MESAJ GÖNDER]</h4>
-                            <input type="text" id="msg-input" placeholder="ACİL MESAJINIZI YAZIN..." maxlength="100">
+                            <h4>[📡 ACİL MESAJ GÖNDER]</h4>
+                            <p class="popup-desc">Bu mesaj tüm ağa yayılacak. Gerçek FLARE sisteminde GPS koordinatları da eklenir.</p>
+                            <input type="text" id="msg-input" placeholder="YARDIM! ENKAZ ALTINDAYIM..." maxlength="100">
                             <div class="popup-buttons">
-                                <button onclick="sendMessage()">[GÖNDER]</button>
+                                <button onclick="sendMessage()">[📡 GÖNDER]</button>
                                 <button onclick="closeMessagePopup()">[İPTAL]</button>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="map-legend">
+                    <span class="legend-item"><span class="legend-dot node-gateway"></span> GATEWAY (Ana İstasyon)</span>
                     <span class="legend-item"><span class="legend-dot node-active"></span> AKTİF NODE</span>
                     <span class="legend-item"><span class="legend-dot node-inactive"></span> DEVRE DIŞI</span>
                     <span class="legend-item"><span class="legend-dot node-survivor"></span> KURBAN/KULLANICI</span>
-                    <span class="legend-item"><span class="legend-line"></span> BAĞLANTI</span>
+                    <span class="legend-item"><span class="legend-line"></span> LoRa BAĞLANTI</span>
                 </div>
                 <div class="map-instructions">
-                    // TIKLA: Node seç | ÇİFT TIKLA: Mesaj gönder | SÜRÜKLE: Taşı
+                    💡 TIKLA: Node seç | ÇİFT TIKLA: Mesaj gönder | SÜRÜKLE: Taşı
                 </div>
             </section>
 
@@ -183,31 +289,34 @@
                         <span>SÜRE: <span id="prop-time">-</span></span>
                         <span>ULAŞAN: <span id="prop-reached">-</span></span>
                     </div>
+                    <div class="prop-explanation">
+                        <small>HOP = Mesajın kaç node'dan geçtiği. Mesh ağda mesaj "zıplayarak" yayılır.</small>
+                    </div>
                 </div>
 
                 <!-- Log display -->
                 <div id="log-display" class="log-display">
-                    <div class="log-entry system">[SYSTEM] FLARE Mesh Simulator başlatıldı...</div>
-                    <div class="log-entry system">[SYSTEM] Node eklemek için sol paneli kullanın.</div>
+                    <div class="log-entry system">[SYSTEM] FLARE Mesh Simulator v2.0 başlatıldı...</div>
+                    <div class="log-entry system">[SYSTEM] Rehber için sağ üstteki 📖 butonuna tıklayın.</div>
                 </div>
 
                 <!-- Selected node info -->
                 <div class="node-info-panel" id="node-info" style="display:none;">
                     <h4>> SEÇİLİ NODE: <span id="selected-node-id">-</span></h4>
                     <div class="node-stats">
-                        <div class="node-stat">
+                        <div class="node-stat" title="Alınan sinyal gücü. -50 mükemmel, -110 zayıf.">
                             <span class="label">RSSI</span>
                             <span class="value" id="node-rssi">-</span>
                         </div>
-                        <div class="node-stat">
+                        <div class="node-stat" title="Sinyal/Gürültü oranı. Yüksek = temiz sinyal.">
                             <span class="label">SNR</span>
                             <span class="value" id="node-snr">-</span>
                         </div>
-                        <div class="node-stat">
+                        <div class="node-stat" title="Bu node'un bağlı olduğu diğer node sayısı.">
                             <span class="label">BAĞLANTI</span>
                             <span class="value" id="node-connections">-</span>
                         </div>
-                        <div class="node-stat">
+                        <div class="node-stat" title="Bu node üzerinden geçen mesaj sayısı.">
                             <span class="label">MESAJ</span>
                             <span class="value" id="node-messages">-</span>
                         </div>
@@ -220,7 +329,7 @@
 
                 <!-- RSSI Scale -->
                 <div class="rssi-scale">
-                    <h4>// SİNYAL KALİTESİ (RSSI)</h4>
+                    <h4>// SİNYAL KALİTESİ (RSSI) <button class="help-btn small" onclick="showInfo('rssi')">?</button></h4>
                     <div class="scale-bar">
                         <div class="scale-section excellent">-50</div>
                         <div class="scale-section good">-70</div>
@@ -233,6 +342,15 @@
                         <span>ZAYIF</span>
                     </div>
                 </div>
+
+                <!-- Why This Matters -->
+                <div class="why-box">
+                    <h4>// NEDEN ÖNEMLİ?</h4>
+                    <p>🔹 6 Şubat depreminde GSM saatlerce çöktü</p>
+                    <p>🔹 Enkaz altındaki insanlar iletişim kuramadı</p>
+                    <p>🔹 FLARE ile her cihaz bir "mini kule" olur</p>
+                    <p>🔹 Mesajlar zincir şeklinde iletilebilir</p>
+                </div>
             </section>
         </main>
 
@@ -240,8 +358,17 @@
         <footer class="flare-footer">
             <span>[AGÜ MAKİNE MÜHENDİSLİĞİ]</span>
             <span>[FLARE EMERGENCY MESH NETWORK]</span>
-            <span>[v1.0 TACTICAL SIMULATOR]</span>
+            <span>[v2.0 INTERACTIVE SIMULATOR]</span>
         </footer>
+    </div>
+
+    <!-- INFO MODAL -->
+    <div id="info-modal" class="info-modal" style="display:none;">
+        <div class="info-modal-content">
+            <h3 id="info-modal-title">Bilgi</h3>
+            <div id="info-modal-body"></div>
+            <button onclick="closeInfoModal()" class="info-modal-close">[KAPAT]</button>
+        </div>
     </div>
 
     <script src="flare-simulation.js"></script>

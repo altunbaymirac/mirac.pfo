@@ -8,6 +8,82 @@
     <link rel="stylesheet" href="dce-simulation.css">
 </head>
 <body>
+
+    <!-- DCE TUTORIAL OVERLAY -->
+    <div id="dce-tutorial-overlay" class="tutorial-overlay">
+        <div class="tutorial-content">
+            <div class="tutorial-header">
+                <h2>⚡ DCE-SOFC HİBRİT SİSTEM REHBERİ</h2>
+                <button class="tutorial-skip" onclick="skipDCETutorial()">[ATLA]</button>
+            </div>
+            
+            <div class="tutorial-steps">
+                <div class="tutorial-step active" data-step="1">
+                    <div class="step-icon">⚡</div>
+                    <h3>DCE Nedir?</h3>
+                    <p><strong>Doğrudan Kimyasal Genleşme (DCE)</strong> yanmasız bir tahrik sistemidir.</p>
+                    <div class="step-detail">
+                        <p><strong>Reaksiyon:</strong> 2NH₃ → N₂ + 3H₂</p>
+                        <p>Amonyak (NH₃) ayrışınca 2 mol gaz → 4 mol gaz olur. Bu hacim artışı pistonu iter!</p>
+                        <p><strong>Avantaj:</strong> CO₂ emisyonu YOK, NOx YOK!</p>
+                    </div>
+                </div>
+                
+                <div class="tutorial-step" data-step="2">
+                    <div class="step-icon">🔋</div>
+                    <h3>SOFC Yakıt Pili</h3>
+                    <p><strong>Katı Oksit Yakıt Pili (SOFC)</strong> hidrojen veya amonyaktan doğrudan elektrik üretir.</p>
+                    <div class="step-detail">
+                        <p><strong>Verimlilik:</strong> %50-60 (dizel motordan yüksek!)</p>
+                        <p><strong>Çalışma Sıcaklığı:</strong> 600-850°C</p>
+                        <p>Hibrit sistemde DCE'nin atık ısısı SOFC'yi ısıtır → Enerji kaybı azalır!</p>
+                    </div>
+                </div>
+                
+                <div class="tutorial-step" data-step="3">
+                    <div class="step-icon">🌊</div>
+                    <h3>Neden Denizcilik?</h3>
+                    <p>IMO 2050 hedefi: Deniz taşımacılığında <strong>%50 emisyon azaltımı</strong>.</p>
+                    <div class="step-detail">
+                        <p>• Gemiler dünya ticaretinin %90'ını taşıyor</p>
+                        <p>• Mevcut gemiler ağır yakıt (HFO) kullanıyor</p>
+                        <p>• Amonyak: Karbon içermiyor, sıvı depolanabilir</p>
+                        <p>• DCE-SOFC: IMO Tier III uyumlu!</p>
+                    </div>
+                </div>
+                
+                <div class="tutorial-step" data-step="4">
+                    <div class="step-icon">📊</div>
+                    <h3>Simülasyon Parametreleri</h3>
+                    <ul>
+                        <li><strong>Motor Yükü:</strong> Geminin anlık güç ihtiyacı (%)</li>
+                        <li><strong>Rezidans Süresi:</strong> Amonyağın reaktörde kalma süresi</li>
+                        <li><strong>Sıcaklık:</strong> Reaksiyon hızını belirler (Arrhenius)</li>
+                        <li><strong>Katalizör:</strong> Ru (verimli, pahalı) vs Ni (ucuz)</li>
+                    </ul>
+                </div>
+                
+                <div class="tutorial-step" data-step="5">
+                    <div class="step-icon">🚀</div>
+                    <h3>Hazırsın!</h3>
+                    <p>Sistemi başlatıp parametreleri değiştirerek dene:</p>
+                    <ol>
+                        <li>"SİSTEMİ BAŞLAT" butonuna tıkla</li>
+                        <li>Motor yükünü artır/azalt</li>
+                        <li>SOFC'yi kapat/aç, farkı gör</li>
+                        <li>Katalizör tipini değiştir</li>
+                        <li>WtW verimliliğini izle!</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <div class="tutorial-nav">
+                <button class="tutorial-btn" id="dce-prev-btn" onclick="prevDCEStep()" disabled>[← GERİ]</button>
+                <div class="tutorial-dots" id="dce-tutorial-dots"></div>
+                <button class="tutorial-btn primary" id="dce-next-btn" onclick="nextDCEStep()">[İLERİ →]</button>
+            </div>
+        </div>
+    </div>
     <div class="overlay"></div>
     <div class="terminal dce-terminal">
         <header>
@@ -20,6 +96,8 @@
                 <div id="clock">00:00:00</div>
                 <a href="index.html" class="back-btn">[← ANA SAYFA]</a>
             </div>
+        
+            <button class="tutorial-reopen" onclick="reopenDCETutorial()">[📖 REHBER]</button>
         </header>
 
         <!-- CONTROL BAR -->

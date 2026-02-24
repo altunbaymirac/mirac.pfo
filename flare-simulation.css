@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════════════════════════
-   FLARE MESH NETWORK SIMULATOR - STYLES
-   Terminal Aesthetic - Matches miracaltunbay.com.tr
+   FLARE MESH NETWORK SIMULATOR v2.0 - STYLES
+   With Tutorial, Tooltips, and Info Panels
 ═══════════════════════════════════════════════════════════════════════════════ */
 
 :root {
@@ -16,7 +16,336 @@
     --survivor-yellow: #ffdd00;
 }
 
-/* Terminal overrides */
+/* ═══════════════════════════════════════════════════════════════════════════════
+   TUTORIAL OVERLAY
+═══════════════════════════════════════════════════════════════════════════════ */
+
+.tutorial-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease;
+}
+
+.tutorial-overlay.hidden {
+    display: none;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.tutorial-content {
+    background: var(--bg-black);
+    border: 2px solid var(--lora-blue);
+    padding: 30px;
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 0 50px rgba(0, 170, 255, 0.3);
+}
+
+.tutorial-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-dim);
+}
+
+.tutorial-header h2 {
+    color: var(--lora-blue);
+    font-size: 16px;
+    margin: 0;
+}
+
+.tutorial-skip {
+    background: none;
+    border: 1px solid var(--text-dim);
+    color: var(--text-dim);
+    padding: 5px 15px;
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    cursor: pointer;
+}
+
+.tutorial-skip:hover {
+    border-color: var(--danger-red);
+    color: var(--danger-red);
+}
+
+.tutorial-step {
+    display: none;
+    animation: stepIn 0.3s ease;
+}
+
+.tutorial-step.active {
+    display: block;
+}
+
+@keyframes stepIn {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.step-icon {
+    font-size: 48px;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.tutorial-step h3 {
+    color: var(--neon-green);
+    font-size: 18px;
+    margin: 0 0 15px 0;
+    text-align: center;
+}
+
+.tutorial-step p {
+    color: var(--neon-green);
+    font-size: 12px;
+    line-height: 1.8;
+    margin: 10px 0;
+}
+
+.tutorial-step ul, .tutorial-step ol {
+    color: var(--neon-green);
+    font-size: 11px;
+    line-height: 2;
+    padding-left: 20px;
+}
+
+.tutorial-step li {
+    margin: 5px 0;
+}
+
+.tutorial-step strong {
+    color: var(--cyan);
+}
+
+.step-detail {
+    background: rgba(0, 170, 255, 0.1);
+    border: 1px solid var(--lora-blue);
+    padding: 15px;
+    margin: 15px 0;
+    font-size: 11px;
+    color: var(--cyan);
+}
+
+.comparison-box {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.comp-item {
+    padding: 15px 25px;
+    text-align: center;
+    border: 2px solid;
+}
+
+.comp-item.bad {
+    border-color: var(--danger-red);
+    background: rgba(255, 51, 102, 0.1);
+}
+
+.comp-item.good {
+    border-color: var(--neon-green);
+    background: rgba(209, 255, 0, 0.1);
+}
+
+.comp-item span {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.comp-item small {
+    font-size: 9px;
+    color: var(--text-dim);
+}
+
+.tutorial-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-dim);
+}
+
+.tutorial-btn {
+    background: none;
+    border: 2px solid var(--neon-green);
+    color: var(--neon-green);
+    padding: 10px 25px;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.tutorial-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.tutorial-btn:not(:disabled):hover {
+    background: var(--neon-green);
+    color: black;
+}
+
+.tutorial-btn.primary {
+    background: rgba(209, 255, 0, 0.1);
+}
+
+.tutorial-dots {
+    display: flex;
+    gap: 8px;
+}
+
+.tutorial-dot {
+    width: 10px;
+    height: 10px;
+    border: 1px solid var(--neon-green);
+    background: none;
+    cursor: pointer;
+}
+
+.tutorial-dot.active {
+    background: var(--neon-green);
+}
+
+.tutorial-reopen {
+    background: none;
+    border: 1px solid var(--lora-blue);
+    color: var(--lora-blue);
+    padding: 5px 10px;
+    font-family: 'Courier New', monospace;
+    font-size: 9px;
+    cursor: pointer;
+}
+
+.tutorial-reopen:hover {
+    background: var(--lora-blue);
+    color: black;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   INFO TOOLTIPS & HELP BUTTONS
+═══════════════════════════════════════════════════════════════════════════════ */
+
+.help-btn {
+    background: none;
+    border: 1px solid var(--cyan);
+    color: var(--cyan);
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    font-size: 11px;
+    cursor: pointer;
+    margin-left: 5px;
+    transition: all 0.2s;
+}
+
+.help-btn.small {
+    width: 16px;
+    height: 16px;
+    font-size: 9px;
+}
+
+.help-btn:hover {
+    background: var(--cyan);
+    color: black;
+}
+
+.info-icon {
+    color: var(--cyan);
+    cursor: help;
+    font-size: 10px;
+    margin-left: 3px;
+}
+
+.info-tooltip {
+    position: fixed;
+    background: var(--bg-black);
+    border: 1px solid var(--cyan);
+    padding: 10px 15px;
+    max-width: 250px;
+    font-size: 10px;
+    color: var(--cyan);
+    z-index: 9999;
+    pointer-events: none;
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+}
+
+/* Info Modal */
+.info-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.info-modal-content {
+    background: var(--bg-black);
+    border: 2px solid var(--cyan);
+    padding: 25px;
+    max-width: 500px;
+    width: 90%;
+}
+
+.info-modal-content h3 {
+    color: var(--cyan);
+    margin: 0 0 15px 0;
+    font-size: 14px;
+}
+
+.info-modal-content p {
+    color: var(--neon-green);
+    font-size: 11px;
+    line-height: 1.8;
+    margin: 10px 0;
+}
+
+.info-modal-close {
+    margin-top: 20px;
+    padding: 10px 30px;
+    background: none;
+    border: 1px solid var(--cyan);
+    color: var(--cyan);
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.info-modal-close:hover {
+    background: var(--cyan);
+    color: black;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   TERMINAL & LAYOUT (Base styles from main)
+═══════════════════════════════════════════════════════════════════════════════ */
+
 .flare-terminal {
     height: auto;
     min-height: 100vh;
@@ -51,11 +380,6 @@
 .back-btn:hover {
     color: var(--neon-green);
     border-color: var(--neon-green);
-    background: rgba(209, 255, 0, 0.1);
-}
-
-#system-status {
-    color: var(--text-dim);
 }
 
 #system-status.active {
@@ -65,19 +389,15 @@
 
 #system-status.emergency {
     color: var(--danger-red);
-    text-shadow: 0 0 10px var(--danger-red);
-    animation: emergencyPulse 0.5s infinite;
+    animation: pulse 0.5s infinite;
 }
 
-@keyframes emergencyPulse {
+@keyframes pulse {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.5; }
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────── */
-/* SCENARIO BAR */
-/* ─────────────────────────────────────────────────────────────────────────────── */
-
+/* Scenario Bar */
 .scenario-bar {
     display: flex;
     align-items: center;
@@ -109,12 +429,13 @@
 
 .scenario-name.emergency {
     color: var(--danger-red);
-    animation: emergencyPulse 0.5s infinite;
+    animation: pulse 0.5s infinite;
 }
 
 .scenario-buttons {
     display: flex;
     gap: 8px;
+    flex-wrap: wrap;
 }
 
 .scenario-btn {
@@ -128,11 +449,7 @@
     transition: all 0.2s;
 }
 
-.scenario-btn:hover {
-    border-color: var(--neon-green);
-    color: var(--neon-green);
-}
-
+.scenario-btn:hover,
 .scenario-btn.active {
     border-color: var(--neon-green);
     color: var(--neon-green);
@@ -172,21 +489,18 @@
 .status-dot.active {
     background: var(--neon-green);
     box-shadow: 0 0 8px var(--neon-green);
-    animation: pulse 2s infinite;
+    animation: blink 2s infinite;
 }
 
-@keyframes pulse {
+@keyframes blink {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.5; }
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────── */
-/* MAIN GRID */
-/* ─────────────────────────────────────────────────────────────────────────────── */
-
+/* Main Grid */
 .flare-grid {
     display: grid;
-    grid-template-columns: 220px 1fr 260px;
+    grid-template-columns: 220px 1fr 280px;
     gap: 15px;
     margin-bottom: 15px;
 }
@@ -209,20 +523,15 @@
     margin: 0 0 12px 0;
     padding-bottom: 8px;
     border-bottom: 1px solid var(--border-dim);
-    letter-spacing: 0.1em;
 }
 
 .panel h4 {
     color: var(--text-dim);
     font-size: 9px;
     margin: 12px 0 8px 0;
-    letter-spacing: 0.1em;
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────── */
-/* LEFT PANEL: CONTROLS */
-/* ─────────────────────────────────────────────────────────────────────────────── */
-
+/* Control Panel */
 .param-section {
     margin-bottom: 15px;
     padding-bottom: 15px;
@@ -234,11 +543,11 @@
 }
 
 .control-group label {
-    display: block;
+    display: flex;
+    align-items: center;
     font-size: 9px;
     color: var(--text-dim);
     margin-bottom: 5px;
-    letter-spacing: 0.1em;
 }
 
 .btn-row {
@@ -288,7 +597,6 @@
     -webkit-appearance: none;
     height: 6px;
     background: var(--border-dim);
-    border: 1px solid #444400;
     cursor: pointer;
 }
 
@@ -298,7 +606,6 @@
     height: 18px;
     background: linear-gradient(180deg, #888866, #444422);
     border: 1px solid var(--lora-blue);
-    cursor: pointer;
 }
 
 .slider-value {
@@ -332,10 +639,6 @@
     color: var(--danger-red);
 }
 
-.action-btn.danger:hover {
-    background: rgba(255, 51, 102, 0.1);
-}
-
 .action-btn.danger.active {
     background: var(--danger-red);
     color: white;
@@ -349,16 +652,12 @@
     border-bottom: 1px dotted var(--border-dim);
 }
 
-.stat-row:last-child {
-    border-bottom: none;
-}
-
 .stat-value {
     color: var(--cyan);
     font-weight: bold;
 }
 
-.info-box {
+.info-box, .why-box {
     margin-top: 15px;
     padding: 10px;
     border: 1px dashed var(--border-dim);
@@ -371,16 +670,23 @@
     margin-bottom: 6px;
 }
 
-.info-box p {
+.info-box p, .why-box p {
     margin: 4px 0;
     color: var(--neon-green);
     line-height: 1.4;
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────── */
-/* CENTER PANEL: NETWORK MAP */
-/* ─────────────────────────────────────────────────────────────────────────────── */
+.why-box {
+    border-color: var(--lora-blue);
+    background: rgba(0, 170, 255, 0.05);
+}
 
+.why-box h4 {
+    color: var(--lora-blue);
+    margin-top: 0;
+}
+
+/* Map Panel */
 .map-panel {
     min-height: 450px;
     display: flex;
@@ -403,7 +709,7 @@
 
 .map-legend {
     display: flex;
-    gap: 15px;
+    gap: 12px;
     margin-top: 8px;
     font-size: 9px;
     color: var(--text-dim);
@@ -422,6 +728,11 @@
     border-radius: 50%;
 }
 
+.legend-dot.node-gateway {
+    background: #00ff88;
+    box-shadow: 0 0 6px #00ff88;
+}
+
 .legend-dot.node-active {
     background: var(--neon-green);
     box-shadow: 0 0 6px var(--neon-green);
@@ -434,26 +745,26 @@
 
 .legend-dot.node-survivor {
     background: var(--survivor-yellow);
-    box-shadow: 0 0 6px var(--survivor-yellow);
+    border-radius: 0;
+    transform: rotate(45deg);
+    width: 8px;
+    height: 8px;
 }
 
 .legend-line {
     width: 20px;
     height: 2px;
     background: var(--lora-blue);
-    opacity: 0.5;
 }
 
 .map-instructions {
     margin-top: 5px;
-    font-size: 8px;
-    color: var(--text-dim);
-    opacity: 0.7;
-}
-
-#map-mode-indicator {
     font-size: 9px;
-    color: var(--danger-red);
+    color: var(--text-dim);
+    text-align: center;
+    padding: 5px;
+    background: rgba(0, 170, 255, 0.05);
+    border: 1px dashed var(--border-dim);
 }
 
 /* Message Overlay */
@@ -463,7 +774,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.9);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -473,19 +784,24 @@
 .message-popup {
     background: var(--bg-black);
     border: 2px solid var(--neon-green);
-    padding: 20px;
-    min-width: 300px;
+    padding: 25px;
+    min-width: 320px;
 }
 
 .message-popup h4 {
     color: var(--neon-green);
-    margin: 0 0 15px 0;
-    font-size: 12px;
+    margin: 0 0 10px 0;
+}
+
+.popup-desc {
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-bottom: 15px;
 }
 
 .message-popup input {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     background: #080808;
     border: 1px solid var(--border-dim);
     color: var(--neon-green);
@@ -507,7 +823,7 @@
 
 .popup-buttons button {
     flex: 1;
-    padding: 8px;
+    padding: 10px;
     background: none;
     border: 1px solid var(--neon-green);
     color: var(--neon-green);
@@ -525,10 +841,7 @@
     color: black;
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────── */
-/* RIGHT PANEL: LOGS */
-/* ─────────────────────────────────────────────────────────────────────────────── */
-
+/* Logs Panel */
 .propagation-display {
     border: 1px solid var(--border-dim);
     padding: 10px;
@@ -574,8 +887,16 @@
     color: var(--cyan);
 }
 
+.prop-explanation {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed var(--border-dim);
+    font-size: 8px;
+    color: var(--text-dim);
+}
+
 .log-display {
-    height: 200px;
+    height: 180px;
     border: 1px solid var(--border-dim);
     background: #030303;
     padding: 8px;
@@ -590,29 +911,13 @@
     color: var(--neon-green);
 }
 
-.log-entry.system {
-    color: var(--text-dim);
-}
+.log-entry.system { color: var(--text-dim); }
+.log-entry.error { color: var(--danger-red); }
+.log-entry.success { color: var(--neon-green); }
+.log-entry.propagation { color: var(--lora-blue); }
 
-.log-entry.error {
-    color: var(--danger-red);
-}
-
-.log-entry.success {
-    color: var(--neon-green);
-}
-
-.log-entry.propagation {
-    color: var(--lora-blue);
-}
-
-.log-entry .timestamp {
-    color: var(--alert-orange);
-}
-
-.log-entry .node-id {
-    color: var(--cyan);
-}
+.log-entry .timestamp { color: var(--alert-orange); }
+.log-entry .node-id { color: var(--cyan); }
 
 /* Node Info Panel */
 .node-info-panel {
@@ -639,13 +944,13 @@
     text-align: center;
     padding: 5px;
     border: 1px solid var(--border-dim);
+    cursor: help;
 }
 
 .node-stat .label {
     display: block;
     font-size: 8px;
     color: var(--text-dim);
-    margin-bottom: 2px;
 }
 
 .node-stat .value {
@@ -680,10 +985,13 @@
     border: 1px solid var(--border-dim);
     padding: 10px;
     background: rgba(0, 0, 0, 0.3);
+    margin-bottom: 10px;
 }
 
 .rssi-scale h4 {
     margin: 0 0 8px 0;
+    display: flex;
+    align-items: center;
 }
 
 .scale-bar {
@@ -715,10 +1023,7 @@
     color: var(--text-dim);
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────── */
-/* FOOTER */
-/* ─────────────────────────────────────────────────────────────────────────────── */
-
+/* Footer */
 .flare-footer {
     display: flex;
     justify-content: space-between;
@@ -733,23 +1038,24 @@
     color: var(--lora-blue);
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────── */
-/* RESPONSIVE */
-/* ─────────────────────────────────────────────────────────────────────────────── */
-
+/* Responsive */
 @media (max-width: 768px) {
     .scenario-bar {
         flex-direction: column;
         align-items: flex-start;
     }
     
-    .scenario-buttons {
-        flex-wrap: wrap;
-    }
-    
     .flare-footer {
         flex-direction: column;
         gap: 5px;
         text-align: center;
+    }
+    
+    .tutorial-content {
+        padding: 20px;
+    }
+    
+    .comparison-box {
+        flex-direction: column;
     }
 }

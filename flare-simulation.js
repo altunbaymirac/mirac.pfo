@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════════════════════════
-   FLARE MESH NETWORK SIMULATOR - ENGINE
-   Tactical Emergency Mesh Network Visualization
+   FLARE MESH NETWORK SIMULATOR v2.0 - ENGINE
+   With Tutorial, Info System, and Comprehensive Explanations
 ═══════════════════════════════════════════════════════════════════════════════ */
 
 // ─────────────────────────────────────────────────────────────────────────────────
@@ -8,42 +8,74 @@
 // ─────────────────────────────────────────────────────────────────────────────────
 
 const LORA_CONFIG = {
-    // Spreading Factor → Range multiplier
     SF: { 7: 0.6, 9: 0.8, 10: 1.0, 12: 1.4 },
-    // Bandwidth → Speed multiplier (inverse for range)
     BW: { 125: 1.2, 250: 1.0, 500: 0.8 },
-    // Base range in pixels (at SF10, BW250, TX14)
     BASE_RANGE: 150,
-    // TX Power range modifier
-    TX_RANGE_FACTOR: 5, // pixels per dBm
+    TX_RANGE_FACTOR: 5,
+};
+
+const INFO_CONTENT = {
+    scenario: {
+        title: '📡 Senaryolar Hakkında',
+        content: `
+            <p><strong>NORMAL:</strong> GSM çalışıyor, FLARE yedek olarak bekliyor.</p>
+            <p><strong>DEPREM:</strong> GSM altyapısı çökmüş! Baz istasyonları hasar görmüş. FLARE mesh ağı devreye giriyor.</p>
+            <p><strong>SEL:</strong> Kısmi altyapı hasarı. Bazı node'lar su altında kalmış.</p>
+            <hr>
+            <p>Deprem senaryosunda rastgele node'lar hasar görür ve mesajlar alternatif rotalardan iletilir.</p>
+        `
+    },
+    lora: {
+        title: '📻 LoRa Parametreleri',
+        content: `
+            <p><strong>LoRa (Long Range)</strong> düşük güç, uzun menzil kablosuz iletişim teknolojisidir.</p>
+            <hr>
+            <p><strong>SF (Spreading Factor):</strong></p>
+            <p>• SF7: ~2km menzil, 5.5 kbps hız</p>
+            <p>• SF12: ~15km menzil, 0.3 kbps hız</p>
+            <p>Yüksek SF = Uzun menzil ama yavaş veri</p>
+            <hr>
+            <p><strong>BW (Bandwidth):</strong></p>
+            <p>• 125kHz: Uzun menzil, yavaş</p>
+            <p>• 500kHz: Kısa menzil, hızlı</p>
+            <hr>
+            <p><strong>TX Power:</strong></p>
+            <p>Verici gücü. 20dBm'de ~100mW güç harcar. Pil ömrü için optimize edilmeli.</p>
+        `
+    },
+    rssi: {
+        title: '📊 RSSI Nedir?',
+        content: `
+            <p><strong>RSSI (Received Signal Strength Indicator)</strong> alınan sinyalin gücünü dBm cinsinden gösterir.</p>
+            <hr>
+            <p>• <strong>-50 dBm:</strong> Mükemmel (çok yakın)</p>
+            <p>• <strong>-70 dBm:</strong> İyi</p>
+            <p>• <strong>-90 dBm:</strong> Orta</p>
+            <p>• <strong>-110 dBm:</strong> Zayıf (sınırda)</p>
+            <p>• <strong>-130 dBm:</strong> Bağlantı yok</p>
+            <hr>
+            <p>FLARE sisteminde -110 dBm altındaki bağlantılar güvenilir sayılmaz.</p>
+        `
+    }
 };
 
 const state = {
     nodes: [],
     connections: [],
     selectedNode: null,
-    // LoRa Parameters
-    params: {
-        sf: 10,
-        bw: 250,
-        txPower: 14
-    },
-    // Scenario
+    params: { sf: 10, bw: 250, txPower: 14 },
     scenario: 'normal',
     gsmOnline: true,
-    // UI Mode
     nodeDisableMode: false,
-    // Animation
     propagatingMessage: null,
-    messageQueue: [],
-    // Stats
     totalMessages: 0,
     deliveredMessages: 0
 };
 
 let canvas, ctx;
-let animationId;
 let nodeIdCounter = 0;
+let currentTutorialStep = 1;
+const totalTutorialSteps = 5;
 
 // ─────────────────────────────────────────────────────────────────────────────────
 // INITIALIZATION
@@ -53,6 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initCanvas();
     initClock();
     initEventListeners();
+    initTutorial();
     createInitialNodes();
     gameLoop();
 });
@@ -77,45 +110,157 @@ function initClock() {
 }
 
 function initEventListeners() {
-    // Canvas interactions
     canvas.addEventListener('click', handleCanvasClick);
     canvas.addEventListener('dblclick', handleCanvasDoubleClick);
     canvas.addEventListener('mousedown', handleMouseDown);
     canvas.addEventListener('mousemove', handleMouseMove);
     canvas.addEventListener('mouseup', handleMouseUp);
     
-    // TX Power slider
     const txSlider = document.getElementById('tx-power');
     txSlider.addEventListener('input', (e) => {
         state.params.txPower = parseInt(e.target.value);
         document.getElementById('tx-power-val').innerText = state.params.txPower + ' dBm';
         updateConnections();
+        updateStats();
+    });
+    
+    // Info icons hover
+    document.querySelectorAll('.info-icon').forEach(icon => {
+        icon.addEventListener('mouseenter', showTooltip);
+        icon.addEventListener('mouseleave', hideTooltip);
     });
 }
 
-function createInitialNodes() {
-    // Create some demo nodes
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
+// ─────────────────────────────────────────────────────────────────────────────────
+// TUTORIAL SYSTEM
+// ─────────────────────────────────────────────────────────────────────────────────
+
+function initTutorial() {
+    // Check if user has seen tutorial
+    const hasSeenTutorial = localStorage.getItem('flare-tutorial-seen');
     
-    // Gateway/Base station
-    addNodeAt(centerX, centerY - 80, 'gateway');
+    if (!hasSeenTutorial) {
+        showTutorial();
+    } else {
+        document.getElementById('tutorial-overlay').classList.add('hidden');
+    }
     
-    // Regular nodes
-    addNodeAt(centerX - 120, centerY + 20, 'node');
-    addNodeAt(centerX + 130, centerY + 30, 'node');
-    addNodeAt(centerX - 60, centerY + 120, 'node');
-    addNodeAt(centerX + 70, centerY + 100, 'node');
+    // Create dots
+    const dotsContainer = document.getElementById('tutorial-dots');
+    for (let i = 1; i <= totalTutorialSteps; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'tutorial-dot' + (i === 1 ? ' active' : '');
+        dot.onclick = () => goToStep(i);
+        dotsContainer.appendChild(dot);
+    }
+}
+
+function showTutorial() {
+    document.getElementById('tutorial-overlay').classList.remove('hidden');
+    currentTutorialStep = 1;
+    updateTutorialUI();
+}
+
+function skipTutorial() {
+    localStorage.setItem('flare-tutorial-seen', 'true');
+    document.getElementById('tutorial-overlay').classList.add('hidden');
+}
+
+function reopenTutorial() {
+    showTutorial();
+}
+
+function nextStep() {
+    if (currentTutorialStep < totalTutorialSteps) {
+        currentTutorialStep++;
+        updateTutorialUI();
+    } else {
+        skipTutorial();
+    }
+}
+
+function prevStep() {
+    if (currentTutorialStep > 1) {
+        currentTutorialStep--;
+        updateTutorialUI();
+    }
+}
+
+function goToStep(step) {
+    currentTutorialStep = step;
+    updateTutorialUI();
+}
+
+function updateTutorialUI() {
+    // Update steps
+    document.querySelectorAll('.tutorial-step').forEach(step => {
+        step.classList.remove('active');
+        if (parseInt(step.dataset.step) === currentTutorialStep) {
+            step.classList.add('active');
+        }
+    });
     
-    // Survivor node
-    addNodeAt(centerX + 10, centerY + 180, 'survivor');
+    // Update dots
+    document.querySelectorAll('.tutorial-dot').forEach((dot, index) => {
+        dot.classList.toggle('active', index + 1 === currentTutorialStep);
+    });
     
-    log('SYSTEM', '6 node ile demo ağ oluşturuldu');
+    // Update buttons
+    document.getElementById('prev-btn').disabled = currentTutorialStep === 1;
+    document.getElementById('next-btn').textContent = 
+        currentTutorialStep === totalTutorialSteps ? '[BAŞLA →]' : '[İLERİ →]';
+}
+
+// ─────────────────────────────────────────────────────────────────────────────────
+// INFO & TOOLTIP SYSTEM
+// ─────────────────────────────────────────────────────────────────────────────────
+
+function showInfo(infoKey) {
+    const info = INFO_CONTENT[infoKey];
+    if (!info) return;
+    
+    document.getElementById('info-modal-title').textContent = info.title;
+    document.getElementById('info-modal-body').innerHTML = info.content;
+    document.getElementById('info-modal').style.display = 'flex';
+}
+
+function closeInfoModal() {
+    document.getElementById('info-modal').style.display = 'none';
+}
+
+function showTooltip(e) {
+    const tooltip = document.getElementById('info-tooltip');
+    const content = e.target.dataset.info;
+    
+    if (!content) return;
+    
+    document.getElementById('tooltip-content').textContent = content;
+    tooltip.style.display = 'block';
+    tooltip.style.left = (e.pageX + 10) + 'px';
+    tooltip.style.top = (e.pageY + 10) + 'px';
+}
+
+function hideTooltip() {
+    document.getElementById('info-tooltip').style.display = 'none';
 }
 
 // ─────────────────────────────────────────────────────────────────────────────────
 // NODE MANAGEMENT
 // ─────────────────────────────────────────────────────────────────────────────────
+
+function createInitialNodes() {
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    
+    addNodeAt(centerX, centerY - 80, 'gateway');
+    addNodeAt(centerX - 120, centerY + 20, 'node');
+    addNodeAt(centerX + 130, centerY + 30, 'node');
+    addNodeAt(centerX - 60, centerY + 120, 'node');
+    addNodeAt(centerX + 70, centerY + 100, 'node');
+    addNodeAt(centerX + 10, centerY + 180, 'survivor');
+    
+    log('SYSTEM', '6 node ile demo ağ oluşturuldu');
+}
 
 function addNode() {
     const x = 50 + Math.random() * (canvas.width - 100);
@@ -123,19 +268,21 @@ function addNode() {
     addNodeAt(x, y, 'node');
 }
 
+function addSurvivor() {
+    const x = 50 + Math.random() * (canvas.width - 100);
+    const y = 50 + Math.random() * (canvas.height - 100);
+    addNodeAt(x, y, 'survivor');
+}
+
 function addNodeAt(x, y, type = 'node') {
     nodeIdCounter++;
     const node = {
         id: nodeIdCounter,
-        x: x,
-        y: y,
-        type: type, // 'gateway', 'node', 'survivor'
+        x, y, type,
         active: true,
         rssi: -50,
         snr: 10,
         messagesReceived: 0,
-        lastMessageTime: null,
-        // For animation
         pulseRadius: 0,
         isPulsing: false
     };
@@ -145,7 +292,7 @@ function addNodeAt(x, y, type = 'node') {
     updateStats();
     
     const typeLabel = type === 'gateway' ? 'GATEWAY' : type === 'survivor' ? 'KULLANICI' : 'NODE';
-    log('SYSTEM', `${typeLabel}-${node.id} ağa eklendi [${Math.round(x)}, ${Math.round(y)}]`);
+    log('SYSTEM', `${typeLabel}-${node.id} ağa eklendi`);
     
     return node;
 }
@@ -154,23 +301,9 @@ function toggleSelectedNode() {
     if (state.selectedNode) {
         state.selectedNode.active = !state.selectedNode.active;
         const status = state.selectedNode.active ? 'AKTİF' : 'DEVRE DIŞI';
-        log('SYSTEM', `NODE-${state.selectedNode.id} şimdi ${status}`);
+        log('SYSTEM', `NODE-${state.selectedNode.id} → ${status}`);
         updateConnections();
         updateStats();
-    }
-}
-
-function removeNode(node) {
-    const index = state.nodes.indexOf(node);
-    if (index > -1) {
-        state.nodes.splice(index, 1);
-        if (state.selectedNode === node) {
-            state.selectedNode = null;
-            document.getElementById('node-info').style.display = 'none';
-        }
-        updateConnections();
-        updateStats();
-        log('SYSTEM', `NODE-${node.id} ağdan kaldırıldı`);
     }
 }
 
@@ -179,6 +312,8 @@ function resetNetwork() {
     state.connections = [];
     state.selectedNode = null;
     state.propagatingMessage = null;
+    state.totalMessages = 0;
+    state.deliveredMessages = 0;
     nodeIdCounter = 0;
     document.getElementById('node-info').style.display = 'none';
     document.getElementById('log-display').innerHTML = '';
@@ -194,12 +329,10 @@ function calculateRange() {
     const sfMultiplier = LORA_CONFIG.SF[state.params.sf] || 1;
     const bwMultiplier = LORA_CONFIG.BW[state.params.bw] || 1;
     const txMultiplier = 1 + (state.params.txPower - 14) * 0.05;
-    
     return LORA_CONFIG.BASE_RANGE * sfMultiplier * bwMultiplier * txMultiplier;
 }
 
 function calculateRSSI(distance, maxRange) {
-    // Simple RSSI model: -50 dBm at closest, -130 dBm at max range
     const ratio = distance / maxRange;
     return Math.round(-50 - (ratio * 80));
 }
@@ -207,37 +340,30 @@ function calculateRSSI(distance, maxRange) {
 function updateConnections() {
     state.connections = [];
     const range = calculateRange();
-    
     const activeNodes = state.nodes.filter(n => n.active);
     
     for (let i = 0; i < activeNodes.length; i++) {
         for (let j = i + 1; j < activeNodes.length; j++) {
             const nodeA = activeNodes[i];
             const nodeB = activeNodes[j];
-            
-            const distance = Math.sqrt(
-                Math.pow(nodeA.x - nodeB.x, 2) + 
-                Math.pow(nodeA.y - nodeB.y, 2)
-            );
+            const distance = Math.sqrt(Math.pow(nodeA.x - nodeB.x, 2) + Math.pow(nodeA.y - nodeB.y, 2));
             
             if (distance <= range) {
                 const rssi = calculateRSSI(distance, range);
                 state.connections.push({
                     from: nodeA,
                     to: nodeB,
-                    distance: distance,
-                    rssi: rssi,
+                    distance,
+                    rssi,
                     quality: rssi > -70 ? 'excellent' : rssi > -90 ? 'good' : rssi > -110 ? 'fair' : 'weak'
                 });
-                
-                // Update node RSSI (average of connections)
                 nodeA.rssi = rssi;
                 nodeB.rssi = rssi;
             }
         }
     }
     
-    updateStats();
+    document.getElementById('stat-range').textContent = Math.round(range) + ' px';
 }
 
 // ─────────────────────────────────────────────────────────────────────────────────
@@ -245,9 +371,7 @@ function updateConnections() {
 // ─────────────────────────────────────────────────────────────────────────────────
 
 function sendFromSelected() {
-    if (state.selectedNode) {
-        openMessagePopup(state.selectedNode);
-    }
+    if (state.selectedNode) openMessagePopup(state.selectedNode);
 }
 
 function openMessagePopup(sourceNode) {
@@ -262,9 +386,7 @@ function closeMessagePopup() {
 }
 
 function sendMessage() {
-    const msgInput = document.getElementById('msg-input');
-    const text = msgInput.value.trim();
-    
+    const text = document.getElementById('msg-input').value.trim();
     if (!text || !state.messageSourceNode) {
         closeMessagePopup();
         return;
@@ -272,8 +394,6 @@ function sendMessage() {
     
     const sourceNode = state.messageSourceNode;
     closeMessagePopup();
-    
-    // Start propagation
     propagateMessage(sourceNode, text);
 }
 
@@ -282,26 +402,20 @@ function propagateMessage(sourceNode, text) {
     
     const message = {
         id: Date.now(),
-        text: text,
-        sourceNode: sourceNode,
+        text,
+        sourceNode,
         reachedNodes: new Set([sourceNode.id]),
         hops: 0,
         startTime: Date.now(),
-        path: [sourceNode],
         currentWave: [sourceNode],
-        nextWave: [],
         complete: false
     };
     
     state.propagatingMessage = message;
-    
-    // Start pulse animation on source
     sourceNode.isPulsing = true;
     sourceNode.pulseRadius = 0;
     
-    log('PROPAGATION', `NODE-${sourceNode.id}'den mesaj gönderildi: "${text.substring(0, 30)}${text.length > 30 ? '...' : ''}"`);
-    
-    // Propagate in waves
+    log('PROPAGATION', `NODE-${sourceNode.id}'den mesaj: "${text.substring(0, 25)}${text.length > 25 ? '...' : ''}"`);
     propagateWave(message);
 }
 
@@ -309,27 +423,19 @@ function propagateWave(message) {
     if (message.complete) return;
     
     const range = calculateRange();
-    message.nextWave = [];
+    const nextWave = [];
     
-    // Find all nodes reachable from current wave
     for (const currentNode of message.currentWave) {
         for (const node of state.nodes) {
             if (!node.active) continue;
             if (message.reachedNodes.has(node.id)) continue;
             
-            const distance = Math.sqrt(
-                Math.pow(currentNode.x - node.x, 2) + 
-                Math.pow(currentNode.y - node.y, 2)
-            );
+            const distance = Math.sqrt(Math.pow(currentNode.x - node.x, 2) + Math.pow(currentNode.y - node.y, 2));
             
             if (distance <= range) {
                 message.reachedNodes.add(node.id);
-                message.nextWave.push(node);
-                message.path.push(node);
+                nextWave.push(node);
                 node.messagesReceived++;
-                node.lastMessageTime = Date.now();
-                
-                // Pulse animation
                 node.isPulsing = true;
                 node.pulseRadius = 0;
                 
@@ -338,29 +444,20 @@ function propagateWave(message) {
         }
     }
     
-    if (message.nextWave.length > 0) {
+    if (nextWave.length > 0) {
         message.hops++;
-        message.currentWave = message.nextWave;
-        
-        // Update propagation display
+        message.currentWave = nextWave;
         updatePropagationDisplay(message);
-        
-        // Continue propagation after delay
         setTimeout(() => propagateWave(message), 500);
     } else {
-        // Propagation complete
         message.complete = true;
-        const endTime = Date.now();
-        const duration = endTime - message.startTime;
-        
+        const activeCount = state.nodes.filter(n => n.active).length;
         state.deliveredMessages += message.reachedNodes.size;
         
-        log('SUCCESS', `Mesaj yayılımı tamamlandı: ${message.reachedNodes.size}/${state.nodes.filter(n => n.active).length} node'a ulaştı, ${message.hops} hop, ${duration}ms`);
-        
+        log('SUCCESS', `✓ Yayılım tamamlandı: ${message.reachedNodes.size}/${activeCount} node, ${message.hops} hop`);
         updatePropagationDisplay(message, true);
         updateStats();
         
-        // Clear propagation after a moment
         setTimeout(() => {
             state.propagatingMessage = null;
             state.nodes.forEach(n => n.isPulsing = false);
@@ -372,11 +469,11 @@ function updatePropagationDisplay(message, complete = false) {
     const activeNodes = state.nodes.filter(n => n.active).length;
     const progress = Math.round((message.reachedNodes.size / activeNodes) * 100);
     
-    document.getElementById('prop-progress').innerText = progress + '%';
+    document.getElementById('prop-progress').textContent = progress + '%';
     document.getElementById('prop-fill').style.width = progress + '%';
-    document.getElementById('prop-hops').innerText = message.hops;
-    document.getElementById('prop-time').innerText = (Date.now() - message.startTime) + 'ms';
-    document.getElementById('prop-reached').innerText = message.reachedNodes.size + '/' + activeNodes;
+    document.getElementById('prop-hops').textContent = message.hops;
+    document.getElementById('prop-time').textContent = (Date.now() - message.startTime) + 'ms';
+    document.getElementById('prop-reached').textContent = message.reachedNodes.size + '/' + activeNodes;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────────
@@ -386,7 +483,6 @@ function updatePropagationDisplay(message, complete = false) {
 function setScenario(scenario) {
     state.scenario = scenario;
     
-    // Update buttons
     document.querySelectorAll('.scenario-btn').forEach(btn => btn.classList.remove('active'));
     event.target.classList.add('active');
     
@@ -394,6 +490,9 @@ function setScenario(scenario) {
     const gsmStatus = document.getElementById('gsm-status');
     const gsmDot = document.getElementById('gsm-dot');
     const systemStatus = document.getElementById('system-status');
+    
+    // Reset all nodes first
+    state.nodes.forEach(n => n.active = true);
     
     switch(scenario) {
         case 'normal':
@@ -408,45 +507,42 @@ function setScenario(scenario) {
             break;
             
         case 'earthquake':
-            scenarioName.textContent = '⚠️ DEPREM - GSM ALTYAPISI ÇÖKTÜ';
+            scenarioName.textContent = '⚠️ DEPREM - GSM ÇÖKTÜ';
             scenarioName.classList.add('emergency');
             gsmStatus.textContent = 'OFFLINE';
             gsmDot.classList.remove('active');
             state.gsmOnline = false;
-            systemStatus.textContent = 'EMERGENCY MODE';
+            systemStatus.textContent = 'EMERGENCY';
             systemStatus.classList.add('active', 'emergency');
-            log('ERROR', '⚠️ DEPREM TESPİT EDİLDİ - GSM ALTYAPISI ÇÖKTÜ');
-            log('SYSTEM', 'FLARE MESH AĞI AKTİF - Acil durum modu başlatıldı');
-            
-            // Randomly disable some nodes to simulate damage
-            simulateDamage(0.2);
+            log('ERROR', '⚠️ DEPREM! GSM altyapısı çöktü!');
+            log('SYSTEM', 'FLARE mesh ağı aktif - Acil durum modu');
+            simulateDamage(0.25);
             break;
             
         case 'flood':
-            scenarioName.textContent = '🌊 SEL - KISMI AĞ HASARI';
+            scenarioName.textContent = '🌊 SEL - KISMI HASAR';
             scenarioName.classList.add('emergency');
             gsmStatus.textContent = 'DEGRADED';
             gsmDot.classList.remove('active');
             state.gsmOnline = false;
-            systemStatus.textContent = 'EMERGENCY MODE';
+            systemStatus.textContent = 'EMERGENCY';
             systemStatus.classList.add('active', 'emergency');
-            log('ERROR', '🌊 SEL UYARISI - Kısmi ağ hasarı');
-            log('SYSTEM', 'FLARE MESH AĞI AKTİF');
-            
+            log('ERROR', '🌊 SEL! Kısmi ağ hasarı');
             simulateDamage(0.3);
             break;
     }
+    
+    updateConnections();
+    updateStats();
 }
 
 function simulateDamage(probability) {
     state.nodes.forEach(node => {
         if (node.type !== 'gateway' && Math.random() < probability) {
             node.active = false;
-            log('ERROR', `NODE-${node.id} hasar gördü - devre dışı`);
+            log('ERROR', `NODE-${node.id} hasar gördü`);
         }
     });
-    updateConnections();
-    updateStats();
 }
 
 // ─────────────────────────────────────────────────────────────────────────────────
@@ -460,44 +556,29 @@ function handleCanvasClick(e) {
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-    
-    // Check if clicked on a node
     const clickedNode = findNodeAt(x, y);
     
     if (state.nodeDisableMode && clickedNode) {
         clickedNode.active = !clickedNode.active;
-        const status = clickedNode.active ? 'AKTİF' : 'DEVRE DIŞI';
-        log('SYSTEM', `NODE-${clickedNode.id} → ${status}`);
+        log('SYSTEM', `NODE-${clickedNode.id} → ${clickedNode.active ? 'AKTİF' : 'DEVRE DIŞI'}`);
         updateConnections();
         updateStats();
         return;
     }
     
-    if (clickedNode) {
-        selectNode(clickedNode);
-    } else {
-        deselectNode();
-    }
+    if (clickedNode) selectNode(clickedNode);
+    else deselectNode();
 }
 
 function handleCanvasDoubleClick(e) {
     const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    
-    const clickedNode = findNodeAt(x, y);
-    
-    if (clickedNode && clickedNode.active) {
-        openMessagePopup(clickedNode);
-    }
+    const clickedNode = findNodeAt(e.clientX - rect.left, e.clientY - rect.top);
+    if (clickedNode && clickedNode.active) openMessagePopup(clickedNode);
 }
 
 function handleMouseDown(e) {
     const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    
-    const node = findNodeAt(x, y);
+    const node = findNodeAt(e.clientX - rect.left, e.clientY - rect.top);
     if (node) {
         isDragging = true;
         dragNode = node;
@@ -514,7 +595,7 @@ function handleMouseMove(e) {
     }
 }
 
-function handleMouseUp(e) {
+function handleMouseUp() {
     isDragging = false;
     dragNode = null;
     canvas.style.cursor = 'crosshair';
@@ -522,27 +603,20 @@ function handleMouseUp(e) {
 
 function findNodeAt(x, y) {
     for (const node of state.nodes) {
-        const distance = Math.sqrt(Math.pow(node.x - x, 2) + Math.pow(node.y - y, 2));
-        if (distance < 20) {
-            return node;
-        }
+        if (Math.sqrt(Math.pow(node.x - x, 2) + Math.pow(node.y - y, 2)) < 20) return node;
     }
     return null;
 }
 
 function selectNode(node) {
     state.selectedNode = node;
+    document.getElementById('node-info').style.display = 'block';
     
-    const infoPanel = document.getElementById('node-info');
-    infoPanel.style.display = 'block';
-    
-    document.getElementById('selected-node-id').textContent = 
-        (node.type === 'gateway' ? 'GATEWAY-' : node.type === 'survivor' ? 'USER-' : 'NODE-') + node.id;
+    const typeLabel = node.type === 'gateway' ? 'GATEWAY-' : node.type === 'survivor' ? 'USER-' : 'NODE-';
+    document.getElementById('selected-node-id').textContent = typeLabel + node.id;
     document.getElementById('node-rssi').textContent = node.rssi + ' dBm';
     document.getElementById('node-snr').textContent = node.snr + ' dB';
-    
-    const connections = state.connections.filter(c => c.from === node || c.to === node).length;
-    document.getElementById('node-connections').textContent = connections;
+    document.getElementById('node-connections').textContent = state.connections.filter(c => c.from === node || c.to === node).length;
     document.getElementById('node-messages').textContent = node.messagesReceived;
 }
 
@@ -554,16 +628,15 @@ function deselectNode() {
 function toggleNodeMode() {
     state.nodeDisableMode = !state.nodeDisableMode;
     const btn = document.querySelector('.action-btn.danger');
-    const text = document.getElementById('node-mode-text');
     
     if (state.nodeDisableMode) {
         btn.classList.add('active');
-        text.textContent = '[✓ KAPAT MODU AKTİF]';
+        document.getElementById('node-mode-text').textContent = '[✓ MODU KAPAT]';
         document.getElementById('map-mode-indicator').textContent = '[NODE KAPAT MODU]';
         canvas.style.cursor = 'not-allowed';
     } else {
         btn.classList.remove('active');
-        text.textContent = '[🔴 NODE KAPAT MODU]';
+        document.getElementById('node-mode-text').textContent = '[🔴 NODE KAPAT MODU]';
         document.getElementById('map-mode-indicator').textContent = '';
         canvas.style.cursor = 'crosshair';
     }
@@ -571,20 +644,16 @@ function toggleNodeMode() {
 
 function setParam(param, value) {
     state.params[param] = value;
-    
-    // Update button states
-    document.querySelectorAll(`.param-btn`).forEach(btn => {
+    document.querySelectorAll('.param-btn').forEach(btn => {
         const btnValue = parseInt(btn.textContent);
-        if (param === 'sf' && [7, 9, 10, 12].includes(btnValue)) {
-            btn.classList.toggle('active', btnValue === value);
-        }
-        if (param === 'bw' && [125, 250, 500].includes(btnValue)) {
+        if ((param === 'sf' && [7, 9, 10, 12].includes(btnValue)) ||
+            (param === 'bw' && [125, 250, 500].includes(btnValue))) {
             btn.classList.toggle('active', btnValue === value);
         }
     });
-    
     updateConnections();
-    log('SYSTEM', `LoRa parametresi güncellendi: ${param.toUpperCase()}=${value}`);
+    updateStats();
+    log('SYSTEM', `LoRa: ${param.toUpperCase()}=${value}`);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────────
@@ -592,52 +661,25 @@ function setParam(param, value) {
 // ─────────────────────────────────────────────────────────────────────────────────
 
 function updateStats() {
-    const totalNodes = state.nodes.length;
-    const activeNodes = state.nodes.filter(n => n.active).length;
+    const total = state.nodes.length;
+    const active = state.nodes.filter(n => n.active).length;
     
-    document.getElementById('stat-nodes').textContent = `${activeNodes}/${totalNodes}`;
+    document.getElementById('stat-nodes').textContent = `${active}/${total}`;
+    document.getElementById('stat-connections').textContent = state.connections.length;
     
-    // Calculate average hops (simplified)
-    const avgHops = state.connections.length > 0 ? 
-        (state.connections.length / activeNodes).toFixed(1) : '0.0';
-    document.getElementById('stat-hops').textContent = avgHops;
-    
-    // Coverage (based on connections)
-    const maxPossibleConnections = (activeNodes * (activeNodes - 1)) / 2;
-    const coverage = maxPossibleConnections > 0 ? 
-        Math.round((state.connections.length / maxPossibleConnections) * 100) : 0;
-    document.getElementById('stat-coverage').textContent = coverage + '%';
-    
-    // Delivery rate
     const delivery = state.totalMessages > 0 ? 
-        Math.round((state.deliveredMessages / (state.totalMessages * activeNodes)) * 100) : 100;
-    document.getElementById('stat-delivery').textContent = Math.min(100, delivery) + '%';
+        Math.round((state.deliveredMessages / (state.totalMessages * active)) * 100) : '-';
+    document.getElementById('stat-delivery').textContent = delivery === '-' ? '-' : Math.min(100, delivery) + '%';
 }
 
 function log(type, message) {
     const logDisplay = document.getElementById('log-display');
-    const timestamp = new Date().toLocaleTimeString('tr-TR');
+    const time = new Date().toLocaleTimeString('tr-TR');
     
     const entry = document.createElement('div');
-    entry.className = 'log-entry';
+    entry.className = 'log-entry ' + type.toLowerCase();
+    entry.innerHTML = `<span class="timestamp">[${time}]</span> ${message}`;
     
-    switch(type) {
-        case 'ERROR':
-            entry.classList.add('error');
-            break;
-        case 'SUCCESS':
-            entry.classList.add('success');
-            break;
-        case 'PROPAGATION':
-            entry.classList.add('propagation');
-            break;
-        case 'SYSTEM':
-        default:
-            entry.classList.add('system');
-            break;
-    }
-    
-    entry.innerHTML = `<span class="timestamp">[${timestamp}]</span> ${message}`;
     logDisplay.appendChild(entry);
     logDisplay.scrollTop = logDisplay.scrollHeight;
 }
@@ -648,44 +690,28 @@ function log(type, message) {
 
 function gameLoop() {
     render();
-    animationId = requestAnimationFrame(gameLoop);
+    requestAnimationFrame(gameLoop);
 }
 
 function render() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    // Draw grid
     drawGrid();
-    
-    // Draw range circles for selected node
-    if (state.selectedNode) {
-        drawRangeCircle(state.selectedNode);
-    }
-    
-    // Draw connections
+    if (state.selectedNode) drawRangeCircle(state.selectedNode);
     drawConnections();
-    
-    // Draw nodes
     drawNodes();
-    
-    // Draw pulse animations
     drawPulseAnimations();
 }
 
 function drawGrid() {
     ctx.strokeStyle = '#1a1a00';
     ctx.lineWidth = 0.5;
-    
-    const gridSize = 30;
-    
-    for (let x = 0; x < canvas.width; x += gridSize) {
+    for (let x = 0; x < canvas.width; x += 30) {
         ctx.beginPath();
         ctx.moveTo(x, 0);
         ctx.lineTo(x, canvas.height);
         ctx.stroke();
     }
-    
-    for (let y = 0; y < canvas.height; y += gridSize) {
+    for (let y = 0; y < canvas.height; y += 30) {
         ctx.beginPath();
         ctx.moveTo(0, y);
         ctx.lineTo(canvas.width, y);
@@ -695,35 +721,20 @@ function drawGrid() {
 
 function drawConnections() {
     for (const conn of state.connections) {
-        const alpha = conn.quality === 'excellent' ? 0.8 : 
-                     conn.quality === 'good' ? 0.6 : 
-                     conn.quality === 'fair' ? 0.4 : 0.2;
+        const alpha = conn.quality === 'excellent' ? 0.8 : conn.quality === 'good' ? 0.6 : conn.quality === 'fair' ? 0.4 : 0.2;
+        let isActive = false;
         
-        // Check if this connection is part of active propagation
-        let isActiveConnection = false;
         if (state.propagatingMessage) {
             const msg = state.propagatingMessage;
-            isActiveConnection = msg.reachedNodes.has(conn.from.id) && msg.reachedNodes.has(conn.to.id);
+            isActive = msg.reachedNodes.has(conn.from.id) && msg.reachedNodes.has(conn.to.id);
         }
         
-        ctx.strokeStyle = isActiveConnection ? '#00ff88' : `rgba(0, 170, 255, ${alpha})`;
-        ctx.lineWidth = isActiveConnection ? 3 : 2;
-        
+        ctx.strokeStyle = isActive ? '#00ff88' : `rgba(0, 170, 255, ${alpha})`;
+        ctx.lineWidth = isActive ? 3 : 2;
         ctx.beginPath();
         ctx.moveTo(conn.from.x, conn.from.y);
         ctx.lineTo(conn.to.x, conn.to.y);
         ctx.stroke();
-        
-        // Draw RSSI indicator at midpoint
-        if (conn.quality !== 'excellent') {
-            const midX = (conn.from.x + conn.to.x) / 2;
-            const midY = (conn.from.y + conn.to.y) / 2;
-            
-            ctx.fillStyle = conn.quality === 'good' ? '#88ff00' : 
-                           conn.quality === 'fair' ? '#ffaa00' : '#ff6600';
-            ctx.font = '8px Courier New';
-            ctx.fillText(conn.rssi + 'dBm', midX - 15, midY - 5);
-        }
     }
 }
 
@@ -732,11 +743,10 @@ function drawNodes() {
         const isSelected = state.selectedNode === node;
         const size = node.type === 'gateway' ? 18 : node.type === 'survivor' ? 14 : 12;
         
-        // Node glow
+        // Glow
         if (node.active) {
             const gradient = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, size + 10);
-            const color = node.type === 'gateway' ? '0, 255, 136' : 
-                         node.type === 'survivor' ? '255, 221, 0' : '209, 255, 0';
+            const color = node.type === 'gateway' ? '0, 255, 136' : node.type === 'survivor' ? '255, 221, 0' : '209, 255, 0';
             gradient.addColorStop(0, `rgba(${color}, 0.3)`);
             gradient.addColorStop(1, `rgba(${color}, 0)`);
             ctx.fillStyle = gradient;
@@ -745,13 +755,10 @@ function drawNodes() {
             ctx.fill();
         }
         
-        // Node body
-        ctx.fillStyle = !node.active ? '#333333' :
-                       node.type === 'gateway' ? '#00ff88' : 
-                       node.type === 'survivor' ? '#ffdd00' : '#d1ff00';
+        // Body
+        ctx.fillStyle = !node.active ? '#333' : node.type === 'gateway' ? '#00ff88' : node.type === 'survivor' ? '#ffdd00' : '#d1ff00';
         
         if (node.type === 'gateway') {
-            // Diamond shape for gateway
             ctx.beginPath();
             ctx.moveTo(node.x, node.y - size);
             ctx.lineTo(node.x + size, node.y);
@@ -760,7 +767,6 @@ function drawNodes() {
             ctx.closePath();
             ctx.fill();
         } else if (node.type === 'survivor') {
-            // Triangle for survivor/user
             ctx.beginPath();
             ctx.moveTo(node.x, node.y - size);
             ctx.lineTo(node.x + size, node.y + size);
@@ -768,7 +774,6 @@ function drawNodes() {
             ctx.closePath();
             ctx.fill();
         } else {
-            // Circle for regular nodes
             ctx.beginPath();
             ctx.arc(node.x, node.y, size, 0, Math.PI * 2);
             ctx.fill();
@@ -783,14 +788,13 @@ function drawNodes() {
             ctx.stroke();
         }
         
-        // Node label
-        ctx.fillStyle = node.active ? '#ffffff' : '#666666';
+        // Label
+        ctx.fillStyle = node.active ? '#fff' : '#666';
         ctx.font = 'bold 9px Courier New';
         ctx.textAlign = 'center';
-        const label = node.type === 'gateway' ? 'GW' : node.type === 'survivor' ? 'USR' : node.id;
-        ctx.fillText(label, node.x, node.y + 3);
+        ctx.fillText(node.type === 'gateway' ? 'GW' : node.type === 'survivor' ? '👤' : node.id, node.x, node.y + 3);
         
-        // Status indicator for inactive nodes
+        // Inactive marker
         if (!node.active) {
             ctx.fillStyle = '#ff3366';
             ctx.font = 'bold 12px Courier New';
@@ -801,7 +805,6 @@ function drawNodes() {
 
 function drawRangeCircle(node) {
     const range = calculateRange();
-    
     ctx.strokeStyle = 'rgba(0, 170, 255, 0.3)';
     ctx.lineWidth = 1;
     ctx.setLineDash([5, 5]);
@@ -810,17 +813,15 @@ function drawRangeCircle(node) {
     ctx.stroke();
     ctx.setLineDash([]);
     
-    // Range label
     ctx.fillStyle = '#00aaff';
     ctx.font = '10px Courier New';
-    ctx.fillText(`${Math.round(range)}px range`, node.x + range + 5, node.y);
+    ctx.fillText(`${Math.round(range)}px`, node.x + range + 5, node.y);
 }
 
 function drawPulseAnimations() {
     for (const node of state.nodes) {
         if (node.isPulsing) {
             node.pulseRadius += 3;
-            
             const alpha = 1 - (node.pulseRadius / 80);
             if (alpha > 0) {
                 ctx.strokeStyle = `rgba(0, 255, 136, ${alpha})`;

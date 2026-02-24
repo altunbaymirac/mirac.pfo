@@ -524,3 +524,97 @@ function updateDataPanel() {
     document.getElementById('data-wtw').textContent = Math.max(0, wtw).toFixed(1);
     document.getElementById('bar-wtw').style.width = Math.min(100, wtw) + '%';
 }
+
+// ─────────────────────────────────────────────────────────────────────────────────
+// DCE TUTORIAL SYSTEM
+// ─────────────────────────────────────────────────────────────────────────────────
+
+let dceTutorialStep = 1;
+const dceTotalSteps = 5;
+
+document.addEventListener('DOMContentLoaded', () => {
+    initDCETutorial();
+});
+
+function initDCETutorial() {
+    const hasSeenTutorial = localStorage.getItem('dce-tutorial-seen');
+    
+    if (!hasSeenTutorial) {
+        showDCETutorial();
+    } else {
+        const overlay = document.getElementById('dce-tutorial-overlay');
+        if (overlay) overlay.classList.add('hidden');
+    }
+    
+    // Create dots
+    const dotsContainer = document.getElementById('dce-tutorial-dots');
+    if (dotsContainer) {
+        for (let i = 1; i <= dceTotalSteps; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'tutorial-dot' + (i === 1 ? ' active' : '');
+            dot.onclick = () => goToDCEStep(i);
+            dotsContainer.appendChild(dot);
+        }
+    }
+}
+
+function showDCETutorial() {
+    const overlay = document.getElementById('dce-tutorial-overlay');
+    if (overlay) {
+        overlay.classList.remove('hidden');
+        dceTutorialStep = 1;
+        updateDCETutorialUI();
+    }
+}
+
+function skipDCETutorial() {
+    localStorage.setItem('dce-tutorial-seen', 'true');
+    const overlay = document.getElementById('dce-tutorial-overlay');
+    if (overlay) overlay.classList.add('hidden');
+}
+
+function reopenDCETutorial() {
+    showDCETutorial();
+}
+
+function nextDCEStep() {
+    if (dceTutorialStep < dceTotalSteps) {
+        dceTutorialStep++;
+        updateDCETutorialUI();
+    } else {
+        skipDCETutorial();
+    }
+}
+
+function prevDCEStep() {
+    if (dceTutorialStep > 1) {
+        dceTutorialStep--;
+        updateDCETutorialUI();
+    }
+}
+
+function goToDCEStep(step) {
+    dceTutorialStep = step;
+    updateDCETutorialUI();
+}
+
+function updateDCETutorialUI() {
+    // Update steps
+    document.querySelectorAll('#dce-tutorial-overlay .tutorial-step').forEach(step => {
+        step.classList.remove('active');
+        if (parseInt(step.dataset.step) === dceTutorialStep) {
+            step.classList.add('active');
+        }
+    });
+    
+    // Update dots
+    document.querySelectorAll('#dce-tutorial-dots .tutorial-dot').forEach((dot, index) => {
+        dot.classList.toggle('active', index + 1 === dceTutorialStep);
+    });
+    
+    // Update buttons
+    const prevBtn = document.getElementById('dce-prev-btn');
+    const nextBtn = document.getElementById('dce-next-btn');
+    if (prevBtn) prevBtn.disabled = dceTutorialStep === 1;
+    if (nextBtn) nextBtn.textContent = dceTutorialStep === dceTotalSteps ? '[BAŞLA →]' : '[İLERİ →]';
+}
