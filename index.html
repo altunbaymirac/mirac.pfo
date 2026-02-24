@@ -9,14 +9,22 @@
 </head>
 <body>
     <div class="overlay"></div>
+    <div class="scanlines"></div>
+    
     <div class="terminal">
         <header>
             <div class="system-meta">
-                [UNIT: AGU MECHANICAL ENGINEERING] <br>
-                [OPERATOR: MIRAÇ ALTUNBAY] <br>
-                [STATUS: <span class="status-active">ACTIVE</span>]
+                <span id="typing-1"></span><br>
+                <span id="typing-2"></span><br>
+                <span>[STATUS: <span class="status-active">ACTIVE</span>]</span>
             </div>
-            <div id="clock">00:00:00</div>
+            <div class="header-right">
+                <div id="clock">00:00:00</div>
+                <div class="visitor-counter">
+                    <span class="counter-label">VISITORS:</span>
+                    <span id="visitor-count" class="counter-value">------</span>
+                </div>
+            </div>
         </header>
 
         <nav>
@@ -30,7 +38,7 @@
             
             <!-- ABOUT / OPERATOR -->
             <section id="about" class="content-block">
-                <h3>> OPERATOR PROFILE: MIRAÇ ALTUNBAY</h3>
+                <h3 class="glitch-text" data-text="> OPERATOR PROFILE: MIRAÇ ALTUNBAY">> OPERATOR PROFILE: MIRAÇ ALTUNBAY</h3>
                 
                 <div class="profile-grid">
                     <div class="profile-info">
@@ -44,13 +52,13 @@
                         </div>
                         <div class="info-row">
                             <span class="info-label">DURUM:</span>
-                            <span class="info-value status-active">Aktif</span>
+                            <span class="info-value status-active">Aktif Geliştirici</span>
                         </div>
                     </div>
                     
                     <div class="profile-bio">
                         <p>// Mühendislik ve yazılım arasında köprü kuran bir maker.</p>
-                        <p>// "Anything that moves with an engine"</p>
+                        <p>// "Anything that moves with an engine" felsefesiyle çalışıyorum.</p>
                     </div>
                 </div>
 
@@ -62,7 +70,8 @@
                             <div class="skill-tags">
                                 <span class="skill-tag">React Native</span>
                                 <span class="skill-tag">Firebase</span>
-                                <span class="skill-tag">Python-Java</span>
+                                <span class="skill-tag">Python</span>
+                                <span class="skill-tag">JavaScript</span>
                             </div>
                         </div>
                         <div class="skill-category">
@@ -70,6 +79,7 @@
                             <div class="skill-tags">
                                 <span class="skill-tag">ESP32</span>
                                 <span class="skill-tag">LoRa</span>
+                                <span class="skill-tag">Arduino</span>
                             </div>
                         </div>
                         <div class="skill-category">
@@ -86,17 +96,16 @@
                 <div class="social-links">
                     <h4>> EXTERNAL_LINKS</h4>
                     <div class="links-row">
-                        <a href="https://github.com/altunbaymirac" target="_blank" class="social-btn">[GITHUB]</a>
-                        <a href="https://linkedin.com/in/miraçaltunbay" target="_blank" class="social-btn">[LINKEDIN]</a>
-                        <a href="mailto:altunbaymirac544@gmail.com" class="social-btn">[EMAIL]</a>
-                        <a href="https://www.instagram.com/altunbay.mirac" class="social-btn">[INSTAGRAM]</a>
+                        <a href="https://github.com/miracaltunbay" target="_blank" class="social-btn">[GITHUB]</a>
+                        <a href="https://linkedin.com/in/miracaltunbay" target="_blank" class="social-btn">[LINKEDIN]</a>
+                        <a href="mailto:mirac@example.com" class="social-btn">[EMAIL]</a>
                     </div>
                 </div>
             </section>
 
             <!-- PROJECTS -->
             <section id="projects" class="content-block" style="display:none;">
-                <h3>> ACTIVE MISSIONS</h3>
+                <h3 class="glitch-text" data-text="> ACTIVE MISSIONS">> ACTIVE MISSIONS</h3>
                 
                 <!-- FLARE -->
                 <div class="project-card featured">
@@ -162,35 +171,63 @@
 
             <!-- ARCHIVE / LOGS -->
             <section id="logs" class="content-block" style="display:none;">
-                <h3>> DATA LOGS / ARŞİV</h3>
+                <h3 class="glitch-text" data-text="> DATA LOGS / ARŞİV">> DATA LOGS / ARŞİV</h3>
                 
-                <div class="archive-notice">
-                    <p>// Bu bölüm yapım aşamasında.</p>
-                    <p>// Obsidian notları, teknik yazılar ve kişisel içerikler yakında eklenecek.</p>
+                <!-- Games Section -->
+                <div class="archive-section">
+                    <h4>> RECREATIONAL_PROGRAMS.exe</h4>
+                    <div class="games-grid">
+                        <a href="snake.html" class="game-card">
+                            <div class="game-icon">🐍</div>
+                            <div class="game-title">SNAKE.EXE</div>
+                            <div class="game-desc">Klasik yılan oyunu</div>
+                            <div class="game-highscore">HIGH SCORE: <span id="snake-highscore">0</span></div>
+                        </a>
+                        
+                        <div class="game-card locked">
+                            <div class="game-icon">👾</div>
+                            <div class="game-title">SPACE_INVADERS.EXE</div>
+                            <div class="game-desc">[LOCKED]</div>
+                        </div>
+                        
+                        <div class="game-card locked">
+                            <div class="game-icon">🧱</div>
+                            <div class="game-title">TETRIS.EXE</div>
+                            <div class="game-desc">[LOCKED]</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Archive Categories -->
+                <div class="archive-section">
+                    <h4>> DATA_ARCHIVES</h4>
+                    <div class="archive-categories">
+                        <div class="archive-cat">
+                            <span class="cat-icon">[📝]</span>
+                            <span class="cat-label">Teknik Notlar</span>
+                            <span class="cat-count">COMING SOON</span>
+                        </div>
+                        <div class="archive-cat">
+                            <span class="cat-icon">[🔬]</span>
+                            <span class="cat-label">Araştırmalar</span>
+                            <span class="cat-count">COMING SOON</span>
+                        </div>
+                        <div class="archive-cat">
+                            <span class="cat-icon">[✍️]</span>
+                            <span class="cat-label">Kişisel</span>
+                            <span class="cat-count">COMING SOON</span>
+                        </div>
+                    </div>
                 </div>
                 
-                <div class="archive-categories">
-                    <div class="archive-cat">
-                        <span class="cat-icon">[📝]</span>
-                        <span class="cat-label">Teknik Notlar</span>
-                        <span class="cat-count">COMING SOON</span>
-                    </div>
-                    <div class="archive-cat">
-                        <span class="cat-icon">[🔬]</span>
-                        <span class="cat-label">Araştırmalar</span>
-                        <span class="cat-count">COMING SOON</span>
-                    </div>
-                    <div class="archive-cat">
-                        <span class="cat-icon">[✍️]</span>
-                        <span class="cat-label">Kişisel</span>
-                        <span class="cat-count">COMING SOON</span>
-                    </div>
+                <div class="easter-hint">
+                    <p>// Bazı şeyler gizlidir... ↑↑↓↓←→←→BA</p>
                 </div>
             </section>
 
             <!-- COMMS / RADIO -->
             <section id="comms" class="content-block" style="display:none;">
-                <h3>> COMMS CHANNEL [LIVE]</h3>
+                <h3 class="glitch-text" data-text="> COMMS CHANNEL [LIVE]">> COMMS CHANNEL [LIVE]</h3>
                 <div class="comms-header">
                     <span class="live-indicator">
                         <span class="live-dot"></span>
@@ -216,6 +253,25 @@
             <span>[AGÜ MAKİNE MÜHENDİSLİĞİ]</span>
             <span class="version">v2.1</span>
         </footer>
+    </div>
+
+    <!-- EASTER EGG OVERLAY -->
+    <div id="easter-egg-overlay" class="easter-egg-overlay" style="display:none;">
+        <div class="easter-egg-content">
+            <pre class="ascii-art">
+    ███╗   ███╗██╗██████╗  █████╗  ██████╗
+    ████╗ ████║██║██╔══██╗██╔══██╗██╔════╝
+    ██╔████╔██║██║██████╔╝███████║██║     
+    ██║╚██╔╝██║██║██╔══██╗██╔══██║██║     
+    ██║ ╚═╝ ██║██║██║  ██║██║  ██║╚██████╗
+    ╚═╝     ╚═╝╚═╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝
+            </pre>
+            <h2 class="easter-title">🎉 SECRET UNLOCKED 🎉</h2>
+            <p class="easter-message">Tebrikler! Konami Code'u buldun!</p>
+            <p class="easter-sub">Sen gerçek bir geek'sin. 🎮</p>
+            <button onclick="closeEasterEgg()" class="easter-close">[DEVAM ET]</button>
+        </div>
+        <canvas id="matrix-canvas"></canvas>
     </div>
 
     <!-- Firebase SDK -->
