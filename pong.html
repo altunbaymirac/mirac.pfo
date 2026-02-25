@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PONG.EXE | MIRAÇ ALTUNBAY</title>
+    <style>
+        :root {
+            --primary: #d1ff00;
+            --bg: #050505;
+            --border: #333300;
+            --dim: #666600;
+        }
+        
+        * { box-sizing: border-box; }
+        
+        body {
+            background: var(--bg);
+            color: var(--primary);
+            font-family: 'Courier New', monospace;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            text-transform: uppercase;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .header h1 {
+            color: #00d4ff;
+            font-size: 24px;
+            margin: 0 0 10px 0;
+        }
+        
+        .back-btn {
+            color: var(--dim);
+            text-decoration: none;
+            font-size: 10px;
+            border: 1px solid var(--border);
+            padding: 5px 10px;
+        }
+        
+        .back-btn:hover {
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+        
+        .score-board {
+            display: flex;
+            gap: 50px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        
+        .score-board span {
+            color: var(--dim);
+        }
+        
+        .score-board .score {
+            color: var(--primary);
+            font-size: 28px;
+        }
+        
+        #game-canvas {
+            border: 2px solid var(--primary);
+            background: #000;
+        }
+        
+        .controls-info {
+            font-size: 9px;
+            color: var(--dim);
+            border: 1px dashed var(--border);
+            padding: 10px 20px;
+            margin-top: 15px;
+            text-align: center;
+        }
+        
+        .btn {
+            padding: 10px 30px;
+            background: none;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        
+        .btn:hover {
+            background: var(--primary);
+            color: black;
+        }
+        
+        .game-over {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+        
+        .game-over-box {
+            text-align: center;
+            border: 2px solid var(--primary);
+            padding: 30px;
+            background: var(--bg);
+        }
+        
+        .game-over-box h2 {
+            color: var(--primary);
+            margin: 0 0 10px 0;
+        }
+        
+        .winner {
+            font-size: 18px;
+            color: #00d4ff;
+            margin-bottom: 20px;
+        }
+        
+        .mode-select {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            justify-content: center;
+        }
+        
+        .mode-btn {
+            padding: 8px 15px;
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--dim);
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            cursor: pointer;
+        }
+        
+        .mode-btn:hover, .mode-btn.active {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        .difficulty {
+            margin-top: 10px;
+            font-size: 10px;
+            color: var(--dim);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏓 PONG.EXE</h1>
+        <a href="index.html" class="back-btn">[← ANA SAYFA]</a>
+    </div>
+    
+    <div class="score-board">
+        <div>
+            <span>PLAYER</span><br>
+            <span class="score" id="player-score">0</span>
+        </div>
+        <div>
+            <span>CPU</span><br>
+            <span class="score" id="cpu-score">0</span>
+        </div>
+    </div>
+    
+    <canvas id="game-canvas" width="600" height="400"></canvas>
+    
+    <div class="mode-select">
+        <button class="mode-btn active" onclick="setDifficulty('easy')">EASY</button>
+        <button class="mode-btn" onclick="setDifficulty('normal')">NORMAL</button>
+        <button class="mode-btn" onclick="setDifficulty('hard')">HARD</button>
+    </div>
+    
+    <button class="btn" id="start-btn" onclick="startGame()">[▶ START]</button>
+    
+    <div class="controls-info">
+        <p><kbd>↑</kbd> <kbd>↓</kbd> veya <kbd>W</kbd> <kbd>S</kbd> - Hareket | <kbd>P</kbd> - Pause | İlk 11 sayıya ulaşan kazanır!</p>
+    </div>
+    
+    <div class="game-over" id="game-over">
+        <div class="game-over-box">
+            <h2>GAME OVER</h2>
+            <div class="winner" id="winner">PLAYER WINS!</div>
+            <button class="btn" onclick="startGame()">[↺ PLAY AGAIN]</button>
+            <br><br>
+            <a href="index.html" class="back-btn">[← BACK]</a>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('game-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        const PADDLE_WIDTH = 10, PADDLE_HEIGHT = 80;
+        const BALL_SIZE = 10;
+        const WIN_SCORE = 11;
+        
+        let playerY, cpuY, ballX, ballY, ballVX, ballVY;
+        let playerScore = 0, cpuScore = 0;
+        let isPlaying = false, isPaused = false;
+        let difficulty = 'easy';
+        let cpuSpeed = 3;
+        let gameLoop;
+        
+        const keys = { up: false, down: false };
+        
+        function setDifficulty(d) {
+            difficulty = d;
+            document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            switch(d) {
+                case 'easy': cpuSpeed = 2.5; break;
+                case 'normal': cpuSpeed = 4; break;
+                case 'hard': cpuSpeed = 6; break;
+            }
+        }
+        
+        function resetBall(direction = 1) {
+            ballX = canvas.width / 2;
+            ballY = canvas.height / 2;
+            ballVX = 5 * direction;
+            ballVY = (Math.random() - 0.5) * 6;
+        }
+        
+        function startGame() {
+            document.getElementById('game-over').style.display = 'none';
+            playerScore = 0;
+            cpuScore = 0;
+            updateScore();
+            
+            playerY = canvas.height / 2 - PADDLE_HEIGHT / 2;
+            cpuY = canvas.height / 2 - PADDLE_HEIGHT / 2;
+            resetBall();
+            
+            isPlaying = true;
+            isPaused = false;
+            
+            if (gameLoop) cancelAnimationFrame(gameLoop);
+            gameLoop = requestAnimationFrame(update);
+        }
+        
+        function update() {
+            if (!isPlaying || isPaused) return;
+            
+            // Player movement
+            if (keys.up && playerY > 0) playerY -= 6;
+            if (keys.down && playerY < canvas.height - PADDLE_HEIGHT) playerY += 6;
+            
+            // CPU AI
+            const cpuCenter = cpuY + PADDLE_HEIGHT / 2;
+            const diff = ballY - cpuCenter;
+            
+            if (Math.abs(diff) > 10) {
+                if (diff > 0 && cpuY < canvas.height - PADDLE_HEIGHT) {
+                    cpuY += Math.min(cpuSpeed, diff);
+                } else if (diff < 0 && cpuY > 0) {
+                    cpuY += Math.max(-cpuSpeed, diff);
+                }
+            }
+            
+            // Ball movement
+            ballX += ballVX;
+            ballY += ballVY;
+            
+            // Wall collision
+            if (ballY <= 0 || ballY >= canvas.height - BALL_SIZE) {
+                ballVY = -ballVY;
+                ballY = ballY <= 0 ? 0 : canvas.height - BALL_SIZE;
+            }
+            
+            // Paddle collision
+            // Player paddle
+            if (ballX <= 30 && ballY + BALL_SIZE >= playerY && ballY <= playerY + PADDLE_HEIGHT) {
+                ballVX = Math.abs(ballVX) * 1.05;
+                const hitPos = (ballY - playerY) / PADDLE_HEIGHT;
+                ballVY = (hitPos - 0.5) * 10;
+                ballX = 30;
+            }
+            
+            // CPU paddle
+            if (ballX >= canvas.width - 40 && ballY + BALL_SIZE >= cpuY && ballY <= cpuY + PADDLE_HEIGHT) {
+                ballVX = -Math.abs(ballVX) * 1.05;
+                const hitPos = (ballY - cpuY) / PADDLE_HEIGHT;
+                ballVY = (hitPos - 0.5) * 10;
+                ballX = canvas.width - 40;
+            }
+            
+            // Scoring
+            if (ballX <= 0) {
+                cpuScore++;
+                updateScore();
+                if (cpuScore >= WIN_SCORE) {
+                    gameOver('CPU');
+                    return;
+                }
+                resetBall(1);
+            }
+            
+            if (ballX >= canvas.width) {
+                playerScore++;
+                updateScore();
+                if (playerScore >= WIN_SCORE) {
+                    gameOver('PLAYER');
+                    return;
+                }
+                resetBall(-1);
+            }
+            
+            // Limit ball speed
+            ballVX = Math.max(-15, Math.min(15, ballVX));
+            ballVY = Math.max(-10, Math.min(10, ballVY));
+            
+            draw();
+            gameLoop = requestAnimationFrame(update);
+        }
+        
+        function draw() {
+            // Clear
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Center line
+            ctx.strokeStyle = '#333';
+            ctx.setLineDash([10, 10]);
+            ctx.beginPath();
+            ctx.moveTo(canvas.width / 2, 0);
+            ctx.lineTo(canvas.width / 2, canvas.height);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            // Player paddle
+            ctx.fillStyle = '#d1ff00';
+            ctx.shadowColor = '#d1ff00';
+            ctx.shadowBlur = 10;
+            ctx.fillRect(20, playerY, PADDLE_WIDTH, PADDLE_HEIGHT);
+            
+            // CPU paddle
+            ctx.fillStyle = '#00d4ff';
+            ctx.shadowColor = '#00d4ff';
+            ctx.fillRect(canvas.width - 30, cpuY, PADDLE_WIDTH, PADDLE_HEIGHT);
+            
+            // Ball
+            ctx.fillStyle = '#fff';
+            ctx.shadowColor = '#fff';
+            ctx.shadowBlur = 15;
+            ctx.fillRect(ballX, ballY, BALL_SIZE, BALL_SIZE);
+            
+            ctx.shadowBlur = 0;
+        }
+        
+        function updateScore() {
+            document.getElementById('player-score').textContent = playerScore;
+            document.getElementById('cpu-score').textContent = cpuScore;
+        }
+        
+        function gameOver(winner) {
+            isPlaying = false;
+            cancelAnimationFrame(gameLoop);
+            
+            document.getElementById('winner').textContent = winner + ' WINS!';
+            document.getElementById('game-over').style.display = 'flex';
+            
+            // Save high score (wins)
+            if (winner === 'PLAYER') {
+                const wins = parseInt(localStorage.getItem('pongHighScore') || 0) + 1;
+                localStorage.setItem('pongHighScore', wins);
+            }
+        }
+        
+        // Controls
+        document.addEventListener('keydown', e => {
+            if (e.code === 'ArrowUp' || e.code === 'KeyW') keys.up = true;
+            if (e.code === 'ArrowDown' || e.code === 'KeyS') keys.down = true;
+            if (e.code === 'KeyP' && isPlaying) {
+                isPaused = !isPaused;
+                if (!isPaused) gameLoop = requestAnimationFrame(update);
+            }
+            if (e.code === 'Space' && !isPlaying) startGame();
+        });
+        
+        document.addEventListener('keyup', e => {
+            if (e.code === 'ArrowUp' || e.code === 'KeyW') keys.up = false;
+            if (e.code === 'ArrowDown' || e.code === 'KeyS') keys.down = false;
+        });
+        
+        // Touch controls
+        canvas.addEventListener('touchmove', e => {
+            e.preventDefault();
+            const rect = canvas.getBoundingClientRect();
+            const touch = e.touches[0];
+            playerY = touch.clientY - rect.top - PADDLE_HEIGHT / 2;
+            playerY = Math.max(0, Math.min(canvas.height - PADDLE_HEIGHT, playerY));
+        });
+        
+        // Initial draw
+        playerY = canvas.height / 2 - PADDLE_HEIGHT / 2;
+        cpuY = canvas.height / 2 - PADDLE_HEIGHT / 2;
+        ballX = canvas.width / 2;
+        ballY = canvas.height / 2;
+        draw();
+        
+        // Draw start message
+        ctx.fillStyle = '#666';
+        ctx.font = '14px Courier New';
+        ctx.textAlign = 'center';
+        ctx.fillText('PRESS START OR SPACE', canvas.width / 2, canvas.height / 2 + 50);
+    </script>
+</body>
+</html>

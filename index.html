@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="tr" data-theme="green">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Miraç Altunbay - AGÜ Makine Mühendisliği öğrencisi. FLARE, DCE-SOFC ve diğer projeler.">
-    <title>MIRAÇ ALTUNBAY</title>
+    <title>MIRAÇ ALTUNBAY // TERMINAL</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -20,9 +20,17 @@
             </div>
             <div class="header-right">
                 <div id="clock">00:00:00</div>
-                <div class="visitor-counter">
-                    <span class="counter-label">VISITORS:</span>
-                    <span id="visitor-count" class="counter-value">------</span>
+                <div class="header-controls">
+                    <div class="visitor-counter">
+                        <span class="counter-label">VISITORS:</span>
+                        <span id="visitor-count" class="counter-value">------</span>
+                    </div>
+                    <button class="control-icon" onclick="toggleSound()" title="Ses Efektleri">
+                        <span id="sound-icon">🔇</span>
+                    </button>
+                    <button class="control-icon" onclick="openThemeModal()" title="Tema Değiştir">
+                        🎨
+                    </button>
                 </div>
             </div>
         </header>
@@ -32,6 +40,7 @@
             <button onclick="showSection('projects')">[PROJELER]</button>
             <button onclick="showSection('logs')">[ARŞİV]</button>
             <button onclick="showSection('comms')">[TELSİZ]</button>
+            <button onclick="showSection('terminal')" class="nav-terminal">[>_]</button>
         </nav>
 
         <main id="main-display">
@@ -181,20 +190,22 @@
                             <div class="game-icon">🐍</div>
                             <div class="game-title">SNAKE.EXE</div>
                             <div class="game-desc">Klasik yılan oyunu</div>
-                            <div class="game-highscore">HIGH SCORE: <span id="snake-highscore">0</span></div>
+                            <div class="game-highscore">HIGH: <span id="snake-highscore">0</span></div>
                         </a>
                         
-                        <div class="game-card locked">
-                            <div class="game-icon">👾</div>
-                            <div class="game-title">SPACE_INVADERS.EXE</div>
-                            <div class="game-desc">[LOCKED]</div>
-                        </div>
-                        
-                        <div class="game-card locked">
+                        <a href="tetris.html" class="game-card">
                             <div class="game-icon">🧱</div>
                             <div class="game-title">TETRIS.EXE</div>
-                            <div class="game-desc">[LOCKED]</div>
-                        </div>
+                            <div class="game-desc">Blok yerleştirme</div>
+                            <div class="game-highscore">HIGH: <span id="tetris-highscore">0</span></div>
+                        </a>
+                        
+                        <a href="pong.html" class="game-card">
+                            <div class="game-icon">🏓</div>
+                            <div class="game-title">PONG.EXE</div>
+                            <div class="game-desc">Klasik ping pong</div>
+                            <div class="game-highscore">HIGH: <span id="pong-highscore">0</span></div>
+                        </a>
                     </div>
                 </div>
 
@@ -222,6 +233,27 @@
                 
                 <div class="easter-hint">
                     <p>// Bazı şeyler gizlidir... ↑↑↓↓←→←→BA</p>
+                </div>
+            </section>
+
+            <!-- TERMINAL / COMMAND LINE -->
+            <section id="terminal" class="content-block" style="display:none;">
+                <h3 class="glitch-text" data-text="> TERMINAL">> TERMINAL</h3>
+                
+                <div class="terminal-window">
+                    <div class="terminal-output" id="terminal-output">
+                        <div class="terminal-line">ALTUNBAY_OS v2.1 - Terminal Emulator</div>
+                        <div class="terminal-line">Type 'help' for available commands.</div>
+                        <div class="terminal-line">&nbsp;</div>
+                    </div>
+                    <div class="terminal-input-line">
+                        <span class="terminal-prompt">miraç@agu:~$</span>
+                        <input type="text" id="terminal-input" class="terminal-input" autofocus onkeypress="handleTerminalInput(event)" placeholder="Type command...">
+                    </div>
+                </div>
+                
+                <div class="terminal-help">
+                    <p>// Bazı komutlar: help, about, skills, projects, clear, theme, games, hack</p>
                 </div>
             </section>
 
@@ -253,6 +285,32 @@
             <span>[AGÜ MAKİNE MÜHENDİSLİĞİ]</span>
             <span class="version">v2.1</span>
         </footer>
+    </div>
+
+    <!-- THEME MODAL -->
+    <div id="theme-modal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <h3>> SELECT_THEME</h3>
+            <div class="theme-options">
+                <button class="theme-btn" data-theme="green" onclick="setTheme('green')">
+                    <span class="theme-preview green"></span>
+                    <span>MATRIX GREEN</span>
+                </button>
+                <button class="theme-btn" data-theme="amber" onclick="setTheme('amber')">
+                    <span class="theme-preview amber"></span>
+                    <span>AMBER CRT</span>
+                </button>
+                <button class="theme-btn" data-theme="cyan" onclick="setTheme('cyan')">
+                    <span class="theme-preview cyan"></span>
+                    <span>CYAN TECH</span>
+                </button>
+                <button class="theme-btn" data-theme="red" onclick="setTheme('red')">
+                    <span class="theme-preview red"></span>
+                    <span>RED ALERT</span>
+                </button>
+            </div>
+            <button class="modal-close" onclick="closeThemeModal()">[KAPAT]</button>
+        </div>
     </div>
 
     <!-- EASTER EGG OVERLAY -->
