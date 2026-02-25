@@ -207,9 +207,10 @@ const commands = {
     ],
     contact: () => [
         '> CONTACT INFO:',
-        '  GitHub:   github.com/miracaltunbay',
-        '  LinkedIn: linkedin.com/in/miracaltunbay',
-        '  Email:    mirac@example.com'
+        '  GitHub:    github.com/altunbaymirac',
+        '  LinkedIn:  linkedin.com/in/miraçaltunbay',
+        '  Instagram: instagram.com/altunbay.mirac',
+        '  Email:     altunbaymirac544@gmail.com'
     ],
     games: () => [
         '> AVAILABLE GAMES:',
