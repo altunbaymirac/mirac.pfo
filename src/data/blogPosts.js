@@ -5,11 +5,11 @@ export const blogPosts = [
     date: '2025-01-10',
     readTime: '8 min',
     tags: ['FLARE', 'Engineering', 'Disaster Response'],
-    excerpt: '6 Şubat depremini yaşadım. Enkaz altında ses dinlemenin ne kadar yetersiz olduğunu gördüm. İşte FLARE böyle doğdu.',
+    excerpt: '6 Şubat depremini Malatya\'da yaşadım. Enkaz altında ses dinlemenin ne kadar yetersiz olduğunu gördüm. İşte FLARE böyle doğdu.',
     content: `
 # FLARE: 6 Şubat'tan Doğan Fikir
 
-6 Şubat 2023. Hatay, Kahramanmaraş, ve onlarca şehir binlerce ton betonun altında kaldı. Ben de o sabah Kayseri'de depremi yaşadım.
+6 Şubat 2023. Hatay, Kahramanmaraş, Malatya ve onlarca şehir binlerce ton betonun altında kaldı. Ben de o sabah Malatya'da depremi yaşadım.
 
 ## Sorun: Ses Dinlemek Yetmez
 
@@ -55,12 +55,12 @@ if (accelerometer.detectEarthquake()) {
 3. ⏳ AGÜ kampüsünde menzil testi
 4. ⏳ TTO başvurusu
 
-Bu proje hayat kurtarabilir. Bir sonraki depremde hazır olalım.
+Bu proje bir fikir olarak başladı, ama gerçek hayatta işe yarayabileceğine inanıyorum. Bir sonraki depremde hazır olalım.
 
 ---
 
 **Mirac Altunbay**  
-Mühendislik Öğrencisi, AGÜ
+1. Sınıf Makine Mühendisliği, AGÜ
 `
   },
   {
@@ -129,12 +129,12 @@ Sistem verimi: **%65-70** (diesel: %45-50)
 - SOFC maliyeti yüksek
 - Amonyak toksik (güvenlik protokolleri gerekli)
 
-Ama bu zorluklar çözülebilir. Gelecek yeşil denizcilik bu yönde.
+Bu zorluklar çözülebilir. Yeşil denizcilik geleceği bu yönde gidiyor, en azından ben öyle düşünüyorum.
 
 ---
 
 **Mirac Altunbay**  
-Marine Propulsion Research
+1. Sınıf Makine Mühendisliği, AGÜ
 `
   },
   {
@@ -206,12 +206,12 @@ positionStream = Geolocator.getPositionStream(
 **Production app:** Flutter (performans + stability)  
 **Web desteği önemliyse:** React Native (kod paylaşımı)
 
-GeoSocial'i sonunda **React Native** ile ship ettim çünkü Firebase entegrasyonu zaten hazırdı. Ama bir dahaki projem kesin Flutter.
+GeoSocial'i sonunda **React Native** ile yaptım çünkü Firebase entegrasyonu hazırdı ve öğrenmesi daha kolaydı. Ama bir sonraki büyük projem için Flutter'ı denemek istiyorum.
 
 ---
 
 **Mirac Altunbay**  
-Full-Stack Mobile Developer
+Mobile Dev Hobbyist
 `
   }
 ]

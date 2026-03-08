@@ -26,7 +26,7 @@ export default function Home() {
     {
       name: 'FLARE',
       tag: 'Emergency Communication',
-      description: 'LoRa-based disaster response system saving lives through mesh networking',
+      description: '6 Şubat\'tan sonra aklıma gelen bir fikir: LoRa ile çalışan, enkaz altından sinyal yollayan bir cihaz',
       color: 'terminal-accent',
       link: '/projects',
       stats: ['868 MHz', '1-3 km Range', 'Auto-Activation']
@@ -34,27 +34,26 @@ export default function Home() {
     {
       name: 'DCE-SOFC',
       tag: 'Marine Propulsion',
-      description: 'NH₃-fueled hybrid ship propulsion with real-time thermodynamic simulation',
+      description: 'Amonyak yakıtlı gemi motoru simülasyonu. Gerçek termodinamik hesaplamalarla çalışan bir dijital ikiz',
       color: 'terminal-secondary',
       link: '/projects',
-      stats: ['65-70% Efficiency', 'Zero CO₂', 'Digital Twin']
+      stats: ['Real Physics', 'Zero CO₂', 'Digital Twin']
     },
     {
       name: 'GeoSocial',
       tag: 'Mobile App',
-      description: 'Location-based social network with gamified check-ins and real-time GPS',
+      description: 'Konuma dayalı sosyal ağ. React Native ile yaptım, GPS tracking ve gamification var',
       color: 'terminal-text',
       link: '/blog/react-native-vs-flutter',
-      stats: ['React Native', 'Firebase', 'Cross-platform']
+      stats: ['React Native', 'Firebase', 'GPS Tracking']
     }
   ]
 
   const skills = [
-    { name: 'React / React Native', level: 90 },
-    { name: 'Firebase / Backend', level: 80 },
-    { name: 'LoRa / IoT', level: 75 },
-    { name: 'Thermodynamics / CFD', level: 70 },
-    { name: 'Three.js / WebGL', level: 65 }
+    { name: 'React / React Native', level: 70 },
+    { name: 'Firebase / Backend', level: 60 },
+    { name: 'Java / Python', level: 55 },
+    { name: 'LoRa / IoT (Learning)', level: 40 }
   ]
 
   return (
@@ -83,11 +82,11 @@ export default function Home() {
               MIRAC ALTUNBAY
             </h1>
             <p className="text-xl md:text-2xl text-terminal-secondary mb-4">
-              Engineering Student × Full-Stack Developer × Hardware Hacker
+              Engineering Student
             </p>
             <p className="text-gray-400 max-w-2xl mx-auto mb-8">
-              Building emergency communication systems, hybrid propulsion digital twins, 
-              and mobile apps that solve real-world problems. Currently at Abdullah Gül University.
+              Working on FLARE, an emergency communication system inspired by the 6 February earthquake. 
+              Also building simulations and mobile apps. First-year at AGÜ, learning by doing.
             </p>
 
             <div className="flex flex-wrap items-center justify-center gap-4">
@@ -98,7 +97,7 @@ export default function Home() {
                   className="px-8 py-3 bg-terminal-text border-2 border-terminal-text text-terminal-bg font-bold font-mono flex items-center space-x-2 hover:bg-transparent hover:text-terminal-text transition-all"
                 >
                   <Rocket size={20} />
-                  <span>EXPLORE PROJECTS</span>
+                  <span>PROJELERİ GÖR</span>
                 </motion.button>
               </Link>
 
@@ -108,7 +107,7 @@ export default function Home() {
                   whileTap={{ scale: 0.95 }}
                   className="px-8 py-3 border-2 border-terminal-secondary text-terminal-secondary font-bold font-mono hover:bg-terminal-secondary hover:text-terminal-bg transition-all"
                 >
-                  GET IN TOUCH
+                  İLETİŞİM
                 </motion.button>
               </Link>
             </div>
@@ -122,9 +121,9 @@ export default function Home() {
             className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12"
           >
             {[
-              { label: 'Projects', value: '12+' },
-              { label: 'Technologies', value: '20+' },
-              { label: 'GitHub Stars', value: '100+' },
+              { label: 'Projects', value: '3' },
+              { label: 'Technologies', value: '10+' },
+              { label: 'Lines of Code', value: '5k+' },
               { label: 'Coffee Consumed', value: '∞' }
             ].map((stat, i) => (
               <div key={i} className="bg-terminal-darker border border-terminal-border p-4 text-center">
@@ -242,10 +241,10 @@ export default function Home() {
           >
             <Terminal size={48} className="text-terminal-text mx-auto mb-6" />
             <h2 className="text-3xl font-bold text-terminal-text neon-glow mb-4">
-              Let's Build Something Together
+              Projeler Hakkında Konuşalım
             </h2>
             <p className="text-gray-400 mb-8">
-              Whether you're an investor, collaborator, or fellow engineer - let's connect.
+              FLARE, DCE-SOFC veya başka bir proje hakkında sohbet etmek istersen yazabilirsin.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4">
               <Link to="/contact">
@@ -254,7 +253,7 @@ export default function Home() {
                   whileTap={{ scale: 0.95 }}
                   className="px-8 py-3 bg-terminal-text border-2 border-terminal-text text-terminal-bg font-bold font-mono hover:bg-transparent hover:text-terminal-text transition-all"
                 >
-                  CONTACT ME
+                  İLETİŞİME GEÇ
                 </motion.button>
               </Link>
               <motion.button
@@ -263,7 +262,7 @@ export default function Home() {
                 className="px-8 py-3 border-2 border-terminal-accent text-terminal-accent font-bold font-mono hover:bg-terminal-accent hover:text-white transition-all flex items-center space-x-2"
               >
                 <Download size={20} />
-                <span>DOWNLOAD CV</span>
+                <span>CV İNDİR</span>
               </motion.button>
             </div>
           </motion.div>
