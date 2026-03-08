@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Mail, Send, Download, Github, Linkedin, Twitter, CheckCircle } from 'lucide-react'
+import { Mail, Send, Download, Github, Linkedin, Instagram, CheckCircle } from 'lucide-react'
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -211,27 +211,40 @@ export default function Contact() {
               <div className="space-y-3">
                 <motion.a
                   whileHover={{ x: 5 }}
-                  href="https://github.com/miracaltunbay"
+                  href="https://github.com/altunbaymirac"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center space-x-3 p-3 border-2 border-terminal-border hover:border-terminal-text transition-colors"
                 >
                   <Github size={20} className="text-terminal-text" />
                   <span className="text-terminal-text font-mono text-sm">
-                    github.com/miracaltunbay
+                    github.com/altunbaymirac
                   </span>
                 </motion.a>
 
                 <motion.a
                   whileHover={{ x: 5 }}
-                  href="https://linkedin.com/in/miracaltunbay"
+                  href="https://www.linkedin.com/in/miraç-altunbay"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center space-x-3 p-3 border-2 border-terminal-border hover:border-terminal-text transition-colors"
                 >
                   <Linkedin size={20} className="text-terminal-secondary" />
                   <span className="text-terminal-text font-mono text-sm">
-                    linkedin.com/in/miracaltunbay
+                    linkedin.com/in/miraç-altunbay
+                  </span>
+                </motion.a>
+
+                <motion.a
+                  whileHover={{ x: 5 }}
+                  href="https://www.instagram.com/altunbay.mirac"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center space-x-3 p-3 border-2 border-terminal-border hover:border-terminal-text transition-colors"
+                >
+                  <Instagram size={20} className="text-terminal-accent" />
+                  <span className="text-terminal-text font-mono text-sm">
+                    instagram.com/altunbay.mirac
                   </span>
                 </motion.a>
               </div>

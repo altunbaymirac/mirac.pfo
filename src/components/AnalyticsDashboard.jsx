@@ -36,7 +36,7 @@ export default function AnalyticsDashboard() {
     todayVisitors: realStats.todayVisitors,
     avgSessionTime: realStats.avgSessionTime,
     bounceRate: realStats.bounceRate,
-    pageViews: JSON.parse(localStorage.getItem('page_views') || '{"/"​: 1}'),
+    pageViews: {},
     geographic: {
       'Turkey': 542,
       'USA': 284,
@@ -54,13 +54,17 @@ export default function AnalyticsDashboard() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      const pageViews = JSON.parse(localStorage.getItem('page_views') || '{}')
-      setStats(prev => ({
-        ...prev,
-        totalVisitors: realStats.totalVisitors,
-        todayVisitors: realStats.todayVisitors,
-        pageViews: pageViews
-      }))
+      try {
+        const pageViews = JSON.parse(localStorage.getItem('page_views') || '{}')
+        setStats(prev => ({
+          ...prev,
+          totalVisitors: realStats.totalVisitors,
+          todayVisitors: realStats.todayVisitors,
+          pageViews: pageViews
+        }))
+      } catch (error) {
+        console.error('Stats update error:', error)
+      }
     }, 5000)
 
     const now = new Date()
@@ -246,40 +250,46 @@ export default function AnalyticsDashboard() {
             TOP PAGES
           </h3>
           <div className="space-y-3">
-            {Object.entries(stats.pageViews)
-              .sort(([, a], [, b]) => b - a)
-              .slice(0, 5)
-              .map(([page, views], index) => (
-                <motion.div
-                  key={page}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className="flex items-center justify-between"
-                >
-                  <div className="flex items-center space-x-2 flex-1">
-                    <span className="text-terminal-secondary font-mono text-xs">
-                      #{index + 1}
-                    </span>
-                    <code className="text-terminal-text font-mono text-sm">
-                      {page}
-                    </code>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <div className="w-32 bg-terminal-bg h-2 border border-terminal-border">
-                      <div
-                        className="h-full bg-terminal-text"
-                        style={{ 
-                          width: `${(views / Math.max(...Object.values(stats.pageViews))) * 100}%` 
-                        }}
-                      />
+            {Object.keys(stats.pageViews).length > 0 ? (
+              Object.entries(stats.pageViews)
+                .sort(([, a], [, b]) => b - a)
+                .slice(0, 5)
+                .map(([page, views], index) => (
+                  <motion.div
+                    key={page}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    className="flex items-center justify-between"
+                  >
+                    <div className="flex items-center space-x-2 flex-1">
+                      <span className="text-terminal-secondary font-mono text-xs">
+                        #{index + 1}
+                      </span>
+                      <code className="text-terminal-text font-mono text-sm">
+                        {page}
+                      </code>
                     </div>
-                    <span className="text-terminal-accent font-mono text-sm w-12 text-right">
-                      {views}
-                    </span>
-                  </div>
-                </motion.div>
-              ))}
+                    <div className="flex items-center space-x-3">
+                      <div className="w-32 bg-terminal-bg h-2 border border-terminal-border">
+                        <div
+                          className="h-full bg-terminal-text"
+                          style={{ 
+                            width: `${(views / Math.max(...Object.values(stats.pageViews))) * 100}%` 
+                          }}
+                        />
+                      </div>
+                      <span className="text-terminal-accent font-mono text-sm w-12 text-right">
+                        {views}
+                      </span>
+                    </div>
+                  </motion.div>
+                ))
+            ) : (
+              <p className="text-gray-500 text-sm font-mono text-center py-8">
+                No page views yet. Start browsing to see analytics!
+              </p>
+            )}
           </div>
         </div>
       </div>

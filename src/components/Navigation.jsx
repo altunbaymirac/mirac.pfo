@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Home, BookOpen, Briefcase, BarChart3, Mail, Github, Linkedin } from 'lucide-react'
+import { Home, BookOpen, Briefcase, BarChart3, Mail, Github, Linkedin, Instagram } from 'lucide-react'
 
 export default function Navigation() {
   const location = useLocation()
@@ -66,7 +66,7 @@ export default function Navigation() {
             <motion.a
               whileHover={{ scale: 1.2, rotate: 360 }}
               transition={{ type: 'spring', stiffness: 300 }}
-              href="https://github.com/miracaltunbay"
+              href="https://github.com/altunbaymirac"
               target="_blank"
               rel="noopener noreferrer"
               className="text-terminal-text hover:text-terminal-secondary"
@@ -76,12 +76,22 @@ export default function Navigation() {
             <motion.a
               whileHover={{ scale: 1.2, rotate: -360 }}
               transition={{ type: 'spring', stiffness: 300 }}
-              href="https://linkedin.com/in/miracaltunbay"
+              href="https://www.linkedin.com/in/miraç-altunbay"
               target="_blank"
               rel="noopener noreferrer"
               className="text-terminal-text hover:text-terminal-secondary"
             >
               <Linkedin size={20} />
+            </motion.a>
+            <motion.a
+              whileHover={{ scale: 1.2, rotate: 360 }}
+              transition={{ type: 'spring', stiffness: 300 }}
+              href="https://www.instagram.com/altunbay.mirac"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-terminal-text hover:text-terminal-accent"
+            >
+              <Instagram size={20} />
             </motion.a>
           </div>
         </div>
