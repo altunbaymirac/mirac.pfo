@@ -1,6 +1,8 @@
 import { Routes, Route } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import { useEffect } from 'react'
 import Navigation from './components/Navigation'
+import ChatWidget from './components/ChatWidget'
 import Home from './pages/Home'
 import Blog from './pages/Blog'
 import BlogPost from './pages/BlogPost'
@@ -10,10 +12,21 @@ import Contact from './pages/Contact'
 import MatrixRain from './components/MatrixRain'
 
 function App() {
+  // Google Analytics page view tracking
+  useEffect(() => {
+    // Google Analytics varsa sayfa görüntüleme kaydı
+    if (window.gtag) {
+      window.gtag('event', 'page_view', {
+        page_path: window.location.pathname,
+      })
+    }
+  }, [])
+
   return (
     <div className="relative min-h-screen bg-terminal-bg">
       <MatrixRain />
       <Navigation />
+      <ChatWidget />
       
       <motion.div
         initial={{ opacity: 0 }}
