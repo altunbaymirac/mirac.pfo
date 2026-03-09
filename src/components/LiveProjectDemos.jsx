@@ -11,8 +11,8 @@ const DEMOS = [
     tech: ['React', 'Leaflet', 'LoRa Protocol'],
     url: '/demos/flare',
     color: 'terminal-accent',
-    features: ['Interactive Map', 'Beacon Tracking', 'RSSI Analysis', 'How to Use Guide'],
-    status: 'Live Demo Available'
+    features: ['Interactive Map', 'Beacon Tracking', 'Mesh Network', 'How to Use Guide'],
+    status: 'Live Demo'
   },
   {
     id: 'dce-sofc',
@@ -21,8 +21,18 @@ const DEMOS = [
     tech: ['React', 'Recharts', 'Thermodynamics'],
     url: '/demos/dce-sofc',
     color: 'terminal-secondary',
-    features: ['P&ID Diagram', 'Arrhenius Simulation', 'Live Charts', 'Formula Reference'],
-    status: 'Live Demo Available'
+    features: ['Animated P&ID', 'Arrhenius Simulation', 'Live Charts', 'Formula Reference'],
+    status: 'Live Demo'
+  },
+  {
+    id: 'geosocial',
+    title: 'GeoSocial Mobile App',
+    description: 'Location-based social network with real-time GPS tracking',
+    tech: ['React Native', 'Firebase', 'GPS'],
+    url: '/demos/geosocial',
+    color: 'terminal-text',
+    features: ['Android Mockup', 'GPS Tracking', 'Check-in System', 'Social Feed'],
+    status: 'Live Demo'
   }
 ]
 
@@ -41,7 +51,7 @@ export default function LiveProjectDemos() {
       </div>
 
       {/* Demo Cards */}
-      <div className="grid md:grid-cols-2 gap-6">
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {DEMOS.map((demo) => {
           const colorClasses = {
             'terminal-accent': { border: 'border-terminal-accent', text: 'text-terminal-accent' },

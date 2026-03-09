@@ -39,19 +39,86 @@ const stationIcon = new L.Icon({
 export default function FLAREDemoPage() {
   const [isRunning, setIsRunning] = useState(false)
   const [showHelp, setShowHelp] = useState(true)
+  const [showMesh, setShowMesh] = useState(true)
   const [beacons, setBeacons] = useState([])
   const [stations, setStations] = useState([
     { id: 's1', lat: 38.7225, lng: 35.4864, name: 'AGÜ Base Station', range: 3000, color: '#00d9ff' },
     { id: 's2', lat: 38.7325, lng: 35.4964, name: 'Emergency Station 2', range: 2500, color: '#4ade80' }
   ])
+  const [meshConnections, setMeshConnections] = useState([])
   const [time, setTime] = useState(0)
   const [stats, setStats] = useState({
     activeBeacons: 0,
     rescued: 0,
     avgSignal: 0,
     coverage: 0,
-    batteryAvg: 100
+    batteryAvg: 100,
+    meshHops: 0
   })
+
+  // Calculate distance between two points
+  const calculateDistance = (lat1, lng1, lat2, lng2) => {
+    const R = 6371e3 // Earth radius in meters
+    const φ1 = lat1 * Math.PI / 180
+    const φ2 = lat2 * Math.PI / 180
+    const Δφ = (lat2 - lat1) * Math.PI / 180
+    const Δλ = (lng2 - lng1) * Math.PI / 180
+
+    const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+              Math.cos(φ1) * Math.cos(φ2) *
+              Math.sin(Δλ/2) * Math.sin(Δλ/2)
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
+
+    return R * c // Distance in meters
+  }
+
+  // Update mesh connections
+  const updateMeshNetwork = () => {
+    const connections = []
+    const BEACON_RANGE = 800 // meters, beacon can communicate within 800m
+    
+    // Beacon to beacon connections
+    beacons.forEach((beacon1, i) => {
+      if (beacon1.status !== 'active') return
+      
+      beacons.forEach((beacon2, j) => {
+        if (i >= j || beacon2.status !== 'active') return
+        
+        const distance = calculateDistance(
+          beacon1.lat, beacon1.lng,
+          beacon2.lat, beacon2.lng
+        )
+        
+        if (distance < BEACON_RANGE) {
+          connections.push({
+            from: { lat: beacon1.lat, lng: beacon1.lng },
+            to: { lat: beacon2.lat, lng: beacon2.lng },
+            type: 'beacon-to-beacon',
+            strength: Math.max(0, 100 - (distance / BEACON_RANGE) * 100)
+          })
+        }
+      })
+      
+      // Beacon to station connections
+      stations.forEach(station => {
+        const distance = calculateDistance(
+          beacon1.lat, beacon1.lng,
+          station.lat, station.lng
+        )
+        
+        if (distance < station.range) {
+          connections.push({
+            from: { lat: beacon1.lat, lng: beacon1.lng },
+            to: { lat: station.lat, lng: station.lng },
+            type: 'beacon-to-station',
+            strength: Math.max(0, 100 - (distance / station.range) * 100)
+          })
+        }
+      })
+    })
+    
+    setMeshConnections(connections)
+  }
 
   useEffect(() => {
     if (!isRunning) return
@@ -86,6 +153,11 @@ export default function FLAREDemoPage() {
     return () => clearInterval(interval)
   }, [isRunning, beacons, stations])
 
+  // Update mesh network when beacons change
+  useEffect(() => {
+    updateMeshNetwork()
+  }, [beacons])
+
   const updateStats = () => {
     const active = beacons.filter(b => b.status === 'active')
     const avgSignal = active.length > 0 
@@ -100,7 +172,8 @@ export default function FLAREDemoPage() {
       rescued: beacons.filter(b => b.status === 'rescued').length,
       avgSignal: Math.round(100 - avgSignal),
       coverage: Math.round((stations.reduce((sum, s) => sum + s.range, 0) / 100)),
-      batteryAvg: Math.round(avgBattery)
+      batteryAvg: Math.round(avgBattery),
+      meshHops: meshConnections.filter(c => c.type === 'beacon-to-beacon').length
     })
   }
 
@@ -137,6 +210,17 @@ export default function FLAREDemoPage() {
 
             <div className="flex items-center gap-2">
               <button
+                onClick={() => setShowMesh(!showMesh)}
+                className={`p-3 border-2 ${
+                  showMesh 
+                    ? 'bg-terminal-secondary border-terminal-secondary text-white' 
+                    : 'border-terminal-text text-terminal-text hover:bg-terminal-text hover:text-terminal-bg'
+                }`}
+                title="Toggle Mesh Network"
+              >
+                <Activity size={20} />
+              </button>
+              <button
                 onClick={() => setShowHelp(!showHelp)}
                 className="p-3 border-2 border-terminal-text text-terminal-text hover:bg-terminal-text hover:text-terminal-bg"
               >
@@ -162,7 +246,7 @@ export default function FLAREDemoPage() {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
             <div className="bg-terminal-bg border-2 border-terminal-accent p-3">
               <div className="flex items-center gap-2 text-xs text-gray-400 mb-1">
                 <Activity size={14} />
@@ -190,6 +274,16 @@ export default function FLAREDemoPage() {
               </div>
               <div className="text-2xl font-bold text-terminal-secondary">
                 {stats.avgSignal}%
+              </div>
+            </div>
+
+            <div className="bg-terminal-bg border-2 border-purple-500 p-3">
+              <div className="flex items-center gap-2 text-xs text-gray-400 mb-1">
+                <Activity size={14} />
+                Mesh Links
+              </div>
+              <div className="text-2xl font-bold text-purple-500">
+                {stats.meshHops}
               </div>
             </div>
 
@@ -244,8 +338,18 @@ export default function FLAREDemoPage() {
                 <ul className="space-y-1">
                   <li>▸ <strong>Auto-Activation</strong> - Beacons wake on earthquake detection</li>
                   <li>▸ <strong>LoRa 868 MHz</strong> - Penetrates concrete and debris</li>
-                  <li>▸ <strong>Mesh Network</strong> - Beacons relay signals to stations</li>
+                  <li>▸ <strong>Mesh Network</strong> - Beacons relay signals to each other</li>
                   <li>▸ <strong>GPS Location</strong> - Transmits coordinates every 10 seconds</li>
+                </ul>
+              </div>
+
+              <div>
+                <h4 className="font-bold text-terminal-accent mb-2">🟣 Purple Mesh Lines</h4>
+                <ul className="space-y-1">
+                  <li>▸ Beacon-to-beacon communication (800m range)</li>
+                  <li>▸ Dotted lines show relay paths</li>
+                  <li>▸ Multi-hop routing to base station</li>
+                  <li>▸ Toggle with mesh button (⚡)</li>
                 </ul>
               </div>
 
@@ -283,6 +387,20 @@ export default function FLAREDemoPage() {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution='&copy; OpenStreetMap'
           />
+
+          {/* Mesh Network Connections */}
+          {showMesh && meshConnections.map((conn, idx) => (
+            <Polyline
+              key={`mesh-${idx}`}
+              positions={[[conn.from.lat, conn.from.lng], [conn.to.lat, conn.to.lng]]}
+              pathOptions={{
+                color: conn.type === 'beacon-to-beacon' ? '#9333ea' : '#00d9ff',
+                weight: conn.type === 'beacon-to-beacon' ? 2 : 1,
+                opacity: conn.strength / 200,
+                dashArray: conn.type === 'beacon-to-beacon' ? '5, 10' : null
+              }}
+            />
+          ))}
 
           {/* Stations */}
           {stations.map(station => (

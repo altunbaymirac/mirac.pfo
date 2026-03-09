@@ -11,6 +11,7 @@ import Analytics from './pages/Analytics'
 import Contact from './pages/Contact'
 import FLAREDemo from './pages/FLAREDemo'
 import DCESOFCDemo from './pages/DCESOFCDemo'
+import GeoSocialDemo from './pages/GeoSocialDemo'
 import MatrixRain from './components/MatrixRain'
 
 function App() {
@@ -45,6 +46,7 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/demos/flare" element={<FLAREDemo />} />
           <Route path="/demos/dce-sofc" element={<DCESOFCDemo />} />
+          <Route path="/demos/geosocial" element={<GeoSocialDemo />} />
         </Routes>
       </motion.div>
     </div>
