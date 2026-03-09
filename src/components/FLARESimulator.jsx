@@ -43,40 +43,40 @@ export default function FLARESimulator() {
       </div>
 
       {/* Status Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-terminal-bg border border-terminal-border p-4">
-          <div className="flex items-center gap-2 text-gray-400 text-sm mb-2">
-            <Battery size={16} />
+      <div className="grid grid-cols-2 gap-3 md:gap-4">
+        <div className="bg-terminal-bg border border-terminal-border p-3 md:p-4">
+          <div className="flex items-center gap-2 text-gray-400 text-xs mb-2">
+            <Battery size={14} />
             <span>Battery</span>
           </div>
-          <div className="text-2xl font-bold text-terminal-text">
+          <div className="text-xl md:text-2xl font-bold text-terminal-text">
             {battery.toFixed(1)}%
           </div>
         </div>
 
-        <div className="bg-terminal-bg border border-terminal-border p-4">
-          <div className="flex items-center gap-2 text-gray-400 text-sm mb-2">
-            <Signal size={16} />
+        <div className="bg-terminal-bg border border-terminal-border p-3 md:p-4">
+          <div className="flex items-center gap-2 text-gray-400 text-xs mb-2">
+            <Signal size={14} />
             <span>Signal</span>
           </div>
-          <div className="text-2xl font-bold text-terminal-secondary">
+          <div className="text-xl md:text-2xl font-bold text-terminal-secondary">
             {signalStrength} dBm
           </div>
         </div>
 
-        <div className="bg-terminal-bg border border-terminal-border p-4">
-          <div className="flex items-center gap-2 text-gray-400 text-sm mb-2">
-            <Activity size={16} />
+        <div className="bg-terminal-bg border border-terminal-border p-3 md:p-4">
+          <div className="flex items-center gap-2 text-gray-400 text-xs mb-2">
+            <Activity size={14} />
             <span>Beacons</span>
           </div>
-          <div className="text-2xl font-bold text-terminal-accent">
+          <div className="text-xl md:text-2xl font-bold text-terminal-accent">
             {beaconCount}
           </div>
         </div>
 
-        <div className="bg-terminal-bg border border-terminal-border p-4">
-          <div className="flex items-center gap-2 text-gray-400 text-sm mb-2">
-            <MapPin size={16} />
+        <div className="bg-terminal-bg border border-terminal-border p-3 md:p-4">
+          <div className="flex items-center gap-2 text-gray-400 text-xs mb-2">
+            <MapPin size={14} />
             <span>GPS</span>
           </div>
           <div className="text-xs font-mono text-terminal-text">

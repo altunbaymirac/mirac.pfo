@@ -90,23 +90,23 @@ export default function Home() {
               Also building simulations and mobile apps. First-year at AGÜ, learning by doing.
             </p>
 
-            <div className="flex flex-wrap items-center justify-center gap-4">
-              <Link to="/projects">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Link to="/projects" className="w-full sm:w-auto">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-8 py-3 bg-terminal-text border-2 border-terminal-text text-terminal-bg font-bold font-mono flex items-center space-x-2 hover:bg-transparent hover:text-terminal-text transition-all"
+                  className="w-full sm:w-auto px-6 md:px-8 py-3 bg-terminal-text border-2 border-terminal-text text-terminal-bg font-bold font-mono flex items-center justify-center space-x-2 hover:bg-transparent hover:text-terminal-text transition-all"
                 >
                   <Rocket size={20} />
-                  <span>PROJELERİ GÖR</span>
+                  <span className="text-sm md:text-base">PROJELERİ GÖR</span>
                 </motion.button>
               </Link>
 
-              <Link to="/contact">
+              <Link to="/contact" className="w-full sm:w-auto">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-8 py-3 border-2 border-terminal-secondary text-terminal-secondary font-bold font-mono hover:bg-terminal-secondary hover:text-terminal-bg transition-all"
+                  className="w-full sm:w-auto px-6 md:px-8 py-3 border-2 border-terminal-secondary text-terminal-secondary font-bold font-mono hover:bg-terminal-secondary hover:text-terminal-bg transition-all text-sm md:text-base"
                 >
                   İLETİŞİM
                 </motion.button>

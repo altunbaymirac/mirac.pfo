@@ -82,43 +82,43 @@ export default function DCESOFCSimulator() {
       </div>
 
       {/* Metrics */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-terminal-bg border border-terminal-border p-4">
-          <div className="flex items-center gap-2 text-gray-400 text-sm mb-2">
-            <Zap size={16} />
+      <div className="grid grid-cols-2 gap-3 md:gap-4">
+        <div className="bg-terminal-bg border border-terminal-border p-3 md:p-4">
+          <div className="flex items-center gap-2 text-gray-400 text-xs mb-2">
+            <Zap size={14} />
             <span>Power</span>
           </div>
-          <div className="text-2xl font-bold text-terminal-text">
+          <div className="text-xl md:text-2xl font-bold text-terminal-text">
             {power.toFixed(1)} kW
           </div>
         </div>
 
-        <div className="bg-terminal-bg border border-terminal-border p-4">
-          <div className="flex items-center gap-2 text-gray-400 text-sm mb-2">
-            <Gauge size={16} />
+        <div className="bg-terminal-bg border border-terminal-border p-3 md:p-4">
+          <div className="flex items-center gap-2 text-gray-400 text-xs mb-2">
+            <Gauge size={14} />
             <span>Efficiency</span>
           </div>
-          <div className="text-2xl font-bold text-terminal-secondary">
+          <div className="text-xl md:text-2xl font-bold text-terminal-secondary">
             {efficiency.toFixed(1)}%
           </div>
         </div>
 
-        <div className="bg-terminal-bg border border-terminal-border p-4">
-          <div className="flex items-center gap-2 text-gray-400 text-sm mb-2">
-            <Thermometer size={16} />
+        <div className="bg-terminal-bg border border-terminal-border p-3 md:p-4">
+          <div className="flex items-center gap-2 text-gray-400 text-xs mb-2">
+            <Thermometer size={14} />
             <span>NH₃ Cracking</span>
           </div>
-          <div className="text-2xl font-bold text-terminal-accent">
+          <div className="text-xl md:text-2xl font-bold text-terminal-accent">
             {temperature}°C
           </div>
         </div>
 
-        <div className="bg-terminal-bg border border-terminal-border p-4">
-          <div className="flex items-center gap-2 text-gray-400 text-sm mb-2">
-            <Droplet size={16} />
+        <div className="bg-terminal-bg border border-terminal-border p-3 md:p-4">
+          <div className="flex items-center gap-2 text-gray-400 text-xs mb-2">
+            <Droplet size={14} />
             <span>CO₂</span>
           </div>
-          <div className="text-2xl font-bold text-green-500">
+          <div className="text-xl md:text-2xl font-bold text-green-500">
             0 g/kWh
           </div>
         </div>

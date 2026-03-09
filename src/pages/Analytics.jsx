@@ -1,11 +1,5 @@
-import SimpleAnalytics from '../components/SimpleAnalytics'
+import VisitorCounter from './VisitorCounter'
 
 export default function Analytics() {
-  return (
-    <div className="min-h-screen pt-24 px-4 pb-12">
-      <div className="max-w-7xl mx-auto">
-        <SimpleAnalytics />
-      </div>
-    </div>
-  )
+  return <VisitorCounter />
 }
