@@ -127,21 +127,41 @@ export default function DCESOFCDemo() {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              { icon: Zap, label: 'Total Power', value: currentData.totalPower.toFixed(1), unit: 'kW', color: 'terminal-text' },
-              { icon: TrendingUp, label: 'Efficiency', value: currentData.efficiency.toFixed(1), unit: '%', color: 'terminal-secondary' },
-              { icon: Thermometer, label: 'NH₃ Conv.', value: currentData.nh3Conversion.toFixed(1), unit: '%', color: 'terminal-accent' },
-              { icon: Droplet, label: 'CO₂', value: '0', unit: 'g/kWh', color: 'green-500' }
-            ].map((stat, i) => (
-              <motion.div key={i} whileHover={{ scale: 1.02, y: -2 }} className={`bg-gradient-to-br from-${stat.color}/20 to-transparent border-2 border-${stat.color} p-4 relative overflow-hidden`}>
-                <div className="absolute top-0 right-0 opacity-10"><stat.icon size={80} /></div>
-                <div className="relative z-10">
-                  <div className="flex items-center gap-2 text-xs text-gray-400 mb-2"><stat.icon size={14} />{stat.label}</div>
-                  <div className={`text-3xl font-bold text-${stat.color}`}>{stat.value}</div>
-                  <div className="text-xs text-gray-500">{stat.unit}</div>
-                </div>
-              </motion.div>
-            ))}
+            <motion.div whileHover={{ scale: 1.02, y: -2 }} className="bg-gradient-to-br from-blue-500/20 to-transparent border-2 border-terminal-text p-4 relative overflow-hidden">
+              <div className="absolute top-0 right-0 opacity-10"><Zap size={80} /></div>
+              <div className="relative z-10">
+                <div className="flex items-center gap-2 text-xs text-gray-400 mb-2"><Zap size={14} />Total Power</div>
+                <div className="text-3xl font-bold text-terminal-text">{currentData.totalPower.toFixed(1)}</div>
+                <div className="text-xs text-gray-500">kW</div>
+              </div>
+            </motion.div>
+
+            <motion.div whileHover={{ scale: 1.02, y: -2 }} className="bg-gradient-to-br from-purple-500/20 to-transparent border-2 border-terminal-secondary p-4 relative overflow-hidden">
+              <div className="absolute top-0 right-0 opacity-10"><TrendingUp size={80} /></div>
+              <div className="relative z-10">
+                <div className="flex items-center gap-2 text-xs text-gray-400 mb-2"><TrendingUp size={14} />Efficiency</div>
+                <div className="text-3xl font-bold text-terminal-secondary">{currentData.efficiency.toFixed(1)}</div>
+                <div className="text-xs text-gray-500">%</div>
+              </div>
+            </motion.div>
+
+            <motion.div whileHover={{ scale: 1.02, y: -2 }} className="bg-gradient-to-br from-orange-500/20 to-transparent border-2 border-terminal-accent p-4 relative overflow-hidden">
+              <div className="absolute top-0 right-0 opacity-10"><Thermometer size={80} /></div>
+              <div className="relative z-10">
+                <div className="flex items-center gap-2 text-xs text-gray-400 mb-2"><Thermometer size={14} />NH₃ Conv.</div>
+                <div className="text-3xl font-bold text-terminal-accent">{currentData.nh3Conversion.toFixed(1)}</div>
+                <div className="text-xs text-gray-500">%</div>
+              </div>
+            </motion.div>
+
+            <motion.div whileHover={{ scale: 1.02, y: -2 }} className="bg-gradient-to-br from-green-500/20 to-transparent border-2 border-green-500 p-4 relative overflow-hidden">
+              <div className="absolute top-0 right-0 opacity-10"><Droplet size={80} /></div>
+              <div className="relative z-10">
+                <div className="flex items-center gap-2 text-xs text-gray-400 mb-2"><Droplet size={14} />CO₂</div>
+                <div className="text-3xl font-bold text-green-500">0</div>
+                <div className="text-xs text-gray-500">g/kWh</div>
+              </div>
+            </motion.div>
           </div>
         </div>
       </div>

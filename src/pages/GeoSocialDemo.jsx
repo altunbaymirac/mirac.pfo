@@ -279,16 +279,18 @@ export default function GeoSocialDemo() {
                           </div>
 
                           <div className="grid grid-cols-3 gap-3">
-                            {[
-                              { label: 'Check-ins', value: checkIns, color: 'purple' },
-                              { label: 'Friends', value: '24', color: 'blue' },
-                              { label: 'Points', value: '156', color: 'green' }
-                            ].map((stat, i) => (
-                              <div key={i} className={`bg-white rounded-xl p-3 text-center shadow`}>
-                                <div className={`text-2xl font-bold text-${stat.color}-600`}>{stat.value}</div>
-                                <div className="text-xs text-gray-600">{stat.label}</div>
-                              </div>
-                            ))}
+                            <div className="bg-white rounded-xl p-3 text-center shadow">
+                              <div className="text-2xl font-bold text-purple-600">{checkIns}</div>
+                              <div className="text-xs text-gray-600">Check-ins</div>
+                            </div>
+                            <div className="bg-white rounded-xl p-3 text-center shadow">
+                              <div className="text-2xl font-bold text-blue-600">24</div>
+                              <div className="text-xs text-gray-600">Friends</div>
+                            </div>
+                            <div className="bg-white rounded-xl p-3 text-center shadow">
+                              <div className="text-2xl font-bold text-green-600">156</div>
+                              <div className="text-xs text-gray-600">Points</div>
+                            </div>
                           </div>
 
                           <div className="bg-white rounded-xl p-4 shadow">
@@ -360,16 +362,18 @@ export default function GeoSocialDemo() {
             <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6">
               <h4 className="text-xl font-bold text-white mb-4">Tech Stack</h4>
               <div className="grid grid-cols-2 gap-3">
-                {[
-                  { name: 'React Native', color: 'blue' },
-                  { name: 'Firebase', color: 'yellow' },
-                  { name: 'Expo', color: 'purple' },
-                  { name: 'GPS API', color: 'green' }
-                ].map((tech, i) => (
-                  <div key={i} className={`bg-${tech.color}-500/20 border border-${tech.color}-500/40 rounded-lg p-3 text-center`}>
-                    <span className={`text-${tech.color}-300 font-semibold text-sm`}>{tech.name}</span>
-                  </div>
-                ))}
+                <div className="bg-blue-500/20 border border-blue-500/40 rounded-lg p-3 text-center">
+                  <span className="text-blue-300 font-semibold text-sm">React Native</span>
+                </div>
+                <div className="bg-yellow-500/20 border border-yellow-500/40 rounded-lg p-3 text-center">
+                  <span className="text-yellow-300 font-semibold text-sm">Firebase</span>
+                </div>
+                <div className="bg-purple-500/20 border border-purple-500/40 rounded-lg p-3 text-center">
+                  <span className="text-purple-300 font-semibold text-sm">Expo</span>
+                </div>
+                <div className="bg-green-500/20 border border-green-500/40 rounded-lg p-3 text-center">
+                  <span className="text-green-300 font-semibold text-sm">GPS API</span>
+                </div>
               </div>
             </div>
 
