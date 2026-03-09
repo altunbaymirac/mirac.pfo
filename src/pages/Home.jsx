@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Terminal, Rocket, Code, Cpu, ArrowRight, Download } from 'lucide-react'
 import FlareBeacon3D from '../components/FlareBeacon3D'
+import LiveProjectDemos from '../components/LiveProjectDemos'
 
 export default function Home() {
   const [terminalText, setTerminalText] = useState('')
@@ -143,48 +144,67 @@ export default function Home() {
           </h2>
 
           <div className="grid md:grid-cols-3 gap-6 mb-12">
-            {projects.map((project, index) => (
-              <motion.div
-                key={project.name}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ y: -10 }}
-                className={`bg-terminal-darker border-2 border-${project.color} p-6 group cursor-pointer`}
-              >
-                <Link to={project.link}>
-                  <div className="flex items-start justify-between mb-4">
-                    <div>
-                      <h3 className={`text-2xl font-bold text-${project.color} mb-1`}>
-                        {project.name}
-                      </h3>
-                      <p className="text-xs font-mono text-gray-500">{project.tag}</p>
-                    </div>
-                    <motion.div
-                      whileHover={{ x: 5 }}
-                      className={`text-${project.color}`}
-                    >
-                      <ArrowRight size={24} />
-                    </motion.div>
-                  </div>
+            {projects.map((project, index) => {
+              const colorClasses = {
+                'terminal-accent': {
+                  border: 'border-terminal-accent',
+                  text: 'text-terminal-accent'
+                },
+                'terminal-secondary': {
+                  border: 'border-terminal-secondary',
+                  text: 'text-terminal-secondary'
+                },
+                'terminal-text': {
+                  border: 'border-terminal-text',
+                  text: 'text-terminal-text'
+                }
+              }
 
-                  <p className="text-gray-400 text-sm mb-4 leading-relaxed">
-                    {project.description}
-                  </p>
+              const colors = colorClasses[project.color]
 
-                  <div className="flex flex-wrap gap-2">
-                    {project.stats.map((stat) => (
-                      <span
-                        key={stat}
-                        className={`px-2 py-1 bg-terminal-bg border border-${project.color} text-xs font-mono text-gray-400`}
+              return (
+                <motion.div
+                  key={project.name}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  whileHover={{ y: -10 }}
+                  className={`bg-terminal-darker border-2 ${colors.border} p-6 group cursor-pointer`}
+                >
+                  <Link to={project.link}>
+                    <div className="flex items-start justify-between mb-4">
+                      <div>
+                        <h3 className={`text-2xl font-bold ${colors.text} mb-1`}>
+                          {project.name}
+                        </h3>
+                        <p className="text-xs font-mono text-gray-500">{project.tag}</p>
+                      </div>
+                      <motion.div
+                        whileHover={{ x: 5 }}
+                        className={colors.text}
                       >
-                        {stat}
-                      </span>
-                    ))}
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
+                        <ArrowRight size={24} />
+                      </motion.div>
+                    </div>
+
+                    <p className="text-gray-400 text-sm mb-4 leading-relaxed">
+                      {project.description}
+                    </p>
+
+                    <div className="flex flex-wrap gap-2">
+                      {project.stats.map((stat) => (
+                        <span
+                          key={stat}
+                          className={`px-2 py-1 bg-terminal-bg ${colors.border} border text-xs font-mono text-gray-400`}
+                        >
+                          {stat}
+                        </span>
+                      ))}
+                    </div>
+                  </Link>
+                </motion.div>
+              )
+            })}
           </div>
 
           {/* 3D Showcase */}
@@ -193,6 +213,17 @@ export default function Home() {
               Interactive 3D Model
             </h3>
             <FlareBeacon3D />
+          </div>
+
+          {/* Live Simulations */}
+          <div className="mt-16">
+            <h3 className="text-2xl font-bold text-terminal-text neon-glow mb-6 text-center">
+              🚀 Live Project Simulations
+            </h3>
+            <p className="text-gray-400 text-center mb-8">
+              FLARE beacon tracker ve DCE-SOFC motor simülasyonları - gerçek zamanlı çalışıyor!
+            </p>
+            <LiveProjectDemos />
           </div>
         </div>
       </section>
