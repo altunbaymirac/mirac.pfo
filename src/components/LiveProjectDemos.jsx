@@ -55,7 +55,8 @@ export default function LiveProjectDemos() {
         {DEMOS.map((demo) => {
           const colorClasses = {
             'terminal-accent': { border: 'border-terminal-accent', text: 'text-terminal-accent' },
-            'terminal-secondary': { border: 'border-terminal-secondary', text: 'text-terminal-secondary' }
+            'terminal-secondary': { border: 'border-terminal-secondary', text: 'text-terminal-secondary' },
+            'terminal-text': { border: 'border-terminal-text', text: 'text-terminal-text' }
           }
           const colors = colorClasses[demo.color]
 
