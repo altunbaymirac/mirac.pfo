@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Home, BookOpen, Briefcase, BarChart3, Mail, Github, Linkedin, Instagram, Menu, X } from 'lucide-react'
+import { Home, BookOpen, Briefcase, BarChart3, Mail, Github, Linkedin, Instagram, Menu, X, Gamepad2 } from 'lucide-react'
 import { useState } from 'react'
 
 export default function Navigation() {
@@ -11,6 +11,7 @@ export default function Navigation() {
     { path: '/', icon: Home, label: 'home' },
     { path: '/blog', icon: BookOpen, label: 'blog' },
     { path: '/projects', icon: Briefcase, label: 'projects' },
+    { path: '/games', icon: Gamepad2, label: 'games' },
     { path: '/analytics', icon: BarChart3, label: 'analytics' },
     { path: '/contact', icon: Mail, label: 'contact' },
   ]

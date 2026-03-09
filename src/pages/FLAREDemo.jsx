@@ -41,6 +41,7 @@ export default function FLAREDemoPage() {
   const [showHelp, setShowHelp] = useState(true)
   const [showMesh, setShowMesh] = useState(true)
   const [beacons, setBeacons] = useState([])
+  const [selectedBeacon, setSelectedBeacon] = useState(null)
   const [stations, setStations] = useState([
     { id: 's1', lat: 38.7225, lng: 35.4864, name: 'AGÜ Base Station', range: 3000, color: '#00d9ff' },
     { id: 's2', lat: 38.7325, lng: 35.4964, name: 'Emergency Station 2', range: 2500, color: '#4ade80' }
@@ -55,6 +56,43 @@ export default function FLAREDemoPage() {
     batteryAvg: 100,
     meshHops: 0
   })
+
+  // Initialize with random beacons
+  useEffect(() => {
+    const initialBeacons = []
+    for (let i = 0; i < 5; i++) {
+      initialBeacons.push({
+        id: `b${Date.now()}-${i}`,
+        lat: 38.7225 + (Math.random() - 0.5) * 0.08,
+        lng: 35.4864 + (Math.random() - 0.5) * 0.08,
+        battery: 80 + Math.random() * 20,
+        rssi: -60 - Math.random() * 60,
+        status: 'active',
+        timestamp: Date.now() - Math.random() * 300000
+      })
+    }
+    setBeacons(initialBeacons)
+  }, [])
+
+  // Add beacon manually
+  const addBeacon = () => {
+    const newBeacon = {
+      id: `b${Date.now()}`,
+      lat: 38.7225 + (Math.random() - 0.5) * 0.08,
+      lng: 35.4864 + (Math.random() - 0.5) * 0.08,
+      battery: 100,
+      rssi: -60 - Math.random() * 60,
+      status: 'active',
+      timestamp: Date.now()
+    }
+    setBeacons(prev => [...prev, newBeacon])
+  }
+
+  // Remove beacon
+  const removeBeacon = (id) => {
+    setBeacons(prev => prev.filter(b => b.id !== id))
+    if (selectedBeacon === id) setSelectedBeacon(null)
+  }
 
   // Calculate distance between two points
   const calculateDistance = (lat1, lng1, lat2, lng2) => {
@@ -126,21 +164,7 @@ export default function FLAREDemoPage() {
     const interval = setInterval(() => {
       setTime(t => t + 1)
 
-      // Random earthquake beacon activation
-      if (Math.random() < 0.15) {
-        const newBeacon = {
-          id: `b${Date.now()}`,
-          lat: 38.7225 + (Math.random() - 0.5) * 0.06,
-          lng: 35.4864 + (Math.random() - 0.5) * 0.06,
-          battery: 100,
-          rssi: -60 - Math.random() * 60,
-          status: 'active',
-          timestamp: Date.now()
-        }
-        setBeacons(prev => [...prev, newBeacon])
-      }
-
-      // Update beacons
+      // Update beacons - only battery drain and RSSI
       setBeacons(prev => prev.map(b => ({
         ...b,
         battery: Math.max(0, b.battery - 0.05),
@@ -209,6 +233,13 @@ export default function FLAREDemoPage() {
             </div>
 
             <div className="flex items-center gap-2">
+              <button
+                onClick={addBeacon}
+                className="p-3 border-2 border-green-500 text-green-500 hover:bg-green-500 hover:text-white font-bold"
+                title="Add Beacon"
+              >
+                + SOS
+              </button>
               <button
                 onClick={() => setShowMesh(!showMesh)}
                 className={`p-3 border-2 ${
@@ -441,14 +472,22 @@ export default function FLAREDemoPage() {
                     <div>📍 GPS: {beacon.lat.toFixed(5)}, {beacon.lng.toFixed(5)}</div>
                     <div>⏱ Active: {Math.floor((Date.now() - beacon.timestamp) / 1000)}s</div>
                   </div>
-                  {beacon.status === 'active' && (
+                  <div className="mt-3 flex gap-2">
+                    {beacon.status === 'active' && (
+                      <button
+                        onClick={() => rescueBeacon(beacon.id)}
+                        className="flex-1 px-3 py-2 bg-green-500 text-white text-xs font-bold hover:bg-green-600"
+                      >
+                        🚑 RESCUE
+                      </button>
+                    )}
                     <button
-                      onClick={() => rescueBeacon(beacon.id)}
-                      className="mt-3 w-full px-3 py-2 bg-green-500 text-white text-xs font-bold hover:bg-green-600"
+                      onClick={() => removeBeacon(beacon.id)}
+                      className="flex-1 px-3 py-2 bg-red-500 text-white text-xs font-bold hover:bg-red-600"
                     >
-                      🚑 MARK AS RESCUED
+                      🗑 DELETE
                     </button>
-                  )}
+                  </div>
                 </div>
               </Popup>
             </Marker>

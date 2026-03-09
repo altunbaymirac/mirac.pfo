@@ -1,4 +1,4 @@
-import { initializeApp } from 'firebase/app'
+import { initializeApp, getApps, getApp } from 'firebase/app'
 import { getDatabase, ref, get, set, increment } from 'firebase/database'
 import { useState, useEffect } from 'react'
 
@@ -14,14 +14,14 @@ const firebaseConfig = {
   measurementId: "G-YQX7QEGVH2"
 }
 
-// Firebase initialize
+// Firebase initialize - prevent duplicate initialization
 let app, database
 try {
-  app = initializeApp(firebaseConfig)
+  // Check if Firebase app already exists
+  app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp()
   database = getDatabase(app)
 } catch (error) {
   console.log('Firebase init error:', error.message)
-  // Fallback to localStorage
   database = null
 }
 
