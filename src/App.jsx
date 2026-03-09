@@ -2,7 +2,7 @@ import { Routes, Route } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useEffect } from 'react'
 import Navigation from './components/Navigation'
-import ChatWidget from './components/ChatWidget'
+import TerminalChatbot from './components/TerminalChatbot'
 import ErrorBoundary from './components/ErrorBoundary'
 import Home from './pages/Home'
 import Blog from './pages/Blog'
@@ -32,7 +32,7 @@ function App() {
       <div className="relative min-h-screen bg-terminal-bg">
         <MatrixRain />
         <Navigation />
-        <ChatWidget />
+        <TerminalChatbot />
         
         <motion.div
           initial={{ opacity: 0 }}
