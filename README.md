@@ -1,326 +1,151 @@
-# 🚀 Mirac Altunbay - Portfolio v2.0
+# Mirac Altunbay - Engineering Portfolio v2.0
 
-Modern, terminal-themed portfolio website with live project demos, 3D visualizations, real-time analytics, and interactive features.
+Modern, terminal-themed portfolio website with live project demonstrations.
 
-## ✨ Features Implemented
+## 🚀 Features
 
-### 1️⃣ Live Project Demos
-- **FLARE Emergency System**: Embedded simulation of LoRa-based disaster communication
-- **DCE-SOFC Hybrid Propulsion**: Real-time thermodynamic digital twin
-- Fullscreen modal viewer
-- Direct links to standalone demos
+- ✅ **FLARE Advanced Simulator** - Interactive LoRa beacon tracking with Leaflet maps
+- ✅ **DCE-SOFC Digital Twin** - Real thermodynamic simulation with Recharts graphs + P&ID
+- ✅ **Firebase Visitor Counter** - Real-time analytics
+- ✅ **3D Beacon Model** - Three.js interactive visualization
+- ✅ **Mobile Responsive** - Hamburger menu + touch-friendly
+- ✅ **Blog System** - Technical articles with syntax highlighting
+- ✅ **Projects Showcase** - FLARE, DCE-SOFC, GeoSocial
 
-### 2️⃣ Blog System
-- Markdown-based posts with syntax highlighting
-- Auto-generated post list from data
-- Individual post pages with beautiful typography
-- Code blocks with language-specific highlighting
-- Tags and metadata
-- Share functionality
+## 📦 Installation
 
-### 3️⃣ 3D Interactive Element
-- **FLARE Beacon 3D Model** using Three.js & React Three Fiber
-- Interactive orbit controls (drag to rotate)
-- Real-time animations (signal rings, LED indicators)
-- Toggle transmission mode
-- Smooth performance with 60 FPS
-
-### 4️⃣ API Playground
-- Live API testing interface
-- Multiple endpoints (FLARE, DCE-SOFC)
-- Request/response visualization
-- Parameter customization
-- Copy response functionality
-- Simulated latency and status codes
-
-### 5️⃣ Real-Time Analytics Dashboard
-- Visitor statistics (total, today, session time)
-- 24-hour visitor trend (Line chart)
-- Geographic distribution (Doughnut chart)
-- Device breakdown (Mobile/Desktop/Tablet)
-- Top pages with visual bars
-- Live activity feed
-- Auto-updating metrics
-
-### 6️⃣ Micro-Interactions (Framer Motion)
-- Smooth page transitions
-- Hover effects with scale/tilt
-- Button press animations
-- Card lift on hover
-- Icon rotations
-- Stagger animations on lists
-- Terminal cursor blink
-- Matrix rain background
-
-### 7️⃣ Contact Form & CV Download
-- Functional contact form with validation
-- Contact type selection
-- Auto-reply confirmation
-- CV download button
-- Social media links
-- Response time indicator
-
-### 8️⃣ Additional Features
-- Terminal-themed design (dark mode)
-- Matrix rain background effect
-- Neon glow text effects
-- Custom scrollbar
-- Responsive grid layouts
-- SEO-optimized meta tags
-- Font optimization (JetBrains Mono)
-
-## 🛠️ Tech Stack
-
-- **Framework**: React 18 + Vite
-- **Routing**: React Router v6
-- **Animations**: Framer Motion
-- **3D Graphics**: Three.js + React Three Fiber + Drei
-- **Charts**: Chart.js + react-chartjs-2
-- **Markdown**: react-markdown + remark-gfm
-- **Syntax Highlighting**: react-syntax-highlighter
-- **Styling**: Tailwind CSS
-- **Icons**: Lucide React
-- **Date Handling**: date-fns
-
-## 📁 Project Structure
-
-```
-portfolio-v2/
-├── src/
-│   ├── components/
-│   │   ├── Navigation.jsx           # Terminal-themed nav with animations
-│   │   ├── MatrixRain.jsx           # Canvas-based background effect
-│   │   ├── FlareBeacon3D.jsx        # Three.js 3D beacon model
-│   │   ├── LiveProjectDemos.jsx     # Embedded project simulations
-│   │   ├── APIPlayground.jsx        # Interactive API testing
-│   │   └── AnalyticsDashboard.jsx   # Real-time stats & charts
-│   ├── pages/
-│   │   ├── Home.jsx                 # Landing page with all features
-│   │   ├── Blog.jsx                 # Blog post listing
-│   │   ├── BlogPost.jsx             # Individual post viewer
-│   │   ├── Projects.jsx             # Projects showcase
-│   │   ├── Analytics.jsx            # Analytics page
-│   │   └── Contact.jsx              # Contact form & info
-│   ├── data/
-│   │   └── blogPosts.js             # Markdown blog content
-│   ├── App.jsx                      # Router setup
-│   ├── main.jsx                     # React entry point
-│   └── index.css                    # Global styles + Tailwind
-├── index.html
-├── package.json
-├── vite.config.js
-├── tailwind.config.js
-└── README.md
-```
-
-## 🚀 Quick Start
-
-### 1. Install Dependencies
 ```bash
+# 1. Extract and enter directory
 cd portfolio-v2
+
+# 2. Install dependencies
 npm install
-```
 
-### 2. Run Development Server
-```bash
+# 3. Start development server
 npm run dev
-```
 
-Open [http://localhost:3000](http://localhost:3000)
-
-### 3. Build for Production
-```bash
+# 4. Build for production
 npm run build
 ```
 
-Output will be in `dist/` directory.
+## 🔥 Firebase Setup (IMPORTANT for Visitor Counter)
 
-## 🎨 Design Philosophy
-
-### Terminal Theme
-- Dark background (#0a0e27)
-- Neon green primary (#00ff41)
-- Cyan secondary (#00d9ff)
-- Orange accent (#ff6b35)
-- Monospace fonts (JetBrains Mono)
-
-### Micro-Interactions
-- Every clickable element has feedback
-- Smooth transitions (0.3s)
-- Scale/tilt effects on hover
-- Icon rotations and glows
-
-### Performance
-- Code splitting with React Router
-- Lazy-loaded 3D components
-- Optimized animations (GPU-accelerated)
-- Efficient canvas rendering
-
-## 📊 Analytics Implementation
-
-The analytics dashboard uses simulated data, but in production you would:
-
-1. **Add Google Analytics:**
-```javascript
-// In index.html
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-```
-
-2. **Track Events:**
-```javascript
-gtag('event', 'page_view', {
-  page_path: window.location.pathname
-});
-```
-
-3. **Real-time Data:**
-Use Firebase Realtime Database or a custom backend to stream visitor data.
-
-## 🔌 API Integration
-
-The API Playground is currently simulated. To connect to real APIs:
-
-1. **Update endpoint URLs** in `APIPlayground.jsx`
-2. **Add axios requests:**
-```javascript
-const response = await axios.get(`/api/flare/beacon/${id}`);
-setResponse(response.data);
-```
-
-3. **Handle authentication** if needed
-
-## 📝 Adding Blog Posts
-
-Edit `src/data/blogPosts.js`:
+1. Go to https://console.firebase.google.com
+2. Create new project
+3. Enable **Realtime Database** (NOT Firestore!)
+4. Go to Project Settings → General → Your apps
+5. Copy your config
+6. Paste into `src/utils/firebase.js`:
 
 ```javascript
-export const blogPosts = [
-  {
-    slug: 'your-post-slug',
-    title: 'Your Post Title',
-    date: '2025-01-15',
-    readTime: '5 min',
-    tags: ['React', 'Engineering'],
-    excerpt: 'Short description...',
-    content: `
-# Your Post Title
-
-Your markdown content here with **bold**, *italic*, and \`code\`.
-
-\`\`\`javascript
-const example = "code blocks work too";
-\`\`\`
-    `
-  }
-]
-```
-
-## 🎯 SEO Optimization
-
-### Meta Tags
-Update in `index.html`:
-```html
-<meta name="description" content="Your description">
-<meta property="og:title" content="Mirac Altunbay - Portfolio">
-<meta property="og:image" content="/og-image.jpg">
-```
-
-### Sitemap
-Generate with:
-```bash
-npm install --save-dev vite-plugin-sitemap
-```
-
-## 🚢 Deployment
-
-### Vercel (Recommended)
-```bash
-npm install -g vercel
-vercel
-```
-
-### Netlify
-```bash
-npm run build
-# Drag 'dist' folder to Netlify
-```
-
-### GitHub Pages
-```bash
-npm install --save-dev gh-pages
-```
-
-Add to `package.json`:
-```json
-"scripts": {
-  "deploy": "gh-pages -d dist"
+const firebaseConfig = {
+  apiKey: "AIza...",
+  authDomain: "your-project.firebaseapp.com",
+  databaseURL: "https://your-project-default-rtdb.firebaseio.com",
+  projectId: "your-project",
+  storageBucket: "your-project.appspot.com",
+  messagingSenderId: "123...",
+  appId: "1:123..."
 }
 ```
 
-## 🔧 Customization
+**Without Firebase:** Visitor counter falls back to localStorage (local only).
 
-### Colors
-Edit `tailwind.config.js`:
+## 🌐 Deploy to Vercel
+
+```bash
+# Push to GitHub first
+git init
+git add .
+git commit -m "Initial commit"
+git branch -M main
+git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO.git
+git push -u origin main
+```
+
+**In Vercel Dashboard:**
+1. Import repository
+2. Framework Preset: **Vite** ⚠️ (NOT "Other"!)
+3. Node.js Version: **20.x** ⚠️ (NOT 24.x!)
+4. Build Command: `npm run build`
+5. Output Directory: `dist`
+6. Deploy!
+
+## 🛠 Tech Stack
+
+- React 18 + Vite
+- TailwindCSS
+- Framer Motion
+- Three.js + React Three Fiber
+- Leaflet + React Leaflet
+- Recharts
+- Firebase Realtime Database
+- React Router
+- Lucide React Icons
+
+## 📱 Mobile Responsive Features
+
+- Hamburger menu (☰) on mobile
+- Touch-friendly simulators
+- Responsive grids (4 columns → 2 columns)
+- Full-width buttons
+- Optimized font sizes
+
+## 🎨 Customization
+
+### Change Terminal Colors
+
+`tailwind.config.js`:
 ```javascript
 colors: {
-  terminal: {
-    bg: '#YOUR_COLOR',
-    text: '#YOUR_COLOR',
-    // ...
-  }
+  'terminal-accent': '#ff6b35',      // Orange
+  'terminal-secondary': '#00d9ff',   // Cyan
 }
 ```
 
-### Fonts
-Update in `index.html` and `tailwind.config.js`
+### Add Blog Post
 
-### 3D Model
-Modify `FlareBeacon3D.jsx` to change beacon appearance
-
-## 📦 Dependencies
-
-```json
+`src/data/blogPosts.js`:
+```javascript
 {
-  "react": "^18.2.0",
-  "framer-motion": "^10.16.16",
-  "three": "^0.159.0",
-  "@react-three/fiber": "^8.15.12",
-  "@react-three/drei": "^9.92.7",
-  "react-markdown": "^9.0.1",
-  "chart.js": "^4.4.1",
-  "react-chartjs-2": "^5.2.0",
-  "lucide-react": "^0.303.0"
+  slug: 'my-post',
+  title: 'My Title',
+  date: '2025-03-10',
+  readTime: '5 min',
+  tags: ['Tag1', 'Tag2'],
+  excerpt: 'Short description',
+  content: `# Markdown content`
 }
 ```
 
-## 🐛 Known Issues
+## 🐛 Common Issues
 
-- 3D beacon may lag on low-end devices (consider adding performance mode)
-- Matrix rain can be CPU-intensive (toggle off option recommended)
-- Some animations may not work on Safari < 14
+**Leaflet map not showing:**
+```bash
+npm install leaflet react-leaflet
+```
 
-## 🔮 Future Enhancements
+**Vercel white screen:**
+- Check Framework = **Vite** (not Other)
+- Check Node = **20.x** (not 24.x)
 
-- [ ] Dark/Light theme toggle
-- [ ] Multi-language support (TR/EN)
-- [ ] Blog post search
-- [ ] Project filtering by tech stack
-- [ ] Visitor heatmap
-- [ ] Easter eggs (Konami code, hidden games)
-- [ ] Resume builder interface
-- [ ] Live coding sandbox
+**Firebase not working:**
+- Make sure you enabled **Realtime Database** (not Firestore)
+- Check databaseURL format is correct
+
+## 📞 Contact
+
+**Mirac Altunbay**  
+1. Sınıf Makine Mühendisliği, AGÜ
+
+- 📧 mirac.altunbay@agu.edu.tr
+- 🐙 [github.com/altunbaymirac](https://github.com/altunbaymirac)
+- 💼 [linkedin.com/in/miraç-altunbay](https://www.linkedin.com/in/miraç-altunbay)
 
 ## 📄 License
 
-MIT License - Feel free to use this template for your own portfolio!
-
-## 👨‍💻 Author
-
-**Mirac Altunbay**
-- GitHub: [@miracaltunbay](https://github.com/miracaltunbay)
-- LinkedIn: [Mirac Altunbay](https://linkedin.com/in/miracaltunbay)
-- Email: mirac.altunbay@agu.edu.tr
+MIT
 
 ---
 
-Built with ❤️ using React, Three.js, and way too much coffee ☕
+**Built with ❤️ by Mirac Altunbay**

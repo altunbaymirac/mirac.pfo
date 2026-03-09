@@ -211,7 +211,7 @@ GeoSocial'i sonunda **React Native** ile yaptım çünkü Firebase entegrasyonu 
 ---
 
 **Mirac Altunbay**  
-Mobile Dev Hobbyist
+1. Sınıf Makine Mühendisliği, AGÜ
 `
   }
 ]

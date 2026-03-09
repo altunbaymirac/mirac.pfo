@@ -1,28 +1,9 @@
-import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Users } from 'lucide-react'
+import { Users, Database, Wifi } from 'lucide-react'
+import { useVisitorCounter } from '../utils/firebase'
 
 export default function VisitorCounter() {
-  const [count, setCount] = useState(0)
-
-  useEffect(() => {
-    try {
-      // Get current count
-      let visitors = parseInt(localStorage.getItem('visitor_count') || '0')
-      
-      // Increment
-      visitors += 1
-      
-      // Save
-      localStorage.setItem('visitor_count', visitors.toString())
-      
-      // Display
-      setCount(visitors)
-    } catch (error) {
-      // Fallback if localStorage fails
-      setCount(1)
-    }
-  }, [])
+  const { count, loading } = useVisitorCounter()
 
   return (
     <div className="min-h-screen pt-24 px-4 pb-12">
@@ -33,10 +14,10 @@ export default function VisitorCounter() {
           className="text-center"
         >
           <h1 className="text-4xl md:text-5xl font-bold text-terminal-text neon-glow mb-4">
-            📊 Visitor Counter
+            📊 Visitor Analytics
           </h1>
           <p className="text-gray-400 mb-12">
-            Simple visitor tracking using browser storage
+            Real-time visitor tracking powered by Firebase Realtime Database
           </p>
 
           {/* Big Counter */}
@@ -44,28 +25,69 @@ export default function VisitorCounter() {
             initial={{ scale: 0.8 }}
             animate={{ scale: 1 }}
             transition={{ type: 'spring', stiffness: 200 }}
-            className="bg-terminal-darker border-4 border-terminal-text p-12 mb-8"
+            className="bg-terminal-darker border-4 border-terminal-text p-8 md:p-12 mb-8"
           >
             <Users size={48} className="text-terminal-text mx-auto mb-6" />
-            <div className="text-8xl md:text-9xl font-bold text-terminal-text neon-glow mb-4">
-              {count.toLocaleString()}
-            </div>
-            <p className="text-xl text-gray-400 font-mono">
+            
+            {loading ? (
+              <div className="text-4xl md:text-6xl font-bold text-terminal-text neon-glow mb-4 animate-pulse">
+                Loading...
+              </div>
+            ) : (
+              <div className="text-6xl md:text-9xl font-bold text-terminal-text neon-glow mb-4">
+                {count.toLocaleString()}
+              </div>
+            )}
+            
+            <p className="text-xl md:text-2xl text-gray-400 font-mono">
               Total Visitors
             </p>
           </motion.div>
 
-          {/* Info */}
-          <div className="bg-terminal-bg border-2 border-terminal-border p-6 text-left">
-            <h3 className="text-lg font-bold text-terminal-secondary mb-3">
-              📝 How it works:
+          {/* Info Cards */}
+          <div className="grid md:grid-cols-2 gap-6 mb-8">
+            <div className="bg-terminal-bg border-2 border-terminal-secondary p-6 text-left">
+              <div className="flex items-center gap-3 mb-4">
+                <Database className="text-terminal-secondary" size={24} />
+                <h3 className="text-lg font-bold text-terminal-secondary">
+                  Firebase Realtime DB
+                </h3>
+              </div>
+              <ul className="space-y-2 text-sm text-gray-400">
+                <li>✓ Real-time synchronization</li>
+                <li>✓ Persistent storage (never resets)</li>
+                <li>✓ Cross-device tracking</li>
+                <li>✓ Instant updates globally</li>
+              </ul>
+            </div>
+
+            <div className="bg-terminal-bg border-2 border-terminal-accent p-6 text-left">
+              <div className="flex items-center gap-3 mb-4">
+                <Wifi className="text-terminal-accent" size={24} />
+                <h3 className="text-lg font-bold text-terminal-accent">
+                  How It Works
+                </h3>
+              </div>
+              <ul className="space-y-2 text-sm text-gray-400">
+                <li>→ Every visit increments Firebase counter</li>
+                <li>→ Data syncs in real-time</li>
+                <li>→ Fallback to localStorage if Firebase unavailable</li>
+                <li>→ Privacy-friendly (no personal data stored)</li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Setup Instructions */}
+          <div className="bg-terminal-darker border-2 border-terminal-border p-6 text-left">
+            <h3 className="text-lg font-bold text-terminal-text mb-4">
+              🔧 Firebase Setup Instructions
             </h3>
-            <ul className="space-y-2 text-sm text-gray-400">
-              <li>✓ Counter stored in your browser (localStorage)</li>
-              <li>✓ Increments every time you visit</li>
-              <li>✓ Resets if you clear browser data</li>
-              <li>✓ No analytics tracking, no cookies</li>
-            </ul>
+            <div className="space-y-3 text-sm text-gray-400 font-mono">
+              <p>1. Create Firebase project at <span className="text-terminal-accent">console.firebase.google.com</span></p>
+              <p>2. Enable <span className="text-terminal-secondary">Realtime Database</span></p>
+              <p>3. Copy config to <code className="bg-terminal-bg px-2 py-1 text-terminal-accent">src/utils/firebase.js</code></p>
+              <p>4. Deploy → Visitor counter works globally!</p>
+            </div>
           </div>
         </motion.div>
       </div>

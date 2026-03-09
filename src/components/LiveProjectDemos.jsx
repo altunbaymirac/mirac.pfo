@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Maximize2, Minimize2, ExternalLink, Code } from 'lucide-react'
-import FLARESimulator from './FLARESimulator'
-import DCESOFCSimulator from './DCESOFCSimulator'
+import FLAREAdvancedSimulator from './FLAREAdvancedSimulator'
+import DCESOFCAdvancedSimulator from './DCESOFCAdvancedSimulator'
 
 const DEMOS = [
   {
@@ -164,9 +164,9 @@ export default function LiveProjectDemos() {
               </div>
 
               {/* Demo Content */}
-              <div className="h-[calc(100%-80px)] bg-terminal-darker overflow-auto p-6">
-                {activeDemo.id === 'flare' && <FLARESimulator />}
-                {activeDemo.id === 'dce-sofc' && <DCESOFCSimulator />}
+              <div className="h-[calc(100%-80px)] bg-terminal-darker overflow-auto">
+                {activeDemo.id === 'flare' && <FLAREAdvancedSimulator />}
+                {activeDemo.id === 'dce-sofc' && <DCESOFCAdvancedSimulator />}
               </div>
             </motion.div>
           </motion.div>
