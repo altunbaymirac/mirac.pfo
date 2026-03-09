@@ -9,6 +9,8 @@ import BlogPost from './pages/BlogPost'
 import Projects from './pages/Projects'
 import Analytics from './pages/Analytics'
 import Contact from './pages/Contact'
+import FLAREDemo from './pages/FLAREDemo'
+import DCESOFCDemo from './pages/DCESOFCDemo'
 import MatrixRain from './components/MatrixRain'
 
 function App() {
@@ -41,6 +43,8 @@ function App() {
           <Route path="/projects" element={<Projects />} />
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/demos/flare" element={<FLAREDemo />} />
+          <Route path="/demos/dce-sofc" element={<DCESOFCDemo />} />
         </Routes>
       </motion.div>
     </div>

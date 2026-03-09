@@ -20,7 +20,9 @@ try {
   app = initializeApp(firebaseConfig)
   database = getDatabase(app)
 } catch (error) {
-  console.log('Firebase init error (expected if no config):', error.message)
+  console.log('Firebase init error:', error.message)
+  // Fallback to localStorage
+  database = null
 }
 
 // Visitor counter hook
