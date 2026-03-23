@@ -207,27 +207,189 @@ export default function DCESOFCDemo() {
       </AnimatePresence>
 
       <div className="max-w-7xl mx-auto px-4 mt-6 space-y-6">
-        <div className="bg-terminal-darker/90 border-2 border-terminal-secondary p-6 shadow-2xl">
-          <h3 className="text-lg font-bold text-terminal-secondary mb-4 flex items-center gap-2"><Activity size={20} />Animated Process Flow</h3>
-          <div className="bg-gradient-to-br from-terminal-bg to-terminal-darker border border-terminal-border p-4 relative">
-            <svg className="absolute top-0 left-0 w-full h-full pointer-events-none" style={{ zIndex: 10 }}>
-              {flowParticles.map(p => (
-                <motion.circle key={p.id} r="4" fill="#00d9ff" initial={{ cx: 110, cy: 100 }} animate={{ cx: 110 + (p.progress / 100) * 640, cy: p.progress < 40 ? 100 : p.progress < 60 ? 70 : 130 }} style={{ filter: 'drop-shadow(0 0 3px #00d9ff)' }} />
-              ))}
+        {/* BÜYÜK ANIMATİON P&ID DIAGRAM */}
+        <div className="bg-terminal-darker border-4 border-terminal-secondary p-6 shadow-2xl">
+          <h3 className="text-xl font-bold text-terminal-secondary mb-4 flex items-center gap-2">
+            <Activity size={24} />
+            Process & Instrumentation Diagram
+          </h3>
+          
+          <div className="relative bg-gradient-to-br from-terminal-bg to-black border-2 border-terminal-border p-8 min-h-[400px]">
+            {/* Animated Flow Particles */}
+            <svg className="absolute top-0 left-0 w-full h-full pointer-events-none" style={{ zIndex: 20 }}>
+              {flowParticles.map(p => {
+                const pathProgress = p.progress / 100
+                let cx, cy
+                
+                if (pathProgress < 0.25) {
+                  // NH3 to Cracker
+                  cx = 120 + (pathProgress / 0.25) * 140
+                  cy = 200
+                } else if (pathProgress < 0.5) {
+                  // Cracker to SOFC (H2)
+                  cx = 260 + ((pathProgress - 0.25) / 0.25) * 180
+                  cy = 140
+                } else if (pathProgress < 0.75) {
+                  // SOFC to Generator
+                  cx = 440 + ((pathProgress - 0.5) / 0.25) * 160
+                  cy = 140
+                } else {
+                  // DCE to Generator
+                  cx = 440 + ((pathProgress - 0.75) / 0.25) * 160
+                  cy = 260
+                }
+                
+                return (
+                  <motion.circle
+                    key={p.id}
+                    r="6"
+                    cx={cx}
+                    cy={cy}
+                    fill="#00d9ff"
+                    style={{
+                      filter: 'drop-shadow(0 0 8px #00d9ff)',
+                      opacity: 0.8
+                    }}
+                  />
+                )
+              })}
             </svg>
-            <svg viewBox="0 0 900 200" className="w-full h-48">
-              <motion.rect x="30" y="50" width="80" height="100" fill="none" stroke="#00d9ff" strokeWidth="3" animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 2, repeat: Infinity }} />
-              <text x="70" y="105" fill="#00d9ff" fontSize="16" textAnchor="middle" fontWeight="bold">NH₃</text>
-              <line x1="110" y1="100" x2="180" y2="100" stroke="#00d9ff" strokeWidth="3"/>
-              <polygon points="180,100 170,95 170,105" fill="#00d9ff"/>
-              <motion.circle cx="230" cy="100" r="50" fill="none" stroke="#ff6b35" strokeWidth="3" animate={{ filter: isRunning ? ['drop-shadow(0 0 5px #ff6b35)', 'drop-shadow(0 0 20px #ff6b35)'] : 'none' }} transition={{ duration: 1, repeat: Infinity }} />
-              <text x="230" y="95" fill="#ff6b35" fontSize="14" textAnchor="middle" fontWeight="bold">CRACKER</text>
-              <text x="230" y="115" fill="#ff6b35" fontSize="13" textAnchor="middle" fontWeight="bold">{crackingTemp}°C</text>
-              <line x1="280" y1="70" x2="370" y2="70" stroke="#00d9ff" strokeWidth="3"/>
-              <text x="325" y="60" fill="#00d9ff" fontSize="11" fontWeight="bold">H₂ {currentData.h2Flow.toFixed(1)} kg/h</text>
-              <motion.rect x="370" y="40" width="100" height="80" fill="none" stroke="#00d9ff" strokeWidth="3" animate={{ opacity: isRunning ? [0.8, 1] : 1 }} transition={{ duration: 1.5, repeat: Infinity }} />
-              <text x="420" y="75" fill="#00d9ff" fontSize="14" textAnchor="middle" fontWeight="bold">SOFC</text>
-              <text x="420" y="110" fill="#4ade80" fontSize="11" textAnchor="middle" fontWeight="bold">{currentData.sofcPower.toFixed(0)} kW</text>
+
+            {/* Main P&ID SVG */}
+            <svg viewBox="0 0 900 400" className="w-full h-full">
+              <defs>
+                {/* Gradients */}
+                <linearGradient id="nh3Gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#00d9ff" stopOpacity="0.3"/>
+                  <stop offset="100%" stopColor="#00d9ff" stopOpacity="0.8"/>
+                </linearGradient>
+                <linearGradient id="crackerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#ff6b35" stopOpacity="0.6"/>
+                  <stop offset="100%" stopColor="#ff0000" stopOpacity="0.9"/>
+                </linearGradient>
+                <radialGradient id="sofcGlow">
+                  <stop offset="0%" stopColor="#00d9ff" stopOpacity="0.8"/>
+                  <stop offset="100%" stopColor="#00d9ff" stopOpacity="0"/>
+                </radialGradient>
+                
+                {/* Arrow markers */}
+                <marker id="arrowBlue" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                  <path d="M2,2 L2,10 L10,6 z" fill="#00d9ff" />
+                </marker>
+                <marker id="arrowOrange" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                  <path d="M2,2 L2,10 L10,6 z" fill="#ff6b35" />
+                </marker>
+                <marker id="arrowGreen" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                  <path d="M2,2 L2,10 L10,6 z" fill="#4ade80" />
+                </marker>
+              </defs>
+
+              {/* NH3 Storage Tank */}
+              <motion.g
+                animate={{ opacity: isRunning ? [1, 0.7, 1] : 1 }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                <rect x="40" y="140" width="120" height="120" rx="10" fill="url(#nh3Gradient)" stroke="#00d9ff" strokeWidth="4"/>
+                <text x="100" y="195" fill="#00d9ff" fontSize="24" textAnchor="middle" fontWeight="bold">NH₃</text>
+                <text x="100" y="220" fill="#00d9ff" fontSize="16" textAnchor="middle">TANK</text>
+                <rect x="60" y="160" width="80" height="80" fill="#00d9ff" opacity="0.2"/>
+              </motion.g>
+
+              {/* Flow NH3 to Cracker */}
+              <line x1="160" y1="200" x2="240" y2="200" stroke="#00d9ff" strokeWidth="6" markerEnd="url(#arrowBlue)"/>
+              <text x="200" y="185" fill="#00d9ff" fontSize="12" textAnchor="middle" fontWeight="bold">NH₃ FEED</text>
+
+              {/* Ammonia Cracker */}
+              <motion.g
+                animate={{ 
+                  filter: isRunning 
+                    ? ['drop-shadow(0 0 10px #ff6b35)', 'drop-shadow(0 0 30px #ff0000)', 'drop-shadow(0 0 10px #ff6b35)']
+                    : 'drop-shadow(0 0 5px #ff6b35)'
+                }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+              >
+                <circle cx="300" cy="200" r="70" fill="url(#crackerGradient)" stroke="#ff6b35" strokeWidth="4"/>
+                <circle cx="300" cy="200" r="60" fill="none" stroke="#ff0000" strokeWidth="2" opacity="0.5"/>
+                <text x="300" y="190" fill="white" fontSize="18" textAnchor="middle" fontWeight="bold">CRACKER</text>
+                <text x="300" y="215" fill="white" fontSize="20" textAnchor="middle" fontWeight="bold">{crackingTemp}°C</text>
+                {/* Flame icon */}
+                <path d="M290,170 L295,155 L300,170 L305,155 L310,170" fill="none" stroke="#ffff00" strokeWidth="2"/>
+              </motion.g>
+
+              {/* H2 Flow to SOFC */}
+              <line x1="370" y1="140" x2="460" y2="140" stroke="#00d9ff" strokeWidth="6" markerEnd="url(#arrowBlue)"/>
+              <text x="415" y="125" fill="#00d9ff" fontSize="14" textAnchor="middle" fontWeight="bold">H₂: {currentData.h2Flow.toFixed(1)} kg/h</text>
+              <rect x="400" y="115" width="70" height="20" fill="#00d9ff" opacity="0.2" rx="5"/>
+
+              {/* SOFC Stack */}
+              <motion.g
+                animate={{ opacity: isRunning ? [0.8, 1, 0.8] : 1 }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                <rect x="460" y="80" width="140" height="120" rx="8" fill="none" stroke="#00d9ff" strokeWidth="5"/>
+                {/* Cell layers */}
+                {[...Array(8)].map((_, i) => (
+                  <rect key={i} x="470" y={90 + i * 13} width="120" height="10" fill="#00d9ff" opacity={0.3 + i * 0.05}/>
+                ))}
+                <text x="530" y="135" fill="#00d9ff" fontSize="20" textAnchor="middle" fontWeight="bold">SOFC</text>
+                <text x="530" y="160" fill="#00d9ff" fontSize="14" textAnchor="middle">{sofcCells} Cells</text>
+                <text x="530" y="180" fill="#4ade80" fontSize="16" textAnchor="middle" fontWeight="bold">{currentData.sofcPower.toFixed(0)} kW</text>
+              </motion.g>
+
+              {/* Remaining NH3 to DCE */}
+              <line x1="330" y1="260" x2="460" y2="260" stroke="#ff6b35" strokeWidth="6" markerEnd="url(#arrowOrange)"/>
+              <text x="395" y="250" fill="#ff6b35" fontSize="12" textAnchor="middle" fontWeight="bold">NH₃ ({(100 - currentData.nh3Conversion).toFixed(0)}%)</text>
+
+              {/* DCE Engine */}
+              <motion.g
+                animate={{
+                  transform: isRunning ? ['translateX(0)', 'translateX(2px)', 'translateX(0)'] : 'translateX(0)'
+                }}
+                transition={{ duration: 0.2, repeat: Infinity }}
+              >
+                <rect x="460" y="210" width="140" height="100" rx="8" fill="none" stroke="#ff6b35" strokeWidth="5"/>
+                <circle cx="500" cy="250" r="25" fill="#ff6b35" opacity="0.3" stroke="#ff6b35" strokeWidth="3"/>
+                <circle cx="560" cy="250" r="25" fill="#ff6b35" opacity="0.3" stroke="#ff6b35" strokeWidth="3"/>
+                <text x="530" y="245" fill="#ff6b35" fontSize="20" textAnchor="middle" fontWeight="bold">DCE</text>
+                <text x="530" y="290" fill="#ff6b35" fontSize="14" textAnchor="middle">Diesel Engine</text>
+                <text x="530" y="270" fill="#ff0000" fontSize="16" textAnchor="middle" fontWeight="bold">{currentData.dcePower.toFixed(0)} kW</text>
+              </motion.g>
+
+              {/* Power merge lines */}
+              <line x1="600" y1="140" x2="660" y2="140" stroke="#00d9ff" strokeWidth="8"/>
+              <line x1="600" y1="260" x2="660" y2="260" stroke="#ff6b35" strokeWidth="8"/>
+              <line x1="660" y1="140" x2="660" y2="260" stroke="#4ade80" strokeWidth="8"/>
+
+              {/* Generator / Power Output */}
+              <motion.g
+                animate={{
+                  transform: isRunning ? 'rotate(360)' : 'rotate(0)'
+                }}
+                transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
+                style={{ transformOrigin: '720px 200px' }}
+              >
+                <circle cx="720" cy="200" r="50" fill="none" stroke="#4ade80" strokeWidth="6"/>
+                <circle cx="720" cy="200" r="40" fill="url(#sofcGlow)"/>
+                <path d="M720,165 L735,200 L720,235 L705,200 Z" fill="#4ade80"/>
+              </motion.g>
+              
+              <line x1="660" y1="200" x2="670" y2="200" stroke="#4ade80" strokeWidth="8" markerEnd="url(#arrowGreen)"/>
+              
+              {/* Total Power Output */}
+              <text x="720" y="280" fill="#4ade80" fontSize="24" textAnchor="middle" fontWeight="bold">
+                {currentData.totalPower.toFixed(1)} kW
+              </text>
+              <text x="720" y="305" fill="#4ade80" fontSize="14" textAnchor="middle">
+                TOTAL OUTPUT
+              </text>
+
+              {/* Efficiency Badge */}
+              <rect x="750" y="120" width="100" height="60" rx="10" fill="#b794f6" opacity="0.2" stroke="#b794f6" strokeWidth="3"/>
+              <text x="800" y="145" fill="#b794f6" fontSize="14" textAnchor="middle" fontWeight="bold">EFFICIENCY</text>
+              <text x="800" y="170" fill="#b794f6" fontSize="22" textAnchor="middle" fontWeight="bold">{currentData.efficiency.toFixed(1)}%</text>
+            </svg>
+          </div>
+        </div>
               <line x1="280" y1="130" x2="370" y2="130" stroke="#ff6b35" strokeWidth="3"/>
               <motion.rect x="370" y="110" width="100" height="60" fill="none" stroke="#ff6b35" strokeWidth="3" animate={{ opacity: isRunning ? [0.7, 1] : 1 }} transition={{ duration: 1.2, repeat: Infinity }} />
               <text x="420" y="140" fill="#ff6b35" fontSize="14" textAnchor="middle" fontWeight="bold">DCE</text>
