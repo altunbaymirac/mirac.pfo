@@ -528,7 +528,7 @@ export default function DCESOFCDemo() {
           </div>
         </div>
       </div>
-      </div>
+      </div>{/* scroll wrapper */}
 
       {/* AREA CHART */}
       {history.length > 1 && (

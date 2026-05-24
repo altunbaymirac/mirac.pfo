@@ -29,7 +29,7 @@ export default function Home() {
       tag: 'Emergency Communication',
       description: '6 Şubat\'tan sonra aklıma gelen bir fikir: LoRa ile çalışan, enkaz altından sinyal yollayan bir cihaz',
       color: 'terminal-accent',
-      link: '/projects',
+      link: '/demos/flare',
       stats: ['868 MHz', '1-3 km Range', 'Auto-Activation']
     },
     {
@@ -37,23 +37,42 @@ export default function Home() {
       tag: 'Marine Propulsion',
       description: 'Amonyak yakıtlı gemi motoru simülasyonu. Gerçek termodinamik hesaplamalarla çalışan bir dijital ikiz',
       color: 'terminal-secondary',
-      link: '/projects',
-      stats: ['Real Physics', 'Zero CO₂', 'Digital Twin']
+      link: '/demos/dce-sofc',
+      stats: ['Arrhenius Kinetics', 'Zero CO₂', 'Digital Twin']
+    },
+    {
+      name: 'Takaslat',
+      tag: 'Marketplace Platform',
+      description: 'Para kullanmadan eşya takası yapabileceğin, AI destekli öneri ve müzakere sistemi olan marketplace',
+      color: 'terminal-text',
+      link: '/demos/takasla',
+      stats: ['React + TS', 'Node.js', 'AI Assistant']
+    },
+    {
+      name: 'FedaGrup',
+      tag: 'Client Website',
+      description: 'FedaGrup İnşaat için hazırladığım kurumsal web sitesi. Mobil uyumlu, hızlı, güven veren tasarım',
+      color: 'terminal-accent',
+      link: 'https://www.fedagrupinsaat.com',
+      external: true,
+      stats: ['Production', 'Responsive', 'Client Project']
     },
     {
       name: 'GeoSocial',
       tag: 'Mobile App',
       description: 'Konuma dayalı sosyal ağ. React Native ile yaptım, GPS tracking ve gamification var',
-      color: 'terminal-text',
-      link: '/blog/react-native-vs-flutter',
+      color: 'terminal-secondary',
+      link: '/demos/geosocial',
       stats: ['React Native', 'Firebase', 'GPS Tracking']
     }
   ]
 
   const skills = [
-    { name: 'React / React Native', level: 70 },
+    { name: 'React / TypeScript', level: 75 },
+    { name: 'Node.js / Express', level: 65 },
     { name: 'Firebase / Backend', level: 60 },
-    { name: 'Java / Python', level: 55 },
+    { name: 'Python / Java', level: 55 },
+    { name: 'Tailwind / UI Design', level: 70 },
     { name: 'LoRa / IoT (Learning)', level: 40 }
   ]
 
@@ -86,8 +105,7 @@ export default function Home() {
               Engineering Student
             </p>
             <p className="text-gray-400 max-w-2xl mx-auto mb-8">
-              Working on FLARE, an emergency communication system inspired by the 6 February earthquake. 
-              Also building simulations and mobile apps. First-year at AGÜ, learning by doing.
+              FLARE (enkaz altı LoRa beacon), DCE-SOFC dijital ikiz, Takaslat marketplace ve FedaGrup kurumsal sitesi üzerinde çalıştım. AGÜ Makine Mühendisliği 1. sınıf, yaparak öğreniyorum.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -122,9 +140,9 @@ export default function Home() {
             className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12"
           >
             {[
-              { label: 'Projects', value: '3' },
-              { label: 'Technologies', value: '10+' },
-              { label: 'Lines of Code', value: '5k+' },
+              { label: 'Projects', value: '5' },
+              { label: 'Technologies', value: '15+' },
+              { label: 'Lines of Code', value: '10k+' },
               { label: 'Coffee Consumed', value: '∞' }
             ].map((stat, i) => (
               <div key={i} className="bg-terminal-darker border border-terminal-border p-4 text-center">
@@ -143,66 +161,47 @@ export default function Home() {
             Featured Projects
           </h2>
 
-          <div className="grid md:grid-cols-3 gap-6 mb-12">
+          <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6 mb-12">
             {projects.map((project, index) => {
               const colorClasses = {
-                'terminal-accent': {
-                  border: 'border-terminal-accent',
-                  text: 'text-terminal-accent'
-                },
-                'terminal-secondary': {
-                  border: 'border-terminal-secondary',
-                  text: 'text-terminal-secondary'
-                },
-                'terminal-text': {
-                  border: 'border-terminal-text',
-                  text: 'text-terminal-text'
-                }
+                'terminal-accent': { border: 'border-terminal-accent', text: 'text-terminal-accent' },
+                'terminal-secondary': { border: 'border-terminal-secondary', text: 'text-terminal-secondary' },
+                'terminal-text': { border: 'border-terminal-text', text: 'text-terminal-text' }
               }
-
               const colors = colorClasses[project.color]
-
-              return (
+              const card = (
                 <motion.div
                   key={project.name}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  whileHover={{ y: -10 }}
-                  className={`bg-terminal-darker border-2 ${colors.border} p-6 group cursor-pointer`}
+                  transition={{ delay: index * 0.08 }}
+                  whileHover={{ y: -6 }}
+                  className={`bg-terminal-darker border-2 ${colors.border} p-6 group cursor-pointer h-full`}
                 >
-                  <Link to={project.link}>
-                    <div className="flex items-start justify-between mb-4">
-                      <div>
-                        <h3 className={`text-2xl font-bold ${colors.text} mb-1`}>
-                          {project.name}
-                        </h3>
-                        <p className="text-xs font-mono text-gray-500">{project.tag}</p>
-                      </div>
-                      <motion.div
-                        whileHover={{ x: 5 }}
-                        className={colors.text}
-                      >
-                        <ArrowRight size={24} />
-                      </motion.div>
+                  <div className="flex items-start justify-between mb-4">
+                    <div>
+                      <h3 className={`text-2xl font-bold ${colors.text} mb-1`}>{project.name}</h3>
+                      <p className="text-xs font-mono text-gray-500">{project.tag}</p>
                     </div>
-
-                    <p className="text-gray-400 text-sm mb-4 leading-relaxed">
-                      {project.description}
-                    </p>
-
-                    <div className="flex flex-wrap gap-2">
-                      {project.stats.map((stat) => (
-                        <span
-                          key={stat}
-                          className={`px-2 py-1 bg-terminal-bg ${colors.border} border text-xs font-mono text-gray-400`}
-                        >
-                          {stat}
-                        </span>
-                      ))}
-                    </div>
-                  </Link>
+                    <motion.div whileHover={{ x: 5 }} className={colors.text}>
+                      <ArrowRight size={24} />
+                    </motion.div>
+                  </div>
+                  <p className="text-gray-400 text-sm mb-4 leading-relaxed">{project.description}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {project.stats.map((stat) => (
+                      <span key={stat} className={`px-2 py-1 bg-terminal-bg ${colors.border} border text-xs font-mono text-gray-400`}>
+                        {stat}
+                      </span>
+                    ))}
+                  </div>
                 </motion.div>
+              )
+
+              return project.external ? (
+                <a key={project.name} href={project.link} target="_blank" rel="noopener noreferrer">{card}</a>
+              ) : (
+                <Link key={project.name} to={project.link}>{card}</Link>
               )
             })}
           </div>
