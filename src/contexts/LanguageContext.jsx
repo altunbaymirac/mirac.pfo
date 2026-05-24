@@ -52,7 +52,7 @@ export const translations = {
       games: 'oyunlar', analytics: 'analitik', contact: 'iletişim', cv: 'özgeçmiş'
     },
     home: {
-      subtitle: 'Mühendislik Öğrencisi',
+      subtitle: 'Engineering Student',
       bio: 'FLARE (enkaz altı LoRa beacon), DCE-SOFC dijital ikiz, Takaslat marketplace ve FedaGrup kurumsal sitesi üzerinde çalıştım. AGÜ Makine Mühendisliği 1. sınıf, yaparak öğreniyorum.',
       btnProjects: 'PROJELERİ GÖR',
       btnContact: 'İLETİŞİM',
