@@ -1,19 +1,22 @@
 import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Home, BookOpen, Briefcase, BarChart3, Mail, Github, Linkedin, Instagram, Menu, X, Gamepad2 } from 'lucide-react'
+import { Home, BookOpen, Briefcase, BarChart3, Mail, Github, Linkedin, Instagram, Menu, X, Gamepad2, FileText } from 'lucide-react'
 import { useState } from 'react'
+import { useLanguage } from '../contexts/LanguageContext'
 
 export default function Navigation() {
   const location = useLocation()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const { lang, toggle, t } = useLanguage()
 
   const navItems = [
-    { path: '/', icon: Home, label: 'home' },
-    { path: '/blog', icon: BookOpen, label: 'blog' },
-    { path: '/projects', icon: Briefcase, label: 'projects' },
-    { path: '/games', icon: Gamepad2, label: 'games' },
-    { path: '/analytics', icon: BarChart3, label: 'analytics' },
-    { path: '/contact', icon: Mail, label: 'contact' },
+    { path: '/', icon: Home, label: t.nav.home },
+    { path: '/blog', icon: BookOpen, label: t.nav.blog },
+    { path: '/projects', icon: Briefcase, label: t.nav.projects },
+    { path: '/games', icon: Gamepad2, label: t.nav.games },
+    { path: '/analytics', icon: BarChart3, label: t.nav.analytics },
+    { path: '/contact', icon: Mail, label: t.nav.contact },
+    { path: '/cv', icon: FileText, label: t.nav.cv },
   ]
 
   return (
@@ -63,6 +66,16 @@ export default function Navigation() {
               )
             })}
           </div>
+
+          {/* Language Toggle */}
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={toggle}
+            className="hidden md:flex items-center px-3 py-1 border-2 border-terminal-secondary text-terminal-secondary font-mono text-sm font-bold hover:bg-terminal-secondary hover:text-terminal-bg transition-all"
+          >
+            {lang === 'tr' ? 'EN' : 'TR'}
+          </motion.button>
 
           {/* Desktop Social */}
           <div className="hidden md:flex items-center space-x-3">
@@ -138,6 +151,14 @@ export default function Navigation() {
                   </Link>
                 )
               })}
+
+              {/* Mobile Language Toggle */}
+              <button
+                onClick={toggle}
+                className="w-full text-center py-3 border-2 border-terminal-secondary text-terminal-secondary font-mono font-bold hover:bg-terminal-secondary hover:text-terminal-bg transition-all"
+              >
+                {lang === 'tr' ? '🌐 Switch to English' : '🌐 Türkçeye Geç'}
+              </button>
 
               {/* Mobile Social */}
               <div className="flex items-center justify-center space-x-6 pt-4 border-t-2 border-terminal-border">

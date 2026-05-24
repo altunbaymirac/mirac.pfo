@@ -15,6 +15,7 @@ import DCESOFCDemo from './pages/DCESOFCDemo'
 import GeoSocialDemo from './pages/GeoSocialDemo'
 import MiniGames from './pages/MiniGames'
 import TakaslaPreview from './pages/TakaslaPreview'
+import CV from './pages/CV'
 import MatrixRain from './components/MatrixRain'
 
 function App() {
@@ -53,6 +54,7 @@ function App() {
             <Route path="/demos/geosocial" element={<GeoSocialDemo />} />
             <Route path="/demos/takasla" element={<TakaslaPreview />} />
             <Route path="/games" element={<MiniGames />} />
+            <Route path="/cv" element={<CV />} />
           </Routes>
         </motion.div>
       </div>

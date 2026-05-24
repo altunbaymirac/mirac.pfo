@@ -4,8 +4,10 @@ import { motion } from 'framer-motion'
 import { Terminal, Rocket, Code, Cpu, ArrowRight, Download } from 'lucide-react'
 import FlareBeacon3D from '../components/FlareBeacon3D'
 import LiveProjectDemos from '../components/LiveProjectDemos'
+import { useLanguage } from '../contexts/LanguageContext'
 
 export default function Home() {
+  const { t } = useLanguage()
   const [terminalText, setTerminalText] = useState('')
   const fullText = 'mirac@portfolio:~$ ./deploy_future.sh'
 
@@ -67,6 +69,51 @@ export default function Home() {
     }
   ]
 
+  const timeline = [
+    {
+      date: 'Eyl 2024',
+      title: 'AGÜ Makine Mühendisliği',
+      desc: 'Abdullah Gül Üniversitesi\'nde Makine Mühendisliği\'ne başladım. Mühendislik düşüncesiyle tanıştım.',
+      tag: '🎓 Eğitim',
+      active: true
+    },
+    {
+      date: 'Şub 2025',
+      title: 'FLARE — İlk Prototip',
+      desc: '6 Şubat depreminden ilham aldım. LoRa 868 MHz ile enkaz altı beacon simülasyonu geliştirdim.',
+      tag: '📡 LoRa / IoT',
+      active: true
+    },
+    {
+      date: 'Mar 2025',
+      title: 'DCE-SOFC Dijital İkiz',
+      desc: 'Amonyak yakıtlı hibrit gemi tahrik sistemi için Arrhenius kinetikleriyle çalışan dijital ikiz simülasyonu.',
+      tag: '⚗️ Termodinamik',
+      active: true
+    },
+    {
+      date: 'Nis 2025',
+      title: 'FedaGrup İnşaat Web Sitesi',
+      desc: 'İlk müşteri projem. Mobil uyumlu, hızlı kurumsal web sitesi — production\'da yayında.',
+      tag: '🌐 Client Project',
+      active: true
+    },
+    {
+      date: 'May 2025',
+      title: 'Takaslat Marketplace',
+      desc: 'React + TypeScript ile AI destekli takas marketplace. Müzakere sistemi ve harita entegrasyonu.',
+      tag: '🛒 Full-Stack',
+      active: true
+    },
+    {
+      date: '2025 →',
+      title: 'FLARE Donanım Prototipi',
+      desc: 'ESP32 + LoRa modülü ile fiziksel prototip. AGÜ kampüsünde menzil testi planlanıyor.',
+      tag: '🔩 Sonraki Adım',
+      active: false
+    }
+  ]
+
   const skills = [
     { name: 'React / TypeScript', level: 75 },
     { name: 'Node.js / Express', level: 65 },
@@ -102,10 +149,10 @@ export default function Home() {
               MIRAC ALTUNBAY
             </h1>
             <p className="text-xl md:text-2xl text-terminal-secondary mb-4">
-              Engineering Student
+              {t.home.subtitle}
             </p>
             <p className="text-gray-400 max-w-2xl mx-auto mb-8">
-              FLARE (enkaz altı LoRa beacon), DCE-SOFC dijital ikiz, Takaslat marketplace ve FedaGrup kurumsal sitesi üzerinde çalıştım. AGÜ Makine Mühendisliği 1. sınıf, yaparak öğreniyorum.
+              {t.home.bio}
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -116,7 +163,7 @@ export default function Home() {
                   className="w-full sm:w-auto px-6 md:px-8 py-3 bg-terminal-text border-2 border-terminal-text text-terminal-bg font-bold font-mono flex items-center justify-center space-x-2 hover:bg-transparent hover:text-terminal-text transition-all"
                 >
                   <Rocket size={20} />
-                  <span className="text-sm md:text-base">PROJELERİ GÖR</span>
+                  <span className="text-sm md:text-base">{t.home.btnProjects}</span>
                 </motion.button>
               </Link>
 
@@ -126,7 +173,7 @@ export default function Home() {
                   whileTap={{ scale: 0.95 }}
                   className="w-full sm:w-auto px-6 md:px-8 py-3 border-2 border-terminal-secondary text-terminal-secondary font-bold font-mono hover:bg-terminal-secondary hover:text-terminal-bg transition-all text-sm md:text-base"
                 >
-                  İLETİŞİM
+                  {t.home.btnContact}
                 </motion.button>
               </Link>
             </div>
@@ -139,12 +186,7 @@ export default function Home() {
             transition={{ delay: 0.5 }}
             className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12"
           >
-            {[
-              { label: 'Projects', value: '5' },
-              { label: 'Technologies', value: '15+' },
-              { label: 'Lines of Code', value: '10k+' },
-              { label: 'Coffee Consumed', value: '∞' }
-            ].map((stat, i) => (
+            {t.home.stats.map((stat, i) => (
               <div key={i} className="bg-terminal-darker border border-terminal-border p-4 text-center">
                 <div className="text-3xl font-bold text-terminal-text">{stat.value}</div>
                 <div className="text-xs text-gray-500 font-mono mt-1">{stat.label}</div>
@@ -158,7 +200,7 @@ export default function Home() {
       <section className="py-20 px-4">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-4xl font-bold text-terminal-text neon-glow mb-12 text-center">
-            Featured Projects
+            {t.home.featuredTitle}
           </h2>
 
           <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6 mb-12">
@@ -227,11 +269,49 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Timeline */}
+      <section className="py-20 px-4">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-4xl font-bold text-terminal-text neon-glow mb-12 text-center">
+            {t.home.timelineTitle}
+          </h2>
+          <div className="relative">
+            <div className="absolute left-6 top-0 bottom-0 w-px bg-terminal-border" />
+            {timeline.map((item, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="relative pl-16 pb-10"
+              >
+                <div className={`absolute left-4 w-5 h-5 border-2 rotate-45 ${item.active ? 'bg-terminal-text border-terminal-text' : 'bg-terminal-bg border-terminal-border'}`} />
+                <div className="bg-terminal-darker border border-terminal-border p-4">
+                  <div className="flex items-start justify-between gap-3 mb-2 flex-wrap">
+                    <h3 className="text-terminal-text font-bold font-mono">{item.title}</h3>
+                    <span className={`text-xs font-mono px-2 py-1 border ${item.active ? 'text-terminal-accent border-terminal-accent' : 'text-gray-500 border-terminal-border'}`}>
+                      {item.date}
+                    </span>
+                  </div>
+                  <p className="text-gray-400 text-sm">{item.desc}</p>
+                  {item.tag && (
+                    <span className="inline-block mt-2 text-xs font-mono text-terminal-secondary border border-terminal-secondary px-2 py-0.5">
+                      {item.tag}
+                    </span>
+                  )}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Skills */}
       <section className="py-20 px-4 bg-terminal-darker">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-4xl font-bold text-terminal-text neon-glow mb-12 text-center">
-            Technical Skills
+            {t.home.skillsTitle}
           </h2>
 
           <div className="space-y-6">
@@ -271,10 +351,10 @@ export default function Home() {
           >
             <Terminal size={48} className="text-terminal-text mx-auto mb-6" />
             <h2 className="text-3xl font-bold text-terminal-text neon-glow mb-4">
-              Projeler Hakkında Konuşalım
+              {t.home.ctaTitle}
             </h2>
             <p className="text-gray-400 mb-8">
-              FLARE, DCE-SOFC veya başka bir proje hakkında sohbet etmek istersen yazabilirsin.
+              {t.home.ctaDesc}
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4">
               <Link to="/contact">
@@ -283,17 +363,19 @@ export default function Home() {
                   whileTap={{ scale: 0.95 }}
                   className="px-8 py-3 bg-terminal-text border-2 border-terminal-text text-terminal-bg font-bold font-mono hover:bg-transparent hover:text-terminal-text transition-all"
                 >
-                  İLETİŞİME GEÇ
+                  {t.home.ctaBtn}
                 </motion.button>
               </Link>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-8 py-3 border-2 border-terminal-accent text-terminal-accent font-bold font-mono hover:bg-terminal-accent hover:text-white transition-all flex items-center space-x-2"
-              >
-                <Download size={20} />
-                <span>CV İNDİR</span>
-              </motion.button>
+              <Link to="/cv">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-8 py-3 border-2 border-terminal-accent text-terminal-accent font-bold font-mono hover:bg-terminal-accent hover:text-white transition-all flex items-center space-x-2"
+                >
+                  <Download size={20} />
+                  <span>{t.home.cvBtn}</span>
+                </motion.button>
+              </Link>
             </div>
           </motion.div>
         </div>
