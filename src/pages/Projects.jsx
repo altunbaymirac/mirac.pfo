@@ -40,10 +40,10 @@ const PROJECTS = [
     color: 'terminal-accent'
   },
   {
-    title: 'Takasla',
-    type: 'Marketplace Preview',
-    description: 'Öğrenciler için takas odaklı marketplace ürün önizlemesi.',
-    tech: ['Product Design', 'Marketplace', 'React'],
+    title: 'Takaslat',
+    type: 'Marketplace Platform',
+    description: 'Para kullanmadan eşya takası yapabileceğin, AI destekli öneri ve müzakere sistemli marketplace.',
+    tech: ['React', 'TypeScript', 'Node.js', 'AI'],
     href: '/demos/takasla',
     color: 'terminal-secondary'
   }

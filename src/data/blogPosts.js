@@ -31,38 +31,52 @@ Bu proje bana teknik taraftan çok ürün tarafını öğretti. Bir firma sitesi
 `
   },
   {
-    slug: 'takasla-onizleme',
-    title: 'Takasla: Takas Odaklı Marketplace Fikri',
+    slug: 'takaslat-marketplace',
+    title: 'Takaslat: Takas Odaklı Marketplace',
     date: '2026-05-20',
     readTime: '5 min',
-    tags: ['Takasla', 'Marketplace', 'Product Design'],
-    excerpt: 'Takasla, öğrencilerin eşya, not, kitap veya küçük hizmetleri para yerine takas mantığıyla değiştirebildiği bir marketplace fikri.',
+    tags: ['Takaslat', 'Marketplace', 'React', 'Full-Stack'],
+    excerpt: 'Takaslat, para kullanmadan eşya takası yapabileceğin, AI destekli öneri ve müzakere sistemi olan bir marketplace platformu.',
     projectLinks: [
       { label: 'Önizlemeyi Aç', href: '/demos/takasla' }
     ],
     content: `
-# Takasla: Takas Odaklı Marketplace Fikri
+# Takaslat: Takas Odaklı Marketplace
 
-Takasla, özellikle öğrenciler için düşündüğüm bir ürün fikri. Her şeyi para ile almak yerine, elindeki bir ürünü veya beceriyi başka bir ihtiyaçla eşleştiren bir takas platformu.
+Takaslat, para kullanmadan eşya, kitap veya ekipman takası yapabileceğin bir marketplace. Özellikle öğrenciler için tasarlandı ama her yaşa hitap ediyor.
 
 ## Problem
 
-Öğrencilerde kullanılmayan çok fazla eşya, kitap, not ve ekipman oluyor. Bunlar çoğu zaman satılmıyor, çöpe gidiyor veya unutuluyor.
+İkinci el platformlarda herkes fiyat konuşuyor. Ama çoğu insanın ihtiyacı para değil — elindekini vermek, karşılığında başka bir şey almak.
 
-## Çözüm
+## Ne Yaptık?
 
-Takasla'nın temel fikri:
+Takaslat'ın öne çıkan özellikleri:
 
-- Elindeki ürünü listele
-- Karşılığında ne istediğini yaz
-- Yakındaki uygun eşleşmeleri gör
-- Güven puanı ve sohbet ile takası tamamla
+- **İlan listeleme** — fotoğraf, açıklama, takas tercihi
+- **AI Asistan** — ilan için otomatik açıklama önerisi, fiyat tahmini
+- **Takas Teklifi Sistemi** — karşı tarafa doğrudan takas öner
+- **Müzakere Simülatörü** — teklifleri kabul/ret/karşı teklif döngüsü
+- **Harita Görünümü** — yakındaki ilanları göster
+- **Güven Puanı** — kullanıcı değerlendirme ve rozet sistemi
+- **Paket Teklifi** — birden fazla ürünü tek teklife ekle
+- **Karşılaştırma** — iki ilanı yan yana değerlendir
 
-## Önizleme
+## Teknik Stack
 
-Şimdilik portföy içinde bir ürün önizlemesi var. Amacım fikrin arayüzünü ve temel akışını göstermek.
+\`\`\`
+Frontend: React + TypeScript + Vite
+State:    Zustand
+Styling:  Tailwind CSS
+Backend:  Node.js + Express
+Deploy:   Vercel
+\`\`\`
 
-[Takasla önizlemesini aç](/demos/takasla)
+## Ne Öğrendim?
+
+Bu proje bana product thinking'i öğretti. Bir marketplace'te kullanıcı güveni, UX akışından daha önemli. Takas sisteminde "kim ne zaman teslim eder?" sorusunu çözmeden hiçbir şey çalışmıyor.
+
+[Takaslat önizlemesini aç](/demos/takasla)
 `
   },
   {

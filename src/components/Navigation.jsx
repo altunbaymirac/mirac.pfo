@@ -77,7 +77,7 @@ export default function Navigation() {
             </motion.a>
             <motion.a
               whileHover={{ scale: 1.2 }}
-              href="https://www.linkedin.com/in/miraç-altunbay"
+              href="https://www.linkedin.com/in/miraç-altunbay-104537280/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-terminal-text hover:text-terminal-secondary"
@@ -150,7 +150,7 @@ export default function Navigation() {
                   <Github size={24} />
                 </a>
                 <a
-                  href="https://www.linkedin.com/in/miraç-altunbay"
+                  href="https://www.linkedin.com/in/miraç-altunbay-104537280/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-terminal-text"

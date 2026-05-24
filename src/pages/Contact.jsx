@@ -224,14 +224,14 @@ export default function Contact() {
 
                 <motion.a
                   whileHover={{ x: 5 }}
-                  href="https://www.linkedin.com/in/miraç-altunbay"
+                  href="https://www.linkedin.com/in/miraç-altunbay-104537280/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center space-x-3 p-3 border-2 border-terminal-border hover:border-terminal-text transition-colors"
                 >
                   <Linkedin size={20} className="text-terminal-secondary" />
                   <span className="text-terminal-text font-mono text-sm">
-                    linkedin.com/in/miraç-altunbay
+                    linkedin.com/in/miraç-altunbay-104537280
                   </span>
                 </motion.a>
 

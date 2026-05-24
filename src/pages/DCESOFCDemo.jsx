@@ -1,431 +1,569 @@
 import { useState, useEffect } from 'react'
-import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, RadialBarChart, RadialBar } from 'recharts'
-import { Zap, Gauge, Thermometer, Droplet, Play, Pause, RotateCcw, Info, TrendingUp, Activity, Flame, Wind } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { AreaChart, Area, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
+
+const CATALYSTS = {
+  Ru: { Ea: 80000, A: 1.2e12, label: 'Eₐ = 80 kJ/mol' },
+  Ni: { Ea: 140000, A: 1.2e11, label: 'Eₐ = 140 kJ/mol' }
+}
+
+// Terminal color palette (matches dce-simulation.html)
+const C = {
+  green: '#d1ff00',
+  cyan: '#00d4ff',
+  orange: '#ff9f1c',
+  heatOrange: '#ff6600',
+  productGreen: '#00ff88',
+  nh3Blue: '#00aaff',
+  electricYellow: '#ffee00',
+  dangerRed: '#ff3366',
+  panelBg: '#0a0a00',
+  borderDim: '#333300',
+  textDim: '#666600',
+  black: '#050505',
+}
+
+const S = {
+  panel: { border: `1px solid ${C.borderDim}`, background: C.panelBg, padding: '15px' },
+  panelTitle: { color: C.orange, fontSize: '11px', margin: '0 0 15px 0', paddingBottom: '8px', borderBottom: `1px solid ${C.borderDim}`, letterSpacing: '0.1em', fontFamily: 'inherit' },
+  formulaBox: { border: `1px solid ${C.borderDim}`, padding: '10px', marginBottom: '10px', background: 'rgba(0,0,0,0.3)' },
+  formulaTitle: { fontSize: '9px', color: C.textDim, display: 'block', marginBottom: '8px' },
+}
+
+function ControlSlider({ label, value, min, max, unit, ticks, onChange, disabled }) {
+  return (
+    <div style={{ marginBottom: '18px' }}>
+      <label style={{ display: 'block', fontSize: '9px', color: C.textDim, marginBottom: '6px', letterSpacing: '0.15em' }}>{label}</label>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <input type="range" min={min} max={max} value={value}
+          onChange={e => onChange(Number(e.target.value))} disabled={disabled}
+          style={{ flex: 1, height: '8px', background: C.borderDim, cursor: disabled ? 'not-allowed' : 'pointer', accentColor: C.green, outline: 'none' }} />
+        <span style={{ fontSize: '12px', color: C.cyan, minWidth: '50px', textAlign: 'right', fontWeight: 'bold' }}>{unit}</span>
+      </div>
+      {ticks && (
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '8px', color: C.borderDim, marginTop: '3px', padding: '0 2px' }}>
+          {ticks.map(t => <span key={t}>{t}</span>)}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function ToggleSwitch({ label, active, onToggle }) {
+  return (
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px', padding: '8px', border: `1px solid ${C.borderDim}`, background: 'rgba(0,0,0,0.3)' }}>
+      <label style={{ fontSize: '9px', color: C.textDim, letterSpacing: '0.1em' }}>{label}</label>
+      <button onClick={onToggle} style={{
+        width: '60px', height: '28px', cursor: 'pointer', position: 'relative', border: 'none',
+        background: active ? `rgba(209,255,0,0.2)` : C.borderDim,
+        outline: `1px solid ${active ? C.green : '#444400'}`,
+        transition: 'all 0.3s', fontFamily: 'inherit'
+      }}>
+        <span style={{ position: 'absolute', fontSize: '8px', color: active ? C.green : C.textDim, top: '50%', transform: 'translateY(-50%)', ...(active ? { right: '24px' } : { left: '6px' }) }}>
+          {active ? 'ON' : 'OFF'}
+        </span>
+        <span style={{
+          position: 'absolute', width: '20px', height: '20px', top: '3px',
+          left: active ? '35px' : '3px',
+          background: active ? C.green : '#444422',
+          boxShadow: active ? `0 0 10px ${C.green}` : 'none',
+          transition: 'all 0.3s'
+        }} />
+      </button>
+    </div>
+  )
+}
+
+function DataCell({ label, value, unit, barColor, barPct }) {
+  return (
+    <div style={{ border: `1px solid ${C.borderDim}`, padding: '8px', background: 'rgba(0,0,0,0.3)' }}>
+      <span style={{ fontSize: '8px', color: C.textDim, display: 'block', marginBottom: '3px', letterSpacing: '0.1em' }}>{label}</span>
+      <div>
+        <span style={{ fontSize: '18px', color: C.green, fontWeight: 'bold' }}>{value}</span>
+        <span style={{ fontSize: '10px', color: C.textDim, marginLeft: '3px' }}>{unit}</span>
+      </div>
+      <div style={{ height: '3px', background: C.borderDim, marginTop: '5px' }}>
+        <div style={{ height: '100%', width: `${Math.min(100, Math.max(0, barPct))}%`, background: barColor, transition: 'width 0.5s' }} />
+      </div>
+    </div>
+  )
+}
+
+function PIDDiagram({ running, sofcOn, whrOn, data }) {
+  const mono = "'Courier New', monospace"
+  const lv = (v, max) => Math.min(100, Math.max(0, (v / max) * 100))
+
+  return (
+    <svg viewBox="0 0 600 400" style={{ width: '100%', height: '380px' }}>
+      <style>{`
+        @keyframes flowPid { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -25; } }
+        @keyframes motorSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .flow-anim { animation: flowPid 1s linear infinite; }
+        .motor-spin { animation: motorSpin 0.5s linear infinite; transform-origin: 420px 230px; }
+      `}</style>
+
+      <defs>
+        <pattern id="pidGrid" width="20" height="20" patternUnits="userSpaceOnUse">
+          <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#1a1a00" strokeWidth="0.5"/>
+        </pattern>
+      </defs>
+      <rect width="600" height="400" fill="url(#pidGrid)"/>
+
+      {/* PIPES */}
+      <path d="M 80 200 L 200 200" fill="none" stroke={C.borderDim} strokeWidth="8" strokeLinecap="square"/>
+      <path d="M 300 100 L 300 140 L 260 140 L 260 170" fill="none" stroke={C.borderDim} strokeWidth="8" strokeLinecap="square"/>
+      <path d="M 300 280 L 300 320 L 420 320 L 420 280" fill="none" stroke={C.borderDim} strokeWidth="8" strokeLinecap="square"/>
+      <path d="M 465 230 L 550 230" fill="none" stroke={C.borderDim} strokeWidth="8" strokeLinecap="square"/>
+      <path d="M 350 70 L 450 70 L 450 130" fill="none" stroke={C.borderDim} strokeWidth="8" strokeLinecap="square"/>
+
+      {/* ANIMATED FLOW LINES */}
+      {running && <>
+        <path d="M 80 200 L 200 200" fill="none" stroke={C.nh3Blue} strokeWidth="4" strokeLinecap="square"
+          strokeDasharray="10 15" className="flow-anim"/>
+        {whrOn && <path d="M 300 100 L 300 140 L 260 140 L 260 170" fill="none" stroke={C.heatOrange} strokeWidth="4"
+          strokeLinecap="square" strokeDasharray="10 15" className="flow-anim"/>}
+        <path d="M 300 280 L 300 320 L 420 320 L 420 280" fill="none" stroke={C.productGreen} strokeWidth="4"
+          strokeLinecap="square" strokeDasharray="10 15" className="flow-anim"/>
+        <path d="M 465 230 L 550 230" fill="none" stroke={C.green} strokeWidth="4"
+          strokeLinecap="square" strokeDasharray="10 15" className="flow-anim"/>
+        {sofcOn && <path d="M 350 70 L 450 70 L 450 130" fill="none" stroke={C.electricYellow} strokeWidth="4"
+          strokeLinecap="square" strokeDasharray="10 15" className="flow-anim"/>}
+      </>}
+
+      {/* NH3 TANK TK-101 */}
+      <rect x="30" y="160" width="50" height="80" fill={C.panelBg} stroke={C.borderDim}/>
+      <rect x="33" y={160 + 80 * (1 - data.tankLevel / 100)} width="44" height={80 * data.tankLevel / 100}
+        fill={C.nh3Blue} opacity="0.6" style={{ transition: 'all 0.5s' }}/>
+      <ellipse cx="55" cy="160" rx="25" ry="8" fill="#111100" stroke={C.borderDim}/>
+      <ellipse cx="55" cy="240" rx="25" ry="8" fill="#111100" stroke={C.borderDim}/>
+      <text x="55" y="255" fontFamily={mono} fontSize="9" fill={C.textDim} textAnchor="middle">TK-101</text>
+      <text x="55" y="198" fontFamily={mono} fontSize="12" fill={C.green} textAnchor="middle" fontWeight="bold">
+        {data.tankLevel.toFixed(0)}%
+      </text>
+
+      {/* SOFC STACK SOFC-101 */}
+      <rect x="250" y="30" width="100" height="70" fill={C.panelBg} stroke={C.borderDim}/>
+      {[0, 1, 2, 3].map(i => (
+        <rect key={i} x="258" y={40 + i * 12} width="84" height="9"
+          fill={running && sofcOn ? `rgba(0,212,255,${0.2 + i * 0.12})` : '#1a1a00'}
+          style={{ transition: 'fill 0.5s' }}/>
+      ))}
+      <text x="300" y="20" fontFamily={mono} fontSize="9" fill={C.textDim} textAnchor="middle">SOFC-101</text>
+      <text x="300" y="57" fontFamily={mono} fontSize="11" fill={C.green} textAnchor="middle" fontWeight="bold">
+        {data.sofcPower.toFixed(0)} kW
+      </text>
+      <text x="300" y="72" fontFamily={mono} fontSize="9" fill={C.cyan} textAnchor="middle">
+        {data.temp.toFixed(0)}°C
+      </text>
+
+      {/* REACTOR R-101 */}
+      <rect x="220" y="170" width="120" height="110" fill={C.panelBg} stroke={C.borderDim} strokeWidth="2"/>
+      <rect x="230" y="185" width="100" height="80"
+        fill={running ? `rgba(255,102,0,${data.conversion / 250})` : '#111100'}
+        style={{ transition: 'fill 0.5s' }}/>
+      <rect x="210" y="165" width="140" height="8" fill="#222200"/>
+      <rect x="210" y="277" width="140" height="8" fill="#222200"/>
+      <text x="280" y="160" fontFamily={mono} fontSize="9" fill={C.textDim} textAnchor="middle">R-101 CRACKER</text>
+      <text x="280" y="219" fontFamily={mono} fontSize="12" fill={C.green} textAnchor="middle" fontWeight="bold">
+        {data.temp.toFixed(0)}°C
+      </text>
+      <text x="280" y="237" fontFamily={mono} fontSize="9" fill={C.cyan} textAnchor="middle">
+        {data.pressure.toFixed(2)} MPa
+      </text>
+      <text x="280" y="255" fontFamily={mono} fontSize="9" fill={C.productGreen} textAnchor="middle">
+        X = {data.conversion.toFixed(1)}%
+      </text>
+
+      {/* BATTERY BAT-101 */}
+      <rect x="420" y="130" width="60" height="80" fill={C.panelBg} stroke={C.borderDim}/>
+      <rect x="440" y="122" width="20" height="10" fill="#222200"/>
+      <rect x="425" y={130 + 80 * (1 - data.batterySoc / 100)} width="50" height={80 * data.batterySoc / 100}
+        fill={C.productGreen} opacity="0.6" style={{ transition: 'all 0.5s' }}/>
+      <text x="450" y="118" fontFamily={mono} fontSize="9" fill={C.textDim} textAnchor="middle">BAT-101</text>
+      <text x="450" y="164" fontFamily={mono} fontSize="11" fill={C.green} textAnchor="middle" fontWeight="bold">
+        {data.batterySoc.toFixed(0)}%
+      </text>
+
+      {/* MOTOR M-101 */}
+      <circle cx="420" cy="230" r="45" fill={C.panelBg} stroke={C.borderDim} strokeWidth="2"/>
+      <circle cx="420" cy="230" r="35" fill="#111100" stroke="#222200"/>
+      <g className={running ? 'motor-spin' : ''}>
+        <line x1="395" y1="230" x2="445" y2="230" stroke={C.green} strokeWidth="4"/>
+        <line x1="420" y1="205" x2="420" y2="255" stroke={C.green} strokeWidth="4"/>
+      </g>
+      <circle cx="420" cy="230" r="10" fill="#222200"/>
+      <rect x="463" y="222" width="25" height="16" fill="#222200" stroke={C.borderDim}/>
+      <text x="420" y="290" fontFamily={mono} fontSize="9" fill={C.textDim} textAnchor="middle">M-101 DCE</text>
+      <text x="420" y="197" fontFamily={mono} fontSize="11" fill={C.green} textAnchor="middle" fontWeight="bold">
+        {data.motorPower.toFixed(0)} kW
+      </text>
+
+      {/* OUTPUT ARROW */}
+      <polygon points="555,215 580,230 555,245" fill={running ? C.green : C.borderDim}
+        style={{ transition: 'fill 0.3s', filter: running ? `drop-shadow(0 0 4px ${C.green})` : 'none' }}/>
+      <text x="567" y="265" fontFamily={mono} fontSize="9" fill={C.textDim} textAnchor="middle">PERVANE</text>
+
+      {/* VALVES */}
+      {[{ tx: 130, ty: 200, id: 'V-101' }, { tx: 300, ty: 300, id: 'V-102' }].map(v => (
+        <g key={v.id} transform={`translate(${v.tx}, ${v.ty})`}>
+          <polygon points="-8,-8 8,0 -8,8" fill={running ? C.green : C.borderDim}/>
+          <polygon points="8,-8 -8,0 8,8" fill={running ? C.green : C.borderDim}/>
+          <text x="0" y="18" fontFamily={mono} fontSize="7" fill={C.textDim} textAnchor="middle">{v.id}</text>
+        </g>
+      ))}
+
+      {/* LEGEND */}
+      <g transform="translate(20, 370)">
+        {[
+          { color: C.nh3Blue, label: 'NH₃', x: 0 },
+          { color: C.productGreen, label: 'N₂+H₂', x: 60 },
+          { color: C.heatOrange, label: 'ISI', x: 130 },
+          { color: C.electricYellow, label: 'ELEKTRİK', x: 180 }
+        ].map(l => (
+          <g key={l.label}>
+            <rect x={l.x} y="-8" width="10" height="10" fill={l.color}/>
+            <text x={l.x + 15} y="0" fontFamily={mono} fontSize="9" fill={C.textDim}>{l.label}</text>
+          </g>
+        ))}
+      </g>
+    </svg>
+  )
+}
 
 export default function DCESOFCDemo() {
   const [isRunning, setIsRunning] = useState(false)
-  const [showHelp, setShowHelp] = useState(true)
-  const [motorLoad, setMotorLoad] = useState(50)
-  const [crackingTemp, setCrackingTemp] = useState(850)
-  const [sofcCells, setSOFCCells] = useState(500)
-  const [flowParticles, setFlowParticles] = useState([])
-  
-  const [currentData, setCurrentData] = useState({
-    totalPower: 0,
-    efficiency: 0,
-    h2Flow: 0,
-    nh3Conversion: 0,
-    sofcVoltage: 0,
-    dcePower: 0,
-    sofcPower: 0,
-    noxEmission: 0
-  })
-  
+  const [motorLoad, setMotorLoad] = useState(75)
+  const [residenceTime, setResidenceTime] = useState(25)
+  const [targetTemp, setTargetTemp] = useState(700)
+  const [sofcOn, setSofcOn] = useState(true)
+  const [whrOn, setWhrOn] = useState(true)
+  const [catalyst, setCatalyst] = useState('Ru')
   const [history, setHistory] = useState([])
   const [time, setTime] = useState(0)
+  const [data, setData] = useState({
+    temp: 25, pressure: 0.1, conversion: 0,
+    motorPower: 0, sofcPower: 0, totalPower: 0,
+    wtwEff: 0, tankLevel: 85, batterySoc: 65
+  })
 
-  const calculateCracking = (temp) => {
+  const calcSim = (temp, tau, load, useSofc, useWhr, cat) => {
     const R = 8.314
-    const Ea = 170000
-    const A = 1.2e10
     const T = temp + 273.15
+    const { Ea, A } = CATALYSTS[cat]
     const k = A * Math.exp(-Ea / (R * T))
-    return Math.min(1, Math.max(0, 1 - Math.exp(-k * 0.5)))
-  }
+    const tauSec = tau / 10
+    const conversion = Math.min(0.98, Math.max(0, 1 - Math.exp(-k * tauSec)))
 
-  const calculateSOFC = (h2Flow, temp) => {
-    const E0 = 1.23
-    const voltage = E0 - 0.0002 * (temp + 273.15 - 1073)
-    const current = (h2Flow * 2 * 96485) / 3600
-    const power = (sofcCells * voltage * current) / 1000
-    return { power, voltage }
-  }
+    const nh3Flow = load * 0.08
+    const h2Flow = nh3Flow * conversion
+    const nh3Rem = nh3Flow * (1 - conversion)
 
-  const calculateDCE = (load, nh3Remaining) => {
-    return { power: (load / 100) * 300 * nh3Remaining * 0.9 }
+    const sofcPower = useSofc
+      ? h2Flow * (0.48 + (temp - 600) * 0.0003) * 120
+      : 0
+
+    const whrBonus = useWhr ? 1.12 : 1.0
+    const dcePower = nh3Rem * 75 * (0.35 + conversion * 0.18) * (load / 100) * whrBonus
+
+    const totalPower = sofcPower + dcePower
+    const fuelEnergy = nh3Flow * 38.28
+    const wtwEff = fuelEnergy > 0 ? Math.min(74, (totalPower / fuelEnergy) * 100) : 0
+    const pressure = Math.min(3.5, 0.1 + conversion * 2.5 + temp / 400)
+
+    return {
+      temp,
+      pressure,
+      conversion: conversion * 100,
+      sofcPower,
+      motorPower: dcePower,
+      totalPower,
+      wtwEff
+    }
   }
 
   useEffect(() => {
     if (!isRunning) return
     const interval = setInterval(() => {
       setTime(t => t + 1)
-      const conversion = calculateCracking(crackingTemp)
-      const h2Flow = motorLoad * 2 * conversion
-      const sofc = calculateSOFC(h2Flow, crackingTemp)
-      const dce = calculateDCE(motorLoad, 1 - conversion)
-      const totalPower = sofc.power + dce.power
-      const efficiency = Math.min(100, (totalPower / (motorLoad * 18)) * 100)
-
-      const newData = {
-        time,
-        totalPower,
-        efficiency,
-        h2Flow,
-        nh3Conversion: conversion * 100,
-        sofcVoltage: sofc.voltage,
-        dcePower: dce.power,
-        sofcPower: sofc.power,
-        noxEmission: 20 * (1 + ((crackingTemp - 700) / 300) * 0.5)
-      }
-      setCurrentData(newData)
-      setHistory(prev => [...prev.slice(-40), newData])
+      const sim = calcSim(targetTemp, residenceTime, motorLoad, sofcOn, whrOn, catalyst)
+      setData(prev => ({
+        ...prev,
+        ...sim,
+        tankLevel: Math.max(10, prev.tankLevel - 0.04),
+        batterySoc: sofcOn
+          ? Math.min(95, prev.batterySoc + 0.08)
+          : Math.max(20, prev.batterySoc - 0.04)
+      }))
+      setHistory(prev => [...prev.slice(-40), { t: prev.length, ...sim }])
     }, 1000)
     return () => clearInterval(interval)
-  }, [isRunning, motorLoad, crackingTemp, sofcCells, time])
-
-  useEffect(() => {
-    if (!isRunning) return
-    const particleInterval = setInterval(() => {
-      setFlowParticles(prev => [
-        ...prev.filter(p => p.progress < 100),
-        { id: Date.now(), progress: 0, speed: 0.8 + Math.random() * 0.4, path: Math.random() > 0.5 ? 'sofc' : 'dce' }
-      ])
-    }, 600)
-    return () => clearInterval(particleInterval)
-  }, [isRunning])
-
-  useEffect(() => {
-    if (!isRunning) return
-    const animInterval = setInterval(() => {
-      setFlowParticles(prev => prev.map(p => ({
-        ...p,
-        progress: p.progress + p.speed
-      })))
-    }, 40)
-    return () => clearInterval(animInterval)
-  }, [isRunning])
+  }, [isRunning, motorLoad, residenceTime, targetTemp, sofcOn, whrOn, catalyst])
 
   const reset = () => {
     setIsRunning(false)
     setHistory([])
     setTime(0)
-    setFlowParticles([])
-    setCurrentData({
-      totalPower: 0,
-      efficiency: 0,
-      h2Flow: 0,
-      nh3Conversion: 0,
-      sofcVoltage: 0,
-      dcePower: 0,
-      sofcPower: 0,
-      noxEmission: 0
-    })
+    setData({ temp: 25, pressure: 0.1, conversion: 0, motorPower: 0, sofcPower: 0, totalPower: 0, wtwEff: 0, tankLevel: 85, batterySoc: 65 })
   }
 
+  const tau = (residenceTime / 10).toFixed(1)
+  const mono = "'Courier New', monospace"
+  const hh = (n) => String(n).padStart(2, '0')
+  const clock = `${hh(Math.floor(time / 3600))}:${hh(Math.floor((time % 3600) / 60))}:${hh(time % 60)}`
+
+  const leds = [
+    { id: 'SOFC', on: sofcOn && isRunning },
+    { id: 'RXN', on: isRunning },
+    { id: 'MTR', on: isRunning && data.motorPower > 0 },
+    { id: 'BAT', on: sofcOn && isRunning, warn: data.batterySoc < 30 }
+  ]
+
   return (
-    <div className="min-h-screen bg-terminal-bg pt-20 pb-12">
-      <div className="max-w-7xl mx-auto px-4 mb-6">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h1 className="text-4xl md:text-5xl font-bold text-terminal-secondary neon-glow mb-2">
-              DCE-SOFC Hybrid Marine Propulsion
-            </h1>
-            <p className="text-gray-400">Ammonia-Fueled Zero-Carbon Power System</p>
-          </div>
-          <div className="flex items-center gap-3">
-            <button onClick={() => setShowHelp(!showHelp)} className="p-3 border-2 border-terminal-text text-terminal-text hover:bg-terminal-text hover:text-terminal-bg">
-              <Info size={20} />
-            </button>
-            <button onClick={() => setIsRunning(!isRunning)} className={`px-6 py-3 border-2 ${isRunning ? 'bg-red-500 border-red-500' : 'bg-green-500 border-green-500'} text-white font-bold flex items-center gap-2`}>
-              {isRunning ? <><Pause size={20} />STOP</> : <><Play size={20} />START</>}
-            </button>
-            <button onClick={reset} className="p-3 border-2 border-terminal-accent text-terminal-accent hover:bg-terminal-accent hover:text-white">
-              <RotateCcw size={20} />
-            </button>
+    <div style={{ fontFamily: mono, background: C.black, color: C.green, minHeight: '100vh', padding: '80px 15px 15px' }}>
+
+      {/* HEADER */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: `2px solid ${C.green}`, paddingBottom: '10px', marginBottom: '10px', fontSize: '11px' }}>
+        <div style={{ lineHeight: '1.8' }}>
+          <div style={{ color: C.textDim }}>[SYSTEM: DCE-SOFC HYBRID PROPULSION]</div>
+          <div style={{ color: C.textDim }}>[UNIT: AGU MECHANICAL ENGINEERING]</div>
+          <div style={{ color: C.textDim }}>
+            {'[STATUS: '}
+            <span style={{
+              color: isRunning ? C.productGreen : C.textDim,
+              textShadow: isRunning ? `0 0 10px ${C.productGreen}` : 'none'
+            }}>
+              {isRunning ? 'ACTIVE' : 'STANDBY'}
+            </span>
+            {']'}
           </div>
         </div>
-
-        <div className="grid md:grid-cols-4 gap-4 mb-6">
-          <motion.div whileHover={{ scale: 1.02, y: -2 }} className="bg-gradient-to-br from-blue-500/20 to-transparent border-2 border-terminal-text p-4 relative overflow-hidden">
-            <div className="absolute top-0 right-0 opacity-10"><Zap size={80} /></div>
-            <div className="relative z-10">
-              <div className="flex items-center gap-2 text-xs text-gray-400 mb-2"><Zap size={14} />Total Power</div>
-              <div className="text-3xl font-bold text-terminal-text">{currentData.totalPower.toFixed(1)}</div>
-              <div className="text-xs text-gray-500">kW</div>
-            </div>
-          </motion.div>
-
-          <motion.div whileHover={{ scale: 1.02, y: -2 }} className="bg-gradient-to-br from-purple-500/20 to-transparent border-2 border-terminal-secondary p-4 relative overflow-hidden">
-            <div className="absolute top-0 right-0 opacity-10"><TrendingUp size={80} /></div>
-            <div className="relative z-10">
-              <div className="flex items-center gap-2 text-xs text-gray-400 mb-2"><TrendingUp size={14} />Efficiency</div>
-              <div className="text-3xl font-bold text-terminal-secondary">{currentData.efficiency.toFixed(1)}</div>
-              <div className="text-xs text-gray-500">%</div>
-            </div>
-          </motion.div>
-
-          <motion.div whileHover={{ scale: 1.02, y: -2 }} className="bg-gradient-to-br from-orange-500/20 to-transparent border-2 border-terminal-accent p-4 relative overflow-hidden">
-            <div className="absolute top-0 right-0 opacity-10"><Thermometer size={80} /></div>
-            <div className="relative z-10">
-              <div className="flex items-center gap-2 text-xs text-gray-400 mb-2"><Thermometer size={14} />NH₃ Conv.</div>
-              <div className="text-3xl font-bold text-terminal-accent">{currentData.nh3Conversion.toFixed(1)}</div>
-              <div className="text-xs text-gray-500">%</div>
-            </div>
-          </motion.div>
-
-          <motion.div whileHover={{ scale: 1.02, y: -2 }} className="bg-gradient-to-br from-green-500/20 to-transparent border-2 border-green-500 p-4 relative overflow-hidden">
-            <div className="absolute top-0 right-0 opacity-10"><Droplet size={80} /></div>
-            <div className="relative z-10">
-              <div className="flex items-center gap-2 text-xs text-gray-400 mb-2"><Droplet size={14} />CO₂</div>
-              <div className="text-3xl font-bold text-green-500">0</div>
-              <div className="text-xs text-gray-500">g/kWh</div>
-            </div>
-          </motion.div>
+        <div style={{ textAlign: 'right' }}>
+          <div style={{ color: C.cyan, fontSize: '20px', fontWeight: 'bold', letterSpacing: '2px' }}>{clock}</div>
+          <div style={{ color: C.textDim, fontSize: '10px', marginTop: '4px' }}>DCE-SOFC DIGITAL TWIN v2.0</div>
         </div>
       </div>
 
-      <AnimatePresence>
-        {showHelp && (
-          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="bg-terminal-darker/90 border-b-2 border-terminal-border">
-            <div className="max-w-7xl mx-auto p-6">
-              <h3 className="text-xl font-bold text-terminal-secondary mb-4 flex items-center gap-2"><Info size={20} />How This Works</h3>
-              <div className="grid md:grid-cols-3 gap-6 text-sm text-gray-300">
-                <div className="bg-terminal-bg/50 p-4 border border-terminal-accent/30">
-                  <h4 className="font-bold text-terminal-accent mb-2"><Flame size={16} className="inline mr-2" />Process Steps</h4>
-                  <ol className="space-y-1 list-decimal list-inside text-xs">
-                    <li>NH₃ heated to {crackingTemp}°C</li>
-                    <li>Arrhenius: 2NH₃ → N₂ + 3H₂</li>
-                    <li>H₂ powers SOFC ({sofcCells} cells)</li>
-                    <li>Remaining NH₃ to DCE backup</li>
-                    <li>Combined output: {currentData.totalPower.toFixed(0)} kW</li>
-                  </ol>
-                </div>
-                <div className="bg-terminal-bg/50 p-4 border border-terminal-secondary/30">
-                  <h4 className="font-bold text-terminal-secondary mb-2"><Gauge size={16} className="inline mr-2" />Controls</h4>
-                  <ul className="space-y-1 text-xs">
-                    <li>▸ Motor Load: Ship power demand</li>
-                    <li>▸ Cracking Temp: Conversion rate</li>
-                    <li>▸ SOFC Cells: Stack size</li>
-                    <li>▸ Higher temp = Better efficiency</li>
-                  </ul>
-                </div>
-                <div className="bg-terminal-bg/50 p-4 border border-green-500/30">
-                  <h4 className="font-bold text-green-500 mb-2"><Droplet size={16} className="inline mr-2" />Benefits</h4>
-                  <ul className="space-y-1 text-xs">
-                    <li>✓ Zero CO₂ (no carbon in NH₃)</li>
-                    <li>✓ ~70% system efficiency</li>
-                    <li>✓ Easy storage vs H₂</li>
-                    <li>⚠ NOₓ: {currentData.noxEmission.toFixed(1)} g/kWh</li>
-                  </ul>
-                </div>
+      {/* CONTROL BAR */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '15px', padding: '10px', border: `1px solid ${C.borderDim}`, background: C.panelBg, marginBottom: '15px', flexWrap: 'wrap' }}>
+        <button onClick={() => setIsRunning(r => !r)} style={{
+          background: isRunning ? C.dangerRed : 'none',
+          border: `${isRunning ? 2 : 1}px solid ${isRunning ? C.dangerRed : C.green}`,
+          color: isRunning ? 'white' : C.green,
+          padding: '8px 20px', fontFamily: mono, fontSize: '12px',
+          cursor: 'pointer', fontWeight: 'bold'
+        }}>
+          {isRunning ? '[■ SISTEMI DURDUR]' : '[▶ SİSTEMİ BAŞLAT]'}
+        </button>
+        <button onClick={reset} style={{
+          background: 'none', border: `1px solid ${C.green}`, color: C.green,
+          padding: '8px 20px', fontFamily: mono, fontSize: '12px', cursor: 'pointer'
+        }}>
+          [↺ RESET]
+        </button>
+
+        {/* LED STATUS */}
+        <div style={{ display: 'flex', gap: '10px', marginLeft: 'auto' }}>
+          {leds.map(led => {
+            const ledColor = led.on ? (led.warn ? C.orange : C.productGreen) : C.textDim
+            return (
+              <span key={led.id} style={{
+                padding: '4px 8px', fontSize: '9px', background: C.panelBg,
+                border: `1px solid ${led.on ? ledColor : C.borderDim}`,
+                color: ledColor,
+                boxShadow: led.on ? `0 0 8px ${ledColor}` : 'none',
+                transition: 'all 0.3s'
+              }}>
+                {led.id}
+              </span>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* MAIN 3-COLUMN GRID */}
+      <div style={{ overflowX: 'auto' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '240px 1fr 285px', gap: '15px', marginBottom: '15px', minWidth: '900px' }}>
+
+        {/* LEFT: CONTROLS */}
+        <div style={S.panel}>
+          <h3 style={S.panelTitle}>&gt; KONTROL PANELİ</h3>
+
+          <ControlSlider label="MOTOR YÜKÜ" value={motorLoad} min={0} max={100}
+            unit={`${motorLoad}%`} ticks={['0', '25', '50', '75', '100']}
+            onChange={setMotorLoad} disabled={isRunning} />
+
+          <ControlSlider label="REZİDANS SÜRESİ (τ)" value={residenceTime} min={5} max={50}
+            unit={`${tau}s`} onChange={setResidenceTime} disabled={isRunning} />
+
+          <ControlSlider label="SICAKLIK HEDEFİ" value={targetTemp} min={400} max={850}
+            unit={`${targetTemp}°C`} ticks={['400', '600', '800']}
+            onChange={setTargetTemp} disabled={isRunning} />
+
+          <ToggleSwitch label="SOFC YAKIT PİLİ" active={sofcOn} onToggle={() => setSofcOn(v => !v)} />
+          <ToggleSwitch label="ATIK ISI GERİ KAZANIMI" active={whrOn} onToggle={() => setWhrOn(v => !v)} />
+
+          {/* Catalyst selector */}
+          <div style={{ marginBottom: '15px' }}>
+            <div style={{ fontSize: '9px', color: C.textDim, marginBottom: '6px', letterSpacing: '0.15em' }}>KATALİZÖR TİPİ</div>
+            <div style={{ display: 'flex', gap: '5px' }}>
+              {['Ru', 'Ni'].map(cat => (
+                <button key={cat} onClick={() => !isRunning && setCatalyst(cat)} style={{
+                  flex: 1, padding: '8px',
+                  background: catalyst === cat ? 'rgba(0,212,255,0.2)' : 'none',
+                  border: `1px solid ${catalyst === cat ? C.cyan : C.borderDim}`,
+                  color: catalyst === cat ? C.cyan : C.textDim,
+                  fontFamily: mono, fontSize: '12px',
+                  cursor: isRunning ? 'not-allowed' : 'pointer'
+                }}>{cat}</button>
+              ))}
+            </div>
+            <div style={{ fontSize: '9px', color: C.textDim, marginTop: '5px', textAlign: 'center' }}>
+              {CATALYSTS[catalyst].label}
+            </div>
+          </div>
+
+          {/* Info box */}
+          <div style={{ marginTop: '20px', padding: '10px', border: `1px dashed ${C.borderDim}`, fontSize: '10px' }}>
+            <span style={{ color: C.textDim, display: 'block', marginBottom: '8px' }}>// SİSTEM BİLGİSİ</span>
+            <p style={{ margin: '4px 0', color: C.green }}>2NH₃ → N₂ + 3H₂</p>
+            <p style={{ margin: '4px 0', color: C.green }}>MOLAR GENİŞLEME: 2x</p>
+            <p style={{ margin: '4px 0', color: C.green }}>YANMA: YOK</p>
+          </div>
+        </div>
+
+        {/* CENTER: P&ID */}
+        <div style={S.panel}>
+          <h3 style={S.panelTitle}>&gt; P&amp;ID AKIŞ DİYAGRAMI</h3>
+          <PIDDiagram running={isRunning} sofcOn={sofcOn} whrOn={whrOn} data={data} />
+        </div>
+
+        {/* RIGHT: DATA & FORMULAS */}
+        <div style={S.panel}>
+          <h3 style={S.panelTitle}>&gt; TERMODİNAMİK VERİLER</h3>
+
+          {/* Arrhenius */}
+          <div style={S.formulaBox}>
+            <span style={S.formulaTitle}>// ARRHENİUS KİNETİĞİ</span>
+            <div style={{ fontSize: '13px', color: C.green, textAlign: 'center', padding: '5px 0' }}>
+              <span style={{ color: C.cyan }}>k</span>
+              {' = '}
+              <span style={{ color: C.orange }}>A</span>
+              {' · exp('}
+              <span style={{ color: C.dangerRed }}>−Eₐ</span>
+              {' / '}
+              <span style={{ color: C.nh3Blue }}>RT</span>
+              {')'}
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-around', fontSize: '9px', color: C.textDim, marginTop: '8px' }}>
+              <span>A = {CATALYSTS[catalyst].A.toExponential(1)}</span>
+              <span>Eₐ = {CATALYSTS[catalyst].Ea / 1000} kJ/mol</span>
+            </div>
+          </div>
+
+          {/* DCE Reaction */}
+          <div style={S.formulaBox}>
+            <span style={S.formulaTitle}>// DCE REAKSİYONU</span>
+            <div style={{ fontSize: '15px', textAlign: 'center', padding: '5px 0' }}>
+              <span style={{ color: C.nh3Blue }}>2NH₃</span>
+              <span style={{ color: C.textDim, margin: '0 8px' }}>→</span>
+              <span style={{ color: C.productGreen }}>N₂</span>
+              <span style={{ color: C.textDim }}> + </span>
+              <span style={{ color: C.dangerRed }}>3H₂</span>
+            </div>
+            <div style={{ fontSize: '9px', color: C.textDim, textAlign: 'center', marginTop: '5px' }}>
+              ΔV = +100% (2 mol → 4 mol)
+            </div>
+          </div>
+
+          {/* Conversion */}
+          <div style={S.formulaBox}>
+            <span style={S.formulaTitle}>// DÖNÜŞÜM ORANI</span>
+            <div style={{ fontSize: '13px', color: C.green, textAlign: 'center', padding: '5px 0' }}>
+              <span style={{ color: C.productGreen }}>X</span> = 1 − exp(−kτ)
+            </div>
+            <div style={{ fontSize: '10px', color: C.textDim, textAlign: 'center', marginTop: '5px' }}>
+              τ = {tau}s →{' '}
+              <span style={{ color: C.productGreen }}>X = {data.conversion.toFixed(1)}%</span>
+            </div>
+          </div>
+
+          {/* Data Grid */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', margin: '15px 0' }}>
+            <DataCell label="REAKTÖR SICAKLIK" value={data.temp.toFixed(0)} unit="°C"
+              barColor={C.heatOrange} barPct={(data.temp / 850) * 100} />
+            <DataCell label="BASINÇ" value={data.pressure.toFixed(2)} unit="MPa"
+              barColor={C.nh3Blue} barPct={(data.pressure / 3.5) * 100} />
+            <DataCell label="DÖNÜŞÜM" value={data.conversion.toFixed(1)} unit="%"
+              barColor={C.productGreen} barPct={data.conversion} />
+            <DataCell label="MOTOR GÜCÜ" value={data.motorPower.toFixed(1)} unit="kW"
+              barColor={C.green} barPct={Math.min(100, data.motorPower / 3.5)} />
+            <DataCell label="SOFC ELEKTRİK" value={data.sofcPower.toFixed(1)} unit="kW"
+              barColor={C.electricYellow} barPct={Math.min(100, data.sofcPower / 3.5)} />
+            <DataCell label="WtW VERİM" value={data.wtwEff.toFixed(1)} unit="%"
+              barColor={C.cyan} barPct={data.wtwEff} />
+          </div>
+
+          {/* Mini chart */}
+          {history.length > 1 && (
+            <div style={{ border: `1px solid ${C.borderDim}`, padding: '10px', marginBottom: '10px', background: 'rgba(0,0,0,0.3)' }}>
+              <span style={{ fontSize: '9px', color: C.textDim, display: 'block', marginBottom: '8px' }}>// CANLI VERİ AKIŞI</span>
+              <ResponsiveContainer width="100%" height={80}>
+                <LineChart data={history}>
+                  <Line type="monotone" dataKey="temp" stroke={C.heatOrange} dot={false} strokeWidth={1.5} />
+                  <Line type="monotone" dataKey="conversion" stroke={C.productGreen} dot={false} strokeWidth={1.5} />
+                </LineChart>
+              </ResponsiveContainer>
+              <div style={{ display: 'flex', justifyContent: 'center', gap: '15px', marginTop: '5px', fontSize: '8px' }}>
+                <span style={{ color: C.heatOrange }}>■ SICAKLIK</span>
+                <span style={{ color: C.productGreen }}>■ DÖNÜŞÜM</span>
               </div>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          )}
 
-      <div className="max-w-7xl mx-auto px-4 mt-6 space-y-6">
-        {/* FULLY ANIMATED P&ID DIAGRAM */}
-        <div className="bg-terminal-darker border-4 border-terminal-secondary p-6 shadow-2xl">
-          <h3 className="text-xl font-bold text-terminal-secondary mb-4 flex items-center gap-2">
-            <Activity size={24} />
-            Live Animated Process Diagram
-          </h3>
-          
-          <div className="relative bg-gradient-to-br from-terminal-bg via-black to-terminal-bg border-2 border-terminal-border p-8 min-h-[500px] overflow-hidden">
-            {/* Animated Background Grid */}
-            <motion.div
-              className="absolute inset-0 opacity-5"
-              style={{
-                backgroundImage: 'linear-gradient(#00d9ff 1px, transparent 1px), linear-gradient(90deg, #00d9ff 1px, transparent 1px)',
-                backgroundSize: '40px 40px'
-              }}
-              animate={{ backgroundPosition: isRunning ? ['0px 0px', '40px 40px'] : '0px 0px' }}
-              transition={{ duration: 15, repeat: Infinity, ease: 'linear' }}
-            />
+          {/* IMO Compliance */}
+          <div style={{ border: `1px dashed ${C.borderDim}`, padding: '10px', fontSize: '9px' }}>
+            <span style={{ color: C.textDim, display: 'block', marginBottom: '5px' }}>// UYUMLULUK</span>
+            {['IMO MSC.1/Circ.1687', 'IGF KOD SERTİFİKASYONU', 'SOLAS II-1'].map(s => (
+              <p key={s} style={{ margin: '3px 0', color: C.green }}>◆ {s}</p>
+            ))}
+          </div>
+        </div>
+      </div>
+      </div>
 
-            {/* Animated Flow Particles WITH GLOW TRAILS */}
-            <svg className="absolute top-0 left-0 w-full h-full pointer-events-none" style={{ zIndex: 25 }}>
-              {flowParticles.map((p) => {
-                const progress = p.progress / 100
-                let cx, cy
-                
-                if (progress < 0.15) {
-                  cx = 130 + (progress / 0.15) * 130
-                  cy = 250
-                } else if (progress < 0.3) {
-                  const local = (progress - 0.15) / 0.15
-                  cx = 260 + local * 120
-                  cy = p.path === 'sofc' ? 250 - local * 110 : 250 + local * 120
-                } else if (progress < 0.55) {
-                  const local = (progress - 0.3) / 0.25
-                  cx = 380 + local * 100
-                  cy = p.path === 'sofc' ? 140 : 370
-                } else if (progress < 0.75) {
-                  const local = (progress - 0.55) / 0.2
-                  cx = 480 + local * 160
-                  cy = p.path === 'sofc' ? 140 + local * 110 : 370 - local * 120
-                } else {
-                  const local = (progress - 0.75) / 0.25
-                  cx = 640 + local * 120
-                  cy = 250
-                }
-                
-                return (
-                  <g key={p.id}>
-                    <motion.circle r="15" cx={cx} cy={cy} fill={p.path === 'sofc' ? '#00d9ff' : '#ff6b35'} opacity="0.05" style={{ filter: 'blur(8px)' }} />
-                    <motion.circle r="10" cx={cx} cy={cy} fill={p.path === 'sofc' ? '#00d9ff' : '#ff6b35'} opacity="0.15" style={{ filter: 'blur(4px)' }} />
-                    <motion.circle r="6" cx={cx} cy={cy} fill={p.path === 'sofc' ? '#00d9ff' : '#ff6b35'} opacity="0.8" style={{ filter: `drop-shadow(0 0 12px ${p.path === 'sofc' ? '#00d9ff' : '#ff6b35'})` }} animate={{ scale: [1, 1.4, 1] }} transition={{ duration: 0.6, repeat: Infinity }} />
-                  </g>
-                )
-              })}
-            </svg>
-
-            {/* Main P&ID SVG */}
-            <svg viewBox="0 0 900 500" className="w-full h-full relative" style={{ zIndex: 15 }}>
+      {/* AREA CHART */}
+      {history.length > 1 && (
+        <div style={{ border: `1px solid ${C.borderDim}`, background: C.panelBg, padding: '15px', marginBottom: '15px' }}>
+          <h3 style={{ ...S.panelTitle, marginBottom: '10px' }}>&gt; GÜÇ ÇIKIŞ GEÇMİŞİ</h3>
+          <ResponsiveContainer width="100%" height={150}>
+            <AreaChart data={history}>
               <defs>
-                <filter id="glowStrong"><feGaussianBlur stdDeviation="6"/><feComponentTransfer><feFuncA type="discrete" tableValues="1 1"/></feComponentTransfer></filter>
-                <filter id="glowMedium"><feGaussianBlur stdDeviation="3"/></filter>
-                <linearGradient id="nh3Grad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stopColor="#00d9ff" stopOpacity="0.3"/><stop offset="100%" stopColor="#00d9ff" stopOpacity="0.7"/></linearGradient>
-                <radialGradient id="crackerGrad"><stop offset="0%" stopColor="#ff3300"/><stop offset="100%" stopColor="#ff6b35" stopOpacity="0.6"/></radialGradient>
-                <radialGradient id="sofcGrad"><stop offset="0%" stopColor="#00d9ff" stopOpacity="0.6"/><stop offset="100%" stopColor="#00d9ff" stopOpacity="0"/></radialGradient>
+                <linearGradient id="gSOFC" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor={C.cyan} stopOpacity={0.8}/>
+                  <stop offset="95%" stopColor={C.cyan} stopOpacity={0.1}/>
+                </linearGradient>
+                <linearGradient id="gDCE" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor={C.heatOrange} stopOpacity={0.8}/>
+                  <stop offset="95%" stopColor={C.heatOrange} stopOpacity={0.1}/>
+                </linearGradient>
               </defs>
-
-              {/* NH3 TANK - BREATHING ANIMATION */}
-              <motion.g animate={{ opacity: isRunning ? [0.9, 1, 0.9] : 1, scale: isRunning ? [1, 1.02, 1] : 1 }} transition={{ duration: 2.5, repeat: Infinity }} style={{ transformOrigin: '100px 250px' }}>
-                <motion.rect x="30" y="180" width="140" height="140" rx="12" fill="url(#nh3Grad)" stroke="#00d9ff" strokeWidth="5" filter="url(#glowMedium)" animate={{ strokeWidth: isRunning ? [5, 7, 5] : 5 }} transition={{ duration: 2, repeat: Infinity }} />
-                <motion.rect x="45" y="200" width="110" height="100" fill="#00d9ff" opacity="0.25" animate={{ height: isRunning ? [100, 75, 100] : 100, y: isRunning ? [200, 225, 200] : 200 }} transition={{ duration: 4, repeat: Infinity }} />
-                <text x="100" y="245" fill="#00d9ff" fontSize="32" textAnchor="middle" fontWeight="bold" filter="url(#glowMedium)">NH₃</text>
-                <text x="100" y="275" fill="#00d9ff" fontSize="18" textAnchor="middle">TANK</text>
-              </motion.g>
-
-              {/* ANIMATED FLOW LINE NH3 → CRACKER */}
-              <motion.line x1="170" y1="250" x2="240" y2="250" stroke="#00d9ff" strokeWidth="10" strokeDasharray="15 8" filter="url(#glowMedium)" animate={{ strokeDashoffset: isRunning ? [0, -23] : 0, strokeWidth: isRunning ? [10, 13, 10] : 10 }} transition={{ strokeDashoffset: { duration: 1.2, repeat: Infinity, ease: 'linear' }, strokeWidth: { duration: 1.5, repeat: Infinity } }} />
-              <polygon points="245,250 230,243 230,257" fill="#00d9ff" filter="url(#glowMedium)"/>
-
-              {/* CRACKER - INTENSE PULSING ANIMATION */}
-              <motion.g animate={{ filter: isRunning ? ['url(#glowMedium)', 'url(#glowStrong)', 'url(#glowMedium)'] : 'url(#glowMedium)', scale: isRunning ? [1, 1.06, 1] : 1 }} transition={{ duration: 1.3, repeat: Infinity }} style={{ transformOrigin: '310px 250px' }}>
-                <motion.circle cx="310" cy="250" r="85" fill="url(#crackerGrad)" stroke="#ff6b35" strokeWidth="6" animate={{ strokeWidth: isRunning ? [6, 10, 6] : 6 }} transition={{ duration: 1.3, repeat: Infinity }} />
-                <motion.circle cx="310" cy="250" r="70" fill="none" stroke="#ff0000" strokeWidth="4" opacity="0.4" animate={{ r: isRunning ? [70, 78, 70] : 70, opacity: isRunning ? [0.4, 0.8, 0.4] : 0.4 }} transition={{ duration: 0.9, repeat: Infinity }} />
-                <text x="310" y="235" fill="white" fontSize="24" textAnchor="middle" fontWeight="bold">CRACKER</text>
-                <text x="310" y="270" fill="white" fontSize="28" textAnchor="middle" fontWeight="bold">{crackingTemp}°C</text>
-                <motion.g animate={{ y: isRunning ? [0, -8, 0] : 0, opacity: isRunning ? [0.7, 1, 0.7] : 0.4 }} transition={{ duration: 0.25, repeat: Infinity }}>
-                  <path d="M280,190 L290,170 L300,190 L310,170 L320,190 L330,170 L340,190" fill="none" stroke="#ffff00" strokeWidth="4" filter="url(#glowMedium)"/>
-                </motion.g>
-              </motion.g>
-
-              {/* H2 TO SOFC - ANIMATED */}
-              <motion.line x1="395" y1="195" x2="475" y2="140" stroke="#00d9ff" strokeWidth="10" strokeDasharray="12 6" filter="url(#glowMedium)" animate={{ strokeDashoffset: isRunning ? [0, -18] : 0, strokeWidth: isRunning ? [10, 13, 10] : 10 }} transition={{ strokeDashoffset: { duration: 1, repeat: Infinity, ease: 'linear' }, strokeWidth: { duration: 1.2, repeat: Infinity } }} />
-              <polygon points="480,138 467,133 472,146" fill="#00d9ff" filter="url(#glowMedium)"/>
-              <motion.text x="435" y="162" fill="#00d9ff" fontSize="15" textAnchor="middle" fontWeight="bold" animate={{ opacity: isRunning ? [0.7, 1, 0.7] : 0.8 }} transition={{ duration: 1.5, repeat: Infinity }}>H₂ {currentData.h2Flow.toFixed(1)} kg/h</motion.text>
-
-              {/* SOFC STACK - LAYERED PULSE ANIMATION */}
-              <motion.g animate={{ opacity: isRunning ? [0.85, 1, 0.85] : 1, scale: isRunning ? [1, 1.03, 1] : 1 }} transition={{ duration: 2.2, repeat: Infinity }} style={{ transformOrigin: '560px 160px' }}>
-                <rect x="480" y="80" width="160" height="140" rx="10" fill="none" stroke="#00d9ff" strokeWidth="7" filter="url(#glowMedium)"/>
-                {[...Array(12)].map((_, i) => (
-                  <motion.rect key={i} x="490" y={90 + i * 11} width="140" height="9" fill="#00d9ff" initial={{ opacity: 0.15 + i * 0.05 }} animate={{ opacity: isRunning ? [0.15 + i * 0.05, 0.4 + i * 0.05, 0.15 + i * 0.05] : 0.15 + i * 0.05 }} transition={{ duration: 2, repeat: Infinity, delay: i * 0.08 }} />
-                ))}
-                <text x="560" y="145" fill="#00d9ff" fontSize="26" textAnchor="middle" fontWeight="bold">SOFC</text>
-                <text x="560" y="175" fill="#00d9ff" fontSize="16" textAnchor="middle">{sofcCells} Cells</text>
-                <motion.text x="560" y="205" fill="#4ade80" fontSize="22" textAnchor="middle" fontWeight="bold" animate={{ scale: isRunning ? [1, 1.15, 1] : 1 }} transition={{ duration: 1.2, repeat: Infinity }} filter="url(#glowMedium)">{currentData.sofcPower.toFixed(0)} kW</motion.text>
-                <motion.circle cx="560" cy="160" r="75" fill="url(#sofcGrad)" pointerEvents="none" animate={{ opacity: isRunning ? [0.3, 0.6, 0.3] : 0.2 }} transition={{ duration: 2, repeat: Infinity }} />
-              </motion.g>
-
-              {/* NH3 TO DCE - ANIMATED */}
-              <motion.line x1="395" y1="305" x2="475" y2="370" stroke="#ff6b35" strokeWidth="10" strokeDasharray="12 6" filter="url(#glowMedium)" animate={{ strokeDashoffset: isRunning ? [0, -18] : 0, strokeWidth: isRunning ? [10, 13, 10] : 10 }} transition={{ strokeDashoffset: { duration: 1, repeat: Infinity, ease: 'linear' }, strokeWidth: { duration: 1.2, repeat: Infinity } }} />
-              <polygon points="480,372 467,367 472,380" fill="#ff6b35" filter="url(#glowMedium)"/>
-              <motion.text x="435" y="330" fill="#ff6b35" fontSize="14" textAnchor="middle" fontWeight="bold" animate={{ opacity: isRunning ? [0.7, 1, 0.7] : 0.8 }} transition={{ duration: 1.5, repeat: Infinity }}>NH₃ {(100 - currentData.nh3Conversion).toFixed(0)}%</motion.text>
-
-              {/* DCE ENGINE - VIBRATING ANIMATION */}
-              <motion.g animate={{ x: isRunning ? [0, 3, -3, 0] : 0, y: isRunning ? [0, -2, 2, 0] : 0 }} transition={{ duration: 0.12, repeat: Infinity }}>
-                <rect x="480" y="300" width="160" height="130" rx="10" fill="none" stroke="#ff6b35" strokeWidth="7" filter="url(#glowMedium)"/>
-                <motion.circle cx="530" cy="355" r="32" fill="#ff6b35" opacity="0.25" stroke="#ff6b35" strokeWidth="4" animate={{ r: isRunning ? [32, 38, 32] : 32, opacity: isRunning ? [0.25, 0.5, 0.25] : 0.25 }} transition={{ duration: 0.25, repeat: Infinity }} />
-                <motion.circle cx="590" cy="355" r="32" fill="#ff6b35" opacity="0.25" stroke="#ff6b35" strokeWidth="4" animate={{ r: isRunning ? [38, 32, 38] : 32, opacity: isRunning ? [0.5, 0.25, 0.5] : 0.25 }} transition={{ duration: 0.25, repeat: Infinity, delay: 0.125 }} />
-                <text x="560" y="345" fill="#ff6b35" fontSize="28" textAnchor="middle" fontWeight="bold">DCE</text>
-                <text x="560" y="375" fill="#ff6b35" fontSize="17" textAnchor="middle">DIESEL</text>
-                <motion.text x="560" y="410" fill="#ff0000" fontSize="22" textAnchor="middle" fontWeight="bold" animate={{ scale: isRunning ? [1, 1.15, 1] : 1 }} transition={{ duration: 1.2, repeat: Infinity, delay: 0.4 }} filter="url(#glowMedium)">{currentData.dcePower.toFixed(0)} kW</motion.text>
-              </motion.g>
-
-              {/* POWER MERGE - PULSING LINES */}
-              <motion.line x1="640" y1="160" x2="700" y2="220" stroke="#00d9ff" strokeWidth="12" filter="url(#glowMedium)" animate={{ strokeWidth: isRunning ? [12, 16, 12] : 12 }} transition={{ duration: 1.3, repeat: Infinity }} />
-              <motion.line x1="640" y1="365" x2="700" y2="280" stroke="#ff6b35" strokeWidth="12" filter="url(#glowMedium)" animate={{ strokeWidth: isRunning ? [12, 16, 12] : 12 }} transition={{ duration: 1.3, repeat: Infinity, delay: 0.5 }} />
-              <motion.line x1="695" y1="250" x2="715" y2="250" stroke="#4ade80" strokeWidth="10" filter="url(#glowMedium)" animate={{ strokeWidth: isRunning ? [10, 13, 10] : 10 }} transition={{ duration: 1.1, repeat: Infinity }} />
-
-              {/* GENERATOR - FULL ROTATION */}
-              <motion.g className="compact-output-group" animate={{ rotate: isRunning ? 360 : 0 }} transition={{ duration: 2.5, repeat: Infinity, ease: 'linear' }} style={{ transformOrigin: '730px 250px' }}>
-                <circle cx="730" cy="250" r="44" fill="none" stroke="#4ade80" strokeWidth="7" filter="url(#glowMedium)"/>
-                <circle cx="730" cy="250" r="31" fill="rgba(74, 222, 128, 0.15)"/>
-                <path d="M730,216 L749,250 L730,284 L711,250 Z" fill="#4ade80" filter="url(#glowMedium)"/>
-              </motion.g>
-
-              {/* TOTAL POWER - MEGA PULSE */}
-              <motion.text x="730" y="338" fill="#4ade80" fontSize="24" textAnchor="middle" fontWeight="bold" animate={{ scale: isRunning ? [1, 1.08, 1] : 1 }} transition={{ duration: 1.6, repeat: Infinity }} filter="url(#glowMedium)">{currentData.totalPower.toFixed(1)} kW</motion.text>
-              <text x="730" y="364" fill="#4ade80" fontSize="14" textAnchor="middle">TOTAL OUTPUT</text>
-
-              {/* EFFICIENCY BADGE - PULSE */}
-              <motion.g animate={{ scale: isRunning ? [1, 1.08, 1] : 1 }} transition={{ duration: 2.3, repeat: Infinity }} style={{ transformOrigin: '835px 240px' }}>
-                <rect x="790" y="200" width="90" height="80" rx="12" fill="rgba(183, 148, 246, 0.2)" stroke="#b794f6" strokeWidth="4" filter="url(#glowMedium)"/>
-                <text x="835" y="230" fill="#b794f6" fontSize="15" textAnchor="middle" fontWeight="bold">EFFICIENCY</text>
-                <motion.text x="835" y="265" fill="#b794f6" fontSize="30" textAnchor="middle" fontWeight="bold" animate={{ scale: isRunning ? [1, 1.12, 1] : 1 }} transition={{ duration: 1.3, repeat: Infinity, delay: 0.3 }}>{currentData.efficiency.toFixed(1)}%</motion.text>
-              </motion.g>
-            </svg>
-          </div>
+              <CartesianGrid strokeDasharray="3 3" stroke="#1a1a00" />
+              <XAxis dataKey="t" stroke={C.borderDim} tick={{ fill: C.textDim, fontSize: 9, fontFamily: mono }} />
+              <YAxis stroke={C.borderDim} tick={{ fill: C.textDim, fontSize: 9, fontFamily: mono }} />
+              <Tooltip contentStyle={{ background: C.panelBg, border: `1px solid ${C.borderDim}`, fontFamily: mono, fontSize: '10px', color: C.green }} />
+              <Area type="monotone" dataKey="sofcPower" stackId="1" stroke={C.cyan}
+                fillOpacity={1} fill="url(#gSOFC)" name="SOFC (kW)" />
+              <Area type="monotone" dataKey="motorPower" stackId="1" stroke={C.heatOrange}
+                fillOpacity={1} fill="url(#gDCE)" name="DCE (kW)" />
+            </AreaChart>
+          </ResponsiveContainer>
         </div>
+      )}
 
-        {/* CONTROLS */}
-        <div className="grid md:grid-cols-3 gap-4">
-          {[
-            { icon: Gauge, label: 'Motor Load', value: motorLoad, min: 0, max: 100, unit: '%', set: setMotorLoad },
-            { icon: Thermometer, label: 'Cracking Temp', value: crackingTemp, min: 700, max: 1000, unit: '°C', set: setCrackingTemp },
-            { icon: Activity, label: 'SOFC Cells', value: sofcCells, min: 100, max: 1000, step: 50, unit: '', set: setSOFCCells }
-          ].map((ctrl, i) => (
-            <motion.div key={i} whileHover={{ scale: 1.02 }} className="bg-gradient-to-br from-terminal-darker to-terminal-bg border-2 border-terminal-border p-6 shadow-lg">
-              <label className="flex items-center justify-between text-sm text-gray-300 mb-3">
-                <span className="flex items-center gap-2 font-bold"><ctrl.icon size={18} className="text-terminal-accent" />{ctrl.label}</span>
-                <span className="text-2xl font-bold text-terminal-accent">{ctrl.value}{ctrl.unit}</span>
-              </label>
-              <input type="range" min={ctrl.min} max={ctrl.max} step={ctrl.step || 1} value={ctrl.value} onChange={(e) => ctrl.set(Number(e.target.value))} className="w-full h-2 bg-terminal-bg rounded-lg appearance-none cursor-pointer accent-terminal-accent" disabled={isRunning} />
-            </motion.div>
-          ))}
-        </div>
-
-        {/* CHARTS */}
-        <div className="grid md:grid-cols-3 gap-4">
-          <div className="md:col-span-2 bg-terminal-darker/90 border-2 border-terminal-border p-4 shadow-lg">
-            <h4 className="text-sm font-bold text-terminal-text mb-3 flex items-center gap-2"><Zap size={16} />Power Output</h4>
-            <ResponsiveContainer width="100%" height={250}>
-              <AreaChart data={history}>
-                <defs>
-                  <linearGradient id="colorSOFC" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="#00d9ff" stopOpacity={0.8}/><stop offset="95%" stopColor="#00d9ff" stopOpacity={0}/></linearGradient>
-                  <linearGradient id="colorDCE" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="#ff6b35" stopOpacity={0.8}/><stop offset="95%" stopColor="#ff6b35" stopOpacity={0}/></linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#333" />
-                <XAxis dataKey="time" stroke="#888" />
-                <YAxis stroke="#888" />
-                <Tooltip contentStyle={{ backgroundColor: '#0a0e27', border: '1px solid #00d9ff' }} />
-                <Legend />
-                <Area type="monotone" dataKey="sofcPower" stackId="1" stroke="#00d9ff" fillOpacity={1} fill="url(#colorSOFC)" name="SOFC (kW)" />
-                <Area type="monotone" dataKey="dcePower" stackId="1" stroke="#ff6b35" fillOpacity={1} fill="url(#colorDCE)" name="DCE (kW)" />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
-
-          <div className="bg-terminal-darker/90 border-2 border-terminal-border p-4 shadow-lg">
-            <h4 className="text-sm font-bold text-terminal-text mb-3 flex items-center gap-2"><TrendingUp size={16} />Efficiency</h4>
-            <ResponsiveContainer width="100%" height={250}>
-              <RadialBarChart cx="50%" cy="50%" innerRadius="60%" outerRadius="100%" data={[{ value: currentData.efficiency, fill: '#00d9ff' }]} startAngle={180} endAngle={0}>
-                <RadialBar background dataKey="value" cornerRadius={10} />
-                <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle" className="text-4xl font-bold fill-terminal-secondary">{currentData.efficiency.toFixed(1)}%</text>
-              </RadialBarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-
-        {/* EQUATIONS */}
-        <div className="bg-gradient-to-br from-terminal-bg to-terminal-darker border-2 border-terminal-accent p-6 shadow-lg">
-          <h4 className="text-lg font-bold text-terminal-accent mb-4 flex items-center gap-2"><Wind size={20} />Thermodynamic Equations</h4>
-          <div className="grid md:grid-cols-2 gap-6 text-sm font-mono text-gray-300">
-            <div className="bg-terminal-darker/50 p-4 border border-terminal-secondary/30">
-              <p className="text-terminal-secondary font-bold mb-2">Arrhenius:</p>
-              <code className="bg-terminal-bg/50 p-3 block rounded text-xs">k = A × exp(-Ea / RT)<br/>A = 1.2×10¹⁰, Ea = 170 kJ/mol<br/>T = {crackingTemp + 273} K</code>
-            </div>
-            <div className="bg-terminal-darker/50 p-4 border border-terminal-accent/30">
-              <p className="text-terminal-accent font-bold mb-2">SOFC Power:</p>
-              <code className="bg-terminal-bg/50 p-3 block rounded text-xs">P = n × V × I / 1000<br/>n = {sofcCells} cells<br/>P = {currentData.sofcPower.toFixed(1)} kW</code>
-            </div>
-          </div>
-        </div>
+      {/* FOOTER */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 15px', border: `1px solid ${C.borderDim}`, background: C.panelBg, fontSize: '9px', flexWrap: 'wrap', gap: '8px' }}>
+        <span style={{ color: C.textDim }}>[AGÜ MAKİNE MÜHENDİSLİĞİ]</span>
+        <span style={{ color: C.textDim }}>[DCE-SOFC HİBRİT TAHRİK SİSTEMİ]</span>
+        <span style={{ color: C.cyan }}>[DİJİTAL İKİZ v2.0]</span>
       </div>
     </div>
   )
