@@ -14,6 +14,7 @@ import FLAREDemo from './pages/FLAREDemo'
 import DCESOFCDemo from './pages/DCESOFCDemo'
 import GeoSocialDemo from './pages/GeoSocialDemo'
 import MiniGames from './pages/MiniGames'
+import TakaslaPreview from './pages/TakaslaPreview'
 import MatrixRain from './components/MatrixRain'
 
 function App() {
@@ -50,6 +51,7 @@ function App() {
             <Route path="/demos/flare" element={<FLAREDemo />} />
             <Route path="/demos/dce-sofc" element={<DCESOFCDemo />} />
             <Route path="/demos/geosocial" element={<GeoSocialDemo />} />
+            <Route path="/demos/takasla" element={<TakaslaPreview />} />
             <Route path="/games" element={<MiniGames />} />
           </Routes>
         </motion.div>

@@ -33,6 +33,27 @@ const DEMOS = [
     color: 'terminal-text',
     features: ['Android Mockup', 'GPS Tracking', 'Check-in System', 'Social Feed'],
     status: 'Live Demo'
+  },
+  {
+    id: 'fedagrup',
+    title: 'FedaGrup Insaat',
+    description: 'Corporate construction website built for a real company presence',
+    tech: ['Web Design', 'Responsive UI', 'Vercel'],
+    url: 'https://www.fedagrupinsaat.com',
+    external: true,
+    color: 'terminal-accent',
+    features: ['Corporate Site', 'Service Pages', 'Mobile Layout', 'Live Domain'],
+    status: 'Live Site'
+  },
+  {
+    id: 'takasla',
+    title: 'Takasla Preview',
+    description: 'Student barter marketplace concept with matching and trust flow',
+    tech: ['Product Design', 'React', 'Marketplace'],
+    url: '/demos/takasla',
+    color: 'terminal-secondary',
+    features: ['Item Listings', 'Match Score', 'Trust Badges', 'Chat Flow'],
+    status: 'Preview'
   }
 ]
 
@@ -60,8 +81,7 @@ export default function LiveProjectDemos() {
           }
           const colors = colorClasses[demo.color]
 
-          return (
-            <Link key={demo.id} to={demo.url}>
+          const card = (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -116,9 +136,18 @@ export default function LiveProjectDemos() {
                 {/* Hover effect */}
                 <div className="mt-4 flex items-center text-sm text-terminal-text opacity-0 group-hover:opacity-100 transition-opacity">
                   <Code size={16} className="mr-2" />
-                  Click to launch full demo
+                  {demo.external ? 'Open live site' : 'Click to launch full demo'}
                 </div>
               </motion.div>
+          )
+
+          return demo.external ? (
+            <a key={demo.id} href={demo.url} target="_blank" rel="noopener noreferrer">
+              {card}
+            </a>
+          ) : (
+            <Link key={demo.id} to={demo.url}>
+              {card}
             </Link>
           )
         })}

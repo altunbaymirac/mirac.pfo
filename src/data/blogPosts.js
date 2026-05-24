@@ -1,11 +1,80 @@
 export const blogPosts = [
   {
+    slug: 'fedagrup-insaat-web-sitesi',
+    title: 'FedaGrup: Kurumsal İnşaat Web Sitesi',
+    date: '2026-05-20',
+    readTime: '4 min',
+    tags: ['FedaGrup', 'Web Design', 'Client Project'],
+    excerpt: 'FedaGrup İnşaat için hazırlanan kurumsal web sitesi: güven veren ilk izlenim, mobil uyum ve net hizmet sunumu.',
+    projectLinks: [
+      { label: 'Canlı Site', href: 'https://www.fedagrupinsaat.com', external: true }
+    ],
+    content: `
+# FedaGrup: Kurumsal İnşaat Web Sitesi
+
+FedaGrup İnşaat projesinde amaç basitti: şirketin dijitalde güven veren, hızlı açılan ve hizmetlerini net anlatan bir web yüzüne sahip olması.
+
+## Odak Noktaları
+
+- Kurumsal ilk izlenim
+- Mobil uyumlu sayfa yapısı
+- Hizmetleri kolay taranır hale getirme
+- Ziyaretçiyi hızlıca iletişime yönlendirme
+
+## Ne Öğrendim?
+
+Bu proje bana teknik taraftan çok ürün tarafını öğretti. Bir firma sitesinde fazla efekt değil, güven veren düzen, okunabilir metin ve doğru bilgi mimarisi daha önemli.
+
+## Link
+
+[FedaGrup İnşaat canlı sitesi](https://www.fedagrupinsaat.com)
+`
+  },
+  {
+    slug: 'takasla-onizleme',
+    title: 'Takasla: Takas Odaklı Marketplace Fikri',
+    date: '2026-05-20',
+    readTime: '5 min',
+    tags: ['Takasla', 'Marketplace', 'Product Design'],
+    excerpt: 'Takasla, öğrencilerin eşya, not, kitap veya küçük hizmetleri para yerine takas mantığıyla değiştirebildiği bir marketplace fikri.',
+    projectLinks: [
+      { label: 'Önizlemeyi Aç', href: '/demos/takasla' }
+    ],
+    content: `
+# Takasla: Takas Odaklı Marketplace Fikri
+
+Takasla, özellikle öğrenciler için düşündüğüm bir ürün fikri. Her şeyi para ile almak yerine, elindeki bir ürünü veya beceriyi başka bir ihtiyaçla eşleştiren bir takas platformu.
+
+## Problem
+
+Öğrencilerde kullanılmayan çok fazla eşya, kitap, not ve ekipman oluyor. Bunlar çoğu zaman satılmıyor, çöpe gidiyor veya unutuluyor.
+
+## Çözüm
+
+Takasla'nın temel fikri:
+
+- Elindeki ürünü listele
+- Karşılığında ne istediğini yaz
+- Yakındaki uygun eşleşmeleri gör
+- Güven puanı ve sohbet ile takası tamamla
+
+## Önizleme
+
+Şimdilik portföy içinde bir ürün önizlemesi var. Amacım fikrin arayüzünü ve temel akışını göstermek.
+
+[Takasla önizlemesini aç](/demos/takasla)
+`
+  },
+  {
     slug: 'flare-6-subat',
     title: 'FLARE: 6 Şubat\'tan Doğan Fikir',
     date: '2025-01-10',
     readTime: '8 min',
     tags: ['FLARE', 'Engineering', 'Disaster Response'],
     excerpt: '6 Şubat depremini Malatya\'da yaşadım. Enkaz altında ses dinlemenin ne kadar yetersiz olduğunu gördüm. İşte FLARE böyle doğdu.',
+    projectLinks: [
+      { label: 'Canlı Demo', href: '/demos/flare' }
+    ],
     content: `
 # FLARE: 6 Şubat'tan Doğan Fikir
 
@@ -70,6 +139,9 @@ Bu proje bir fikir olarak başladı, ama gerçek hayatta işe yarayabileceğine 
     readTime: '6 min',
     tags: ['DCE-SOFC', 'Marine', 'Green Energy'],
     excerpt: 'Amonyak (NH3) yakıtlı hibrit gemi tahrik sistemi neden gelecek? Termodinamik ve çevre açısından analiz.',
+    projectLinks: [
+      { label: 'Canlı Simülasyon', href: '/demos/dce-sofc' }
+    ],
     content: `
 # DCE-SOFC: Neden Amonyak Yakıt?
 
@@ -144,6 +216,9 @@ Bu zorluklar çözülebilir. Yeşil denizcilik geleceği bu yönde gidiyor, en a
     readTime: '5 min',
     tags: ['React Native', 'Flutter', 'Mobile Dev'],
     excerpt: 'GeoSocial uygulamasını hem React Native hem Flutter ile yazdım. İşte karşılaştırma.',
+    projectLinks: [
+      { label: 'Canlı Demo', href: '/demos/geosocial' }
+    ],
     content: `
 # React Native vs Flutter: GeoSocial Tecrübem
 

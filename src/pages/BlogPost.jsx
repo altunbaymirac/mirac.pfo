@@ -4,7 +4,7 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism'
-import { ArrowLeft, Calendar, Clock, Share2, Copy, Check } from 'lucide-react'
+import { ArrowLeft, Calendar, Clock, Share2, Copy, Check, ExternalLink } from 'lucide-react'
 import { blogPosts } from '../data/blogPosts'
 import { useState } from 'react'
 
@@ -102,6 +102,32 @@ export default function BlogPost() {
               </>
             )}
           </motion.button>
+
+          {post.projectLinks?.length > 0 && (
+            <div className="flex flex-wrap gap-3 mt-6">
+              {post.projectLinks.map((projectLink) => {
+                const className = "inline-flex items-center gap-2 px-4 py-2 bg-terminal-darker border-2 border-terminal-secondary text-terminal-secondary hover:bg-terminal-secondary hover:text-terminal-bg transition-colors font-mono text-sm"
+
+                return projectLink.external ? (
+                  <a
+                    key={projectLink.href}
+                    href={projectLink.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={className}
+                  >
+                    <ExternalLink size={16} />
+                    {projectLink.label}
+                  </a>
+                ) : (
+                  <Link key={projectLink.href} to={projectLink.href} className={className}>
+                    <ExternalLink size={16} />
+                    {projectLink.label}
+                  </Link>
+                )
+              })}
+            </div>
+          )}
         </motion.div>
 
         {/* Content */}

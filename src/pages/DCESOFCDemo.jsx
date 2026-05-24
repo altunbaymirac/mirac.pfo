@@ -340,18 +340,18 @@ export default function DCESOFCDemo() {
               {/* POWER MERGE - PULSING LINES */}
               <motion.line x1="640" y1="160" x2="700" y2="220" stroke="#00d9ff" strokeWidth="12" filter="url(#glowMedium)" animate={{ strokeWidth: isRunning ? [12, 16, 12] : 12 }} transition={{ duration: 1.3, repeat: Infinity }} />
               <motion.line x1="640" y1="365" x2="700" y2="280" stroke="#ff6b35" strokeWidth="12" filter="url(#glowMedium)" animate={{ strokeWidth: isRunning ? [12, 16, 12] : 12 }} transition={{ duration: 1.3, repeat: Infinity, delay: 0.5 }} />
-              <motion.line x1="700" y1="250" x2="770" y2="250" stroke="#4ade80" strokeWidth="14" filter="url(#glowStrong)" animate={{ strokeWidth: isRunning ? [14, 19, 14] : 14 }} transition={{ duration: 1.1, repeat: Infinity }} />
+              <motion.line x1="695" y1="250" x2="715" y2="250" stroke="#4ade80" strokeWidth="10" filter="url(#glowMedium)" animate={{ strokeWidth: isRunning ? [10, 13, 10] : 10 }} transition={{ duration: 1.1, repeat: Infinity }} />
 
               {/* GENERATOR - FULL ROTATION */}
-              <motion.g animate={{ rotate: isRunning ? 360 : 0 }} transition={{ duration: 2.5, repeat: Infinity, ease: 'linear' }} style={{ transformOrigin: '745px 250px' }}>
-                <circle cx="745" cy="250" r="65" fill="none" stroke="#4ade80" strokeWidth="10" filter="url(#glowStrong)"/>
-                <circle cx="745" cy="250" r="50" fill="rgba(74, 222, 128, 0.15)"/>
-                <path d="M745,200 L770,250 L745,300 L720,250 Z" fill="#4ade80" filter="url(#glowMedium)"/>
+              <motion.g className="compact-output-group" animate={{ rotate: isRunning ? 360 : 0 }} transition={{ duration: 2.5, repeat: Infinity, ease: 'linear' }} style={{ transformOrigin: '730px 250px' }}>
+                <circle cx="730" cy="250" r="44" fill="none" stroke="#4ade80" strokeWidth="7" filter="url(#glowMedium)"/>
+                <circle cx="730" cy="250" r="31" fill="rgba(74, 222, 128, 0.15)"/>
+                <path d="M730,216 L749,250 L730,284 L711,250 Z" fill="#4ade80" filter="url(#glowMedium)"/>
               </motion.g>
 
               {/* TOTAL POWER - MEGA PULSE */}
-              <motion.text x="745" y="360" fill="#4ade80" fontSize="38" textAnchor="middle" fontWeight="bold" animate={{ scale: isRunning ? [1, 1.2, 1] : 1 }} transition={{ duration: 1.6, repeat: Infinity }} filter="url(#glowStrong)">{currentData.totalPower.toFixed(1)} kW</motion.text>
-              <text x="745" y="390" fill="#4ade80" fontSize="18" textAnchor="middle">TOTAL OUTPUT</text>
+              <motion.text x="730" y="338" fill="#4ade80" fontSize="24" textAnchor="middle" fontWeight="bold" animate={{ scale: isRunning ? [1, 1.08, 1] : 1 }} transition={{ duration: 1.6, repeat: Infinity }} filter="url(#glowMedium)">{currentData.totalPower.toFixed(1)} kW</motion.text>
+              <text x="730" y="364" fill="#4ade80" fontSize="14" textAnchor="middle">TOTAL OUTPUT</text>
 
               {/* EFFICIENCY BADGE - PULSE */}
               <motion.g animate={{ scale: isRunning ? [1, 1.08, 1] : 1 }} transition={{ duration: 2.3, repeat: Infinity }} style={{ transformOrigin: '835px 240px' }}>
