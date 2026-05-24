@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Terminal, Rocket, Code, Cpu, ArrowRight, Download } from 'lucide-react'
@@ -29,7 +29,7 @@ export default function Home() {
     {
       name: 'FLARE',
       tag: 'Emergency Communication',
-      description: '6 Şubat\'tan sonra aklıma gelen bir fikir: LoRa ile çalışan, enkaz altından sinyal yollayan bir cihaz',
+      description: '6 Åubat\'tan sonra aklÄ±ma gelen bir fikir: LoRa ile Ã§alÄ±ÅŸan, enkaz altÄ±ndan sinyal yollayan bir cihaz',
       color: 'terminal-accent',
       link: '/demos/flare',
       stats: ['868 MHz', '1-3 km Range', 'Auto-Activation']
@@ -37,23 +37,24 @@ export default function Home() {
     {
       name: 'DCE-SOFC',
       tag: 'Marine Propulsion',
-      description: 'Amonyak yakıtlı gemi motoru simülasyonu. Gerçek termodinamik hesaplamalarla çalışan bir dijital ikiz',
+      description: 'Amonyak yakÄ±tlÄ± gemi motoru simÃ¼lasyonu. GerÃ§ek termodinamik hesaplamalarla Ã§alÄ±ÅŸan bir dijital ikiz',
       color: 'terminal-secondary',
       link: '/demos/dce-sofc',
-      stats: ['Arrhenius Kinetics', 'Zero CO₂', 'Digital Twin']
+      stats: ['Arrhenius Kinetics', 'Zero COâ‚‚', 'Digital Twin']
     },
     {
       name: 'Takaslat',
       tag: 'Marketplace Platform',
-      description: 'Para kullanmadan eşya takası yapabileceğin, AI destekli öneri ve müzakere sistemi olan marketplace',
+      description: 'Para kullanmadan eÅŸya takasÄ± yapabileceÄŸin, AI destekli Ã¶neri ve mÃ¼zakere sistemi olan marketplace',
       color: 'terminal-text',
-      link: '/demos/takasla',
+      link: 'https://takaslat.vercel.app',
+      external: true,
       stats: ['React + TS', 'Node.js', 'AI Assistant']
     },
     {
       name: 'FedaGrup',
       tag: 'Client Website',
-      description: 'FedaGrup İnşaat için hazırladığım kurumsal web sitesi. Mobil uyumlu, hızlı, güven veren tasarım',
+      description: 'FedaGrup Ä°nÅŸaat iÃ§in hazÄ±rladÄ±ÄŸÄ±m kurumsal web sitesi. Mobil uyumlu, hÄ±zlÄ±, gÃ¼ven veren tasarÄ±m',
       color: 'terminal-accent',
       link: 'https://www.fedagrupinsaat.com',
       external: true,
@@ -62,7 +63,7 @@ export default function Home() {
     {
       name: 'GeoSocial',
       tag: 'Mobile App',
-      description: 'Konuma dayalı sosyal ağ. React Native ile yaptım, GPS tracking ve gamification var',
+      description: 'Konuma dayalÄ± sosyal aÄŸ. React Native ile yaptÄ±m, GPS tracking ve gamification var',
       color: 'terminal-secondary',
       link: '/demos/geosocial',
       stats: ['React Native', 'Firebase', 'GPS Tracking']
@@ -72,44 +73,44 @@ export default function Home() {
   const timeline = [
     {
       date: 'Eyl 2024',
-      title: 'AGÜ Makine Mühendisliği',
-      desc: 'Abdullah Gül Üniversitesi\'nde Makine Mühendisliği\'ne başladım. Mühendislik düşüncesiyle tanıştım.',
-      tag: '🎓 Eğitim',
+      title: 'AGÃœ Makine MÃ¼hendisliÄŸi',
+      desc: 'Abdullah GÃ¼l Ãœniversitesi\'nde Makine MÃ¼hendisliÄŸi\'ne baÅŸladÄ±m. MÃ¼hendislik dÃ¼ÅŸÃ¼ncesiyle tanÄ±ÅŸtÄ±m.',
+      tag: 'ğŸ“ EÄŸitim',
       active: true
     },
     {
-      date: 'Şub 2025',
-      title: 'FLARE — İlk Prototip',
-      desc: '6 Şubat depreminden ilham aldım. LoRa 868 MHz ile enkaz altı beacon simülasyonu geliştirdim.',
-      tag: '📡 LoRa / IoT',
+      date: 'Åub 2025',
+      title: 'FLARE â€” Ä°lk Prototip',
+      desc: '6 Åubat depreminden ilham aldÄ±m. LoRa 868 MHz ile enkaz altÄ± beacon simÃ¼lasyonu geliÅŸtirdim.',
+      tag: 'ğŸ“¡ LoRa / IoT',
       active: true
     },
     {
       date: 'Mar 2025',
-      title: 'DCE-SOFC Dijital İkiz',
-      desc: 'Amonyak yakıtlı hibrit gemi tahrik sistemi için Arrhenius kinetikleriyle çalışan dijital ikiz simülasyonu.',
-      tag: '⚗️ Termodinamik',
+      title: 'DCE-SOFC Dijital Ä°kiz',
+      desc: 'Amonyak yakÄ±tlÄ± hibrit gemi tahrik sistemi iÃ§in Arrhenius kinetikleriyle Ã§alÄ±ÅŸan dijital ikiz simÃ¼lasyonu.',
+      tag: 'âš—ï¸ Termodinamik',
       active: true
     },
     {
       date: 'Nis 2025',
-      title: 'FedaGrup İnşaat Web Sitesi',
-      desc: 'İlk müşteri projem. Mobil uyumlu, hızlı kurumsal web sitesi — production\'da yayında.',
-      tag: '🌐 Client Project',
+      title: 'FedaGrup Ä°nÅŸaat Web Sitesi',
+      desc: 'Ä°lk mÃ¼ÅŸteri projem. Mobil uyumlu, hÄ±zlÄ± kurumsal web sitesi â€” production\'da yayÄ±nda.',
+      tag: 'ğŸŒ Client Project',
       active: true
     },
     {
       date: 'May 2025',
       title: 'Takaslat Marketplace',
-      desc: 'React + TypeScript ile AI destekli takas marketplace. Müzakere sistemi ve harita entegrasyonu.',
-      tag: '🛒 Full-Stack',
+      desc: 'React + TypeScript ile AI destekli takas marketplace. MÃ¼zakere sistemi ve harita entegrasyonu.',
+      tag: 'ğŸ›’ Full-Stack',
       active: true
     },
     {
-      date: '2025 →',
-      title: 'FLARE Donanım Prototipi',
-      desc: 'ESP32 + LoRa modülü ile fiziksel prototip. AGÜ kampüsünde menzil testi planlanıyor.',
-      tag: '🔩 Sonraki Adım',
+      date: '2025 â†’',
+      title: 'FLARE DonanÄ±m Prototipi',
+      desc: 'ESP32 + LoRa modÃ¼lÃ¼ ile fiziksel prototip. AGÃœ kampÃ¼sÃ¼nde menzil testi planlanÄ±yor.',
+      tag: 'ğŸ”© Sonraki AdÄ±m',
       active: false
     }
   ]
@@ -259,10 +260,10 @@ export default function Home() {
           {/* Live Simulations */}
           <div className="mt-16">
             <h3 className="text-2xl font-bold text-terminal-text neon-glow mb-6 text-center">
-              🚀 Live Project Simulations
+              ğŸš€ Live Project Simulations
             </h3>
             <p className="text-gray-400 text-center mb-8">
-              FLARE beacon tracker ve DCE-SOFC motor simülasyonları - gerçek zamanlı çalışıyor!
+              FLARE beacon tracker ve DCE-SOFC motor simÃ¼lasyonlarÄ± - gerÃ§ek zamanlÄ± Ã§alÄ±ÅŸÄ±yor!
             </p>
             <LiveProjectDemos />
           </div>

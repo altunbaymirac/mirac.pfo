@@ -44,7 +44,8 @@ const PROJECTS = [
     type: 'Marketplace Platform',
     description: 'Para kullanmadan eşya takası yapabileceğin, AI destekli öneri ve müzakere sistemli marketplace.',
     tech: ['React', 'TypeScript', 'Node.js', 'AI'],
-    href: '/demos/takasla',
+    href: 'https://takaslat.vercel.app',
+    external: true,
     color: 'terminal-secondary'
   }
 ]

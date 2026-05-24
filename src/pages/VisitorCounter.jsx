@@ -44,50 +44,10 @@ export default function VisitorCounter() {
             </p>
           </motion.div>
 
-          {/* Info Cards */}
-          <div className="grid md:grid-cols-2 gap-6 mb-8">
-            <div className="bg-terminal-bg border-2 border-terminal-secondary p-6 text-left">
-              <div className="flex items-center gap-3 mb-4">
-                <Database className="text-terminal-secondary" size={24} />
-                <h3 className="text-lg font-bold text-terminal-secondary">
-                  Firebase Realtime DB
-                </h3>
-              </div>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li>✓ Real-time synchronization</li>
-                <li>✓ Persistent storage (never resets)</li>
-                <li>✓ Cross-device tracking</li>
-                <li>✓ Instant updates globally</li>
-              </ul>
-            </div>
-
-            <div className="bg-terminal-bg border-2 border-terminal-accent p-6 text-left">
-              <div className="flex items-center gap-3 mb-4">
-                <Wifi className="text-terminal-accent" size={24} />
-                <h3 className="text-lg font-bold text-terminal-accent">
-                  How It Works
-                </h3>
-              </div>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li>→ Every visit increments Firebase counter</li>
-                <li>→ Data syncs in real-time</li>
-                <li>→ Fallback to localStorage if Firebase unavailable</li>
-                <li>→ Privacy-friendly (no personal data stored)</li>
-              </ul>
-            </div>
-          </div>
-
-          {/* Setup Instructions */}
-          <div className="bg-terminal-darker border-2 border-terminal-border p-6 text-left">
-            <h3 className="text-lg font-bold text-terminal-text mb-4">
-              🔧 Firebase Setup Instructions
-            </h3>
-            <div className="space-y-3 text-sm text-gray-400 font-mono">
-              <p>1. Create Firebase project at <span className="text-terminal-accent">console.firebase.google.com</span></p>
-              <p>2. Enable <span className="text-terminal-secondary">Realtime Database</span></p>
-              <p>3. Copy config to <code className="bg-terminal-bg px-2 py-1 text-terminal-accent">src/utils/firebase.js</code></p>
-              <p>4. Deploy → Visitor counter works globally!</p>
-            </div>
+          {/* Info */}
+          <div className="bg-terminal-bg border-2 border-terminal-secondary p-5 inline-flex items-center gap-3">
+            <Wifi className="text-terminal-secondary shrink-0" size={20} />
+            <span className="text-sm text-gray-400 font-mono">Firebase Realtime DB · Privacy-friendly · Güncelleniyor</span>
           </div>
         </motion.div>
       </div>
