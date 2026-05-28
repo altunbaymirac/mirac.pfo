@@ -47,13 +47,14 @@ const DEMOS = [
   },
   {
     id: 'takasla',
-    title: 'Takasla Preview',
-    description: 'Student barter marketplace concept with matching and trust flow',
-    tech: ['Product Design', 'React', 'Marketplace'],
-    url: '/demos/takasla',
+    title: 'Takaslat',
+    description: 'Para kullanmadan eşya takası — AI destekli öneri ve müzakere sistemi olan marketplace',
+    tech: ['React', 'TypeScript', 'Node.js', 'AI'],
+    url: 'https://takaslat.vercel.app',
+    external: true,
     color: 'terminal-secondary',
     features: ['Item Listings', 'Match Score', 'Trust Badges', 'Chat Flow'],
-    status: 'Preview'
+    status: 'Live'
   }
 ]
 
