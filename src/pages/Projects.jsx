@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import { ExternalLink, ArrowRight } from 'lucide-react'
 import LiveProjectDemos from '../components/LiveProjectDemos'
 import FlareBeacon3D from '../components/FlareBeacon3D'
-import APIPlayground from '../components/APIPlayground'
 
 const PROJECTS = [
   {
@@ -140,10 +139,6 @@ export default function Projects() {
           <LiveProjectDemos />
         </section>
 
-        {/* API Playground */}
-        <section>
-          <APIPlayground />
-        </section>
       </div>
     </div>
   )
