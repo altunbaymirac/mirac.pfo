@@ -27,7 +27,7 @@ export default function Home() {
 
   const projects = [
     {
-      name: 'FLARE',
+      name: 'ConcreteWeb',
       tag: 'Emergency Communication',
       description: "6 Şubat'tan sonra aklıma gelen bir fikir: LoRa ile çalışan, enkaz altından sinyal yollayan bir cihaz",
       color: 'terminal-accent',
@@ -80,7 +80,7 @@ export default function Home() {
     },
     {
       date: 'Şub 2025',
-      title: 'FLARE — İlk Prototip',
+      title: 'ConcreteWeb — İlk Prototip',
       desc: '6 Şubat depreminden ilham aldım. LoRa 868 MHz ile enkaz altı beacon simülasyonu geliştirdim.',
       tag: '📡 LoRa / IoT',
       active: true
@@ -108,7 +108,7 @@ export default function Home() {
     },
     {
       date: '2025 →',
-      title: 'FLARE Donanım Prototipi',
+      title: 'ConcreteWeb Donanım Prototipi',
       desc: 'ESP32 + LoRa modülü ile fiziksel prototip. AGÜ kampüsünde menzil testi planlanıyor.',
       tag: '🔩 Sonraki Adım',
       active: false
@@ -263,7 +263,7 @@ export default function Home() {
               🚀 Live Project Simulations
             </h3>
             <p className="text-gray-400 text-center mb-8">
-              FLARE beacon tracker ve DCE-SOFC motor simülasyonları - gerçek zamanlı çalışıyor!
+              ConcreteWeb beacon tracker ve DCE-SOFC motor simülasyonları - gerçek zamanlı çalışıyor!
             </p>
             <LiveProjectDemos />
           </div>

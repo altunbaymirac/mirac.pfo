@@ -81,16 +81,16 @@ Bu proje bana product thinking'i öğretti. Bir marketplace'te kullanıcı güve
   },
   {
     slug: 'flare-6-subat',
-    title: 'FLARE: 6 Şubat\'tan Doğan Fikir',
+    title: 'ConcreteWeb: 6 Şubat\'tan Doğan Fikir',
     date: '2025-01-10',
     readTime: '8 min',
-    tags: ['FLARE', 'Engineering', 'Disaster Response'],
-    excerpt: '6 Şubat depremini Malatya\'da yaşadım. Enkaz altında ses dinlemenin ne kadar yetersiz olduğunu gördüm. İşte FLARE böyle doğdu.',
+    tags: ['ConcreteWeb', 'Engineering', 'Disaster Response'],
+    excerpt: '6 Şubat depremini Malatya\'da yaşadım. Enkaz altında ses dinlemenin ne kadar yetersiz olduğunu gördüm. İşte ConcreteWeb böyle doğdu.',
     projectLinks: [
       { label: 'Canlı Demo', href: '/demos/flare' }
     ],
     content: `
-# FLARE: 6 Şubat'tan Doğan Fikir
+# ConcreteWeb: 6 Şubat'tan Doğan Fikir
 
 6 Şubat 2023. Hatay, Kahramanmaraş, Malatya ve onlarca şehir binlerce ton betonun altında kaldı. Ben de o sabah Malatya'da depremi yaşadım.
 
@@ -104,7 +104,7 @@ Arama-kurtarma ekiplerini izledim. Yaptıkları tek şey **ses dinlemekti**. Enk
 
 ## Çözüm: Dijital Çığlık
 
-FLARE'in pasif kurtarma özelliği tam da bu problemi çözüyor:
+ConcreteWeb'in pasif kurtarma özelliği tam da bu problemi çözüyor:
 
 \`\`\`javascript
 // Otomatik deprem algılama

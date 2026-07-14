@@ -26,7 +26,7 @@ export default function FLARESimulator() {
       <div className="flex items-center justify-between">
         <h3 className="text-xl font-bold text-terminal-accent flex items-center gap-2">
           <Radio size={24} />
-          FLARE Beacon Simulator
+          ConcreteWeb Beacon Simulator
         </h3>
         <motion.button
           whileHover={{ scale: 1.05 }}

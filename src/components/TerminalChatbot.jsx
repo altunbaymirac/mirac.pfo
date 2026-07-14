@@ -10,10 +10,10 @@ const RESPONSES = {
   ],
   
   projects: {
-    flare: "🔥 FLARE: LoRa tabanlı acil durum iletişim sistemi. 6 Şubat depreminden ilham aldı. Mesh network, GPS tracking ve beacon sistemli. /demos/flare'de canlı demo var!",
+    flare: "🔥 ConcreteWeb: LoRa tabanlı acil durum iletişim sistemi. 6 Şubat depreminden ilham aldı. Mesh network, GPS tracking ve beacon sistemli. /demos/flare'de canlı demo var!",
     dce: "⚡ DCE-SOFC: Amonyak yakıtlı hibrid deniz taşıtı. Sıfır CO₂ emisyonu! Arrhenius kimyası ve yakıt hücresi teknolojisi. /demos/dce-sofc'de simülasyon var!",
     geosocial: "📱 GeoSocial: Lokasyon tabanlı sosyal network. React Native + Firebase. GPS tracking ve check-in sistemi. /demos/geosocial'da mockup var!",
-    all: "Mirac 3 büyük proje üzerinde çalışıyor:\n\n1. FLARE - Acil durum LoRa sistemi\n2. DCE-SOFC - Amonyak hibrid motor\n3. GeoSocial - Lokasyon sosyal app\n\nHangisi hakkında detay istersin?"
+    all: "Mirac 3 büyük proje üzerinde çalışıyor:\n\n1. ConcreteWeb - Acil durum LoRa sistemi\n2. DCE-SOFC - Amonyak hibrid motor\n3. GeoSocial - Lokasyon sosyal app\n\nHangisi hakkında detay istersin?"
   },
   
   education: "🎓 Mirac, Abdullah Gül Üniversitesi (AGÜ) Makine Mühendisliği 1. sınıf öğrencisi. Kayseri'de okuyor.",
@@ -32,7 +32,7 @@ const RESPONSES = {
     "Anlamadım 🤔 'help' yaz, sana yardımcı olayım!"
   ],
   
-  help: "💡 Şunları sorabilirsin:\n\n• 'projeler' - FLARE, DCE, GeoSocial\n• 'flare' - FLARE projesi detay\n• 'eğitim' veya 'okul' - Üniversite bilgisi\n• 'iletişim' - Email, sosyal medya\n• 'beceriler' veya 'skills' - Teknik yetenekler\n• 'oyunlar' - Mini games\n• 'cv' - CV indirme"
+  help: "💡 Şunları sorabilirsin:\n\n• 'projeler' - ConcreteWeb, DCE, GeoSocial\n• 'concreteweb' - ConcreteWeb projesi detay\n• 'eğitim' veya 'okul' - Üniversite bilgisi\n• 'iletişim' - Email, sosyal medya\n• 'beceriler' veya 'skills' - Teknik yetenekler\n• 'oyunlar' - Mini games\n• 'cv' - CV indirme"
 }
 
 const getResponse = (message) => {
@@ -49,7 +49,7 @@ const getResponse = (message) => {
   }
   
   // Projects
-  if (/(flare|lora|deprem|earthquake|sos|beacon)/i.test(msg)) {
+  if (/(concreteweb|flare|lora|deprem|earthquake|sos|beacon)/i.test(msg)) {
     return RESPONSES.projects.flare
   }
   if (/(dce|sofc|amonyak|ammonia|yakıt|fuel|hibrid)/i.test(msg)) {
@@ -103,7 +103,7 @@ export default function TerminalChatbot() {
   const [isTyping, setIsTyping] = useState(false)
   const [suggestions] = useState([
     'projeler',
-    'flare nedir?',
+    'ConcreteWeb nedir?',
     'iletişim',
     'cv',
     'oyunlar'

@@ -224,7 +224,7 @@ export default function FLAREDemoPage() {
               <Radio className="text-terminal-accent" size={40} />
               <div>
                 <h1 className="text-3xl md:text-4xl font-bold text-terminal-accent neon-glow">
-                  FLARE Emergency System
+                  ConcreteWeb Emergency System
                 </h1>
                 <p className="text-gray-400 text-sm md:text-base">
                   LoRa 868 MHz Mesh Network Beacon Simulator
@@ -365,7 +365,7 @@ export default function FLAREDemoPage() {
               </div>
 
               <div>
-                <h4 className="font-bold text-terminal-accent mb-2">📡 How FLARE Works</h4>
+                <h4 className="font-bold text-terminal-accent mb-2">📡 How ConcreteWeb Works</h4>
                 <ul className="space-y-1">
                   <li>▸ <strong>Auto-Activation</strong> - Beacons wake on earthquake detection</li>
                   <li>▸ <strong>LoRa 868 MHz</strong> - Penetrates concrete and debris</li>

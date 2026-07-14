@@ -10,13 +10,13 @@ export const translations = {
     },
     home: {
       subtitle: 'Engineering Student',
-      bio: 'Built FLARE (rubble LoRa beacon), DCE-SOFC digital twin, Takaslat marketplace and FedaGrup corporate site. 1st-year Mechanical Engineering at AGÜ — learning by building.',
+      bio: 'Built ConcreteWeb (rubble LoRa beacon), DCE-SOFC digital twin, Takaslat marketplace and FedaGrup corporate site. 1st-year Mechanical Engineering at AGÜ — learning by building.',
       btnProjects: 'VIEW PROJECTS',
       btnContact: 'CONTACT',
       featuredTitle: 'Featured Projects',
       skillsTitle: 'Technical Skills',
       ctaTitle: "Let's Talk Projects",
-      ctaDesc: 'Reach out if you want to chat about FLARE, DCE-SOFC or anything else.',
+      ctaDesc: 'Reach out if you want to chat about ConcreteWeb, DCE-SOFC or anything else.',
       ctaBtn: 'GET IN TOUCH',
       cvBtn: 'DOWNLOAD CV',
       stats: [
@@ -53,13 +53,13 @@ export const translations = {
     },
     home: {
       subtitle: 'Engineering Student',
-      bio: 'FLARE (enkaz altı LoRa beacon), DCE-SOFC dijital ikiz, Takaslat marketplace ve FedaGrup kurumsal sitesi üzerinde çalıştım. AGÜ Makine Mühendisliği 1. sınıf, yaparak öğreniyorum.',
+      bio: 'ConcreteWeb (enkaz altı LoRa beacon), DCE-SOFC dijital ikiz, Takaslat marketplace ve FedaGrup kurumsal sitesi üzerinde çalıştım. AGÜ Makine Mühendisliği 1. sınıf, yaparak öğreniyorum.',
       btnProjects: 'PROJELERİ GÖR',
       btnContact: 'İLETİŞİM',
       featuredTitle: 'Öne Çıkan Projeler',
       skillsTitle: 'Teknik Beceriler',
       ctaTitle: 'Projeler Hakkında Konuşalım',
-      ctaDesc: 'FLARE, DCE-SOFC veya başka bir proje hakkında sohbet etmek istersen yazabilirsin.',
+      ctaDesc: 'ConcreteWeb, DCE-SOFC veya başka bir proje hakkında sohbet etmek istersen yazabilirsin.',
       ctaBtn: 'İLETİŞİME GEÇ',
       cvBtn: 'CV İNDİR',
       stats: [

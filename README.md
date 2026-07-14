@@ -4,13 +4,13 @@ Modern, terminal-themed portfolio website with live project demonstrations.
 
 ## 🚀 Features
 
-- ✅ **FLARE Advanced Simulator** - Interactive LoRa beacon tracking with Leaflet maps
+- ✅ **ConcreteWeb Advanced Simulator** - Interactive LoRa beacon tracking with Leaflet maps
 - ✅ **DCE-SOFC Digital Twin** - Real thermodynamic simulation with Recharts graphs + P&ID
 - ✅ **Firebase Visitor Counter** - Real-time analytics
 - ✅ **3D Beacon Model** - Three.js interactive visualization
 - ✅ **Mobile Responsive** - Hamburger menu + touch-friendly
 - ✅ **Blog System** - Technical articles with syntax highlighting
-- ✅ **Projects Showcase** - FLARE, DCE-SOFC, GeoSocial
+- ✅ **Projects Showcase** - ConcreteWeb, DCE-SOFC, GeoSocial
 
 ## 📦 Installation
 

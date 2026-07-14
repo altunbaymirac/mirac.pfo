@@ -6,7 +6,7 @@ import { Maximize2, Minimize2, ExternalLink, Code } from 'lucide-react'
 const DEMOS = [
   {
     id: 'flare',
-    title: 'FLARE Emergency System',
+    title: 'ConcreteWeb Emergency System',
     description: 'LoRa-based disaster communication simulation',
     tech: ['React', 'Leaflet', 'LoRa Protocol'],
     url: '/demos/flare',

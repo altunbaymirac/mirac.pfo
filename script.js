@@ -197,7 +197,7 @@ const commands = {
     projects: () => [
         '> ACTIVE PROJECTS:',
         '',
-        '[1] FLARE - Emergency Mesh Network',
+        '[1] ConcreteWeb - Emergency Mesh Network',
         '    LoRa tabanlı acil durum haberleşme sistemi',
         '    Status: IN DEVELOPMENT',
         '',

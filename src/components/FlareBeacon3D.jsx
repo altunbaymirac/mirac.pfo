@@ -105,7 +105,7 @@ function BeaconDevice({ isTransmitting }) {
         anchorX="center"
         anchorY="middle"
       >
-        FLARE BEACON
+        ConcreteWeb BEACON
       </Text>
     </group>
   )
@@ -125,7 +125,7 @@ export default function FlareBeacon3D() {
       <div className="absolute top-0 left-0 right-0 z-10 bg-terminal-bg/80 backdrop-blur-sm p-3 border-b-2 border-terminal-text">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-terminal-text font-bold text-lg neon-glow">3D FLARE BEACON</h3>
+            <h3 className="text-terminal-text font-bold text-lg neon-glow">3D ConcreteWeb BEACON</h3>
             <p className="text-xs text-gray-500">Interactive Model - Drag to rotate</p>
           </div>
           <motion.button

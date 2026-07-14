@@ -114,7 +114,7 @@ export default function FLAREAdvancedSimulator() {
             <Radio className="text-terminal-accent" size={28} />
             <div>
               <h3 className="text-xl font-bold text-terminal-accent">
-                FLARE Emergency Network
+                ConcreteWeb Emergency Network
               </h3>
               <p className="text-xs text-gray-500">LoRa Mesh Beacon Simulator</p>
             </div>

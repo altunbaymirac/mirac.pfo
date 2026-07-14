@@ -68,7 +68,7 @@ export default function CV() {
           {/* About */}
           <Section icon={<Code size={18} />} title="Hakkımda / About">
             <p className="text-gray-300 leading-relaxed print:text-gray-700">
-              Abdullah Gül Üniversitesi Makine Mühendisliği 1. sınıf öğrencisiyim. Yazılım geliştirme ve mühendislik simülasyonlarına ilgi duyuyorum. 6 Şubat depreminden ilham alarak FLARE adlı enkaz altı LoRa beacon sistemini tasarladım; amonyak yakıtlı gemi tahrik sistemleri için termodinamik simülasyon geliştirdim. Öğrenirken yapmayı, yaparken öğrenmeyi tercih ediyorum.
+              Abdullah Gül Üniversitesi Makine Mühendisliği 1. sınıf öğrencisiyim. Yazılım geliştirme ve mühendislik simülasyonlarına ilgi duyuyorum. 6 Şubat depreminden ilham alarak ConcreteWeb adlı enkaz altı LoRa beacon sistemini tasarladım; amonyak yakıtlı gemi tahrik sistemleri için termodinamik simülasyon geliştirdim. Öğrenirken yapmayı, yaparken öğrenmeyi tercih ediyorum.
             </p>
           </Section>
 
@@ -85,7 +85,7 @@ export default function CV() {
           {/* Projects */}
           <Section icon={<Briefcase size={18} />} title="Projeler / Projects">
             <CVItem
-              title="FLARE — Enkaz Altı Acil İletişim Sistemi"
+              title="ConcreteWeb — Enkaz Altı Acil İletişim Sistemi"
               date="Şub 2025 – Devam ediyor"
               details={[
                 'LoRa 868 MHz mesh network ile enkaz altından otomatik SOS sinyali',

@@ -10,7 +10,7 @@
 
 ## 🎯 Özellik Kontrolü
 
-### FLARE Demo (/demos/flare)
+### ConcreteWeb Demo (/demos/flare)
 - [x] Interactive Leaflet map
 - [x] Beacon spawn simulation
 - [x] Mesh network visualization (purple lines)
@@ -56,7 +56,7 @@
 - [x] Eski basit simulators
 
 ## ✨ Toplam Özellikler
-1. **FLARE**: Mesh network + interactive map
+1. **ConcreteWeb**: Mesh network + interactive map
 2. **DCE-SOFC**: Animated P&ID + modern charts
 3. **GeoSocial**: Full Android mockup + GPS
 4. **Firebase**: Visitor counter

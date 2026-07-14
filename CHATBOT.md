@@ -15,7 +15,7 @@
 ## 💬 NE YAPAR?
 
 Mirac hakkında bilgi verir:
-- ✅ Projeler (FLARE, DCE-SOFC, GeoSocial)
+- ✅ Projeler (ConcreteWeb, DCE-SOFC, GeoSocial)
 - ✅ Eğitim bilgileri (AGÜ, Mechanical Eng)
 - ✅ İletişim (Email, GitHub, LinkedIn, Instagram)
 - ✅ Beceriler (React, LoRa, Firebase, etc.)
@@ -35,7 +35,7 @@ Mirac hakkında bilgi verir:
 ### Örnek Sorular:
 ```
 "projeler"          → Tüm projeler hakkında bilgi
-"flare nedir?"      → FLARE detayları
+"ConcreteWeb nedir?" → ConcreteWeb detayları
 "iletişim"          → Email, sosyal medya
 "cv"                → CV indirme linki
 "oyunlar"           → Mini games bilgisi
@@ -53,7 +53,7 @@ Mirac hakkında bilgi verir:
 /(merhaba|selam|hey|hi|hello)/i
 
 // Projects
-/(flare|lora|deprem)/i          → FLARE info
+/(concreteweb|flare|lora|deprem)/i → ConcreteWeb info
 /(dce|sofc|amonyak)/i           → DCE-SOFC info
 /(geosocial|gps|lokasyon)/i     → GeoSocial info
 
