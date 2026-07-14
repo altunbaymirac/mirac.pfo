@@ -7,7 +7,7 @@ export default function FLARESimulator() {
   const [battery, setBattery] = useState(100)
   const [signalStrength, setSignalStrength] = useState(0)
   const [beaconCount, setBeaconCount] = useState(0)
-  const [location, setLocation] = useState({ lat: 38.7225, lng: 35.4864 }) // Kayseri
+  const [registry] = useState({ buildingId: 'BLD-04', floor: 3, installedLocation: 'Bedroom A' })
 
   useEffect(() => {
     if (isActive) {
@@ -26,7 +26,7 @@ export default function FLARESimulator() {
       <div className="flex items-center justify-between">
         <h3 className="text-xl font-bold text-terminal-accent flex items-center gap-2">
           <Radio size={24} />
-          ConcreteWeb Beacon Simulator
+          ConcreteWeb Beacon Report Simulator
         </h3>
         <motion.button
           whileHover={{ scale: 1.05 }}
@@ -38,7 +38,7 @@ export default function FLARESimulator() {
               : 'bg-green-500 border-green-500 text-white'
           }`}
         >
-          {isActive ? 'DEACTIVATE' : 'ACTIVATE SOS'}
+          {isActive ? 'DEACTIVATE' : 'SEND LIFE SIGN'}
         </motion.button>
       </div>
 
@@ -77,10 +77,10 @@ export default function FLARESimulator() {
         <div className="bg-terminal-bg border border-terminal-border p-3 md:p-4">
           <div className="flex items-center gap-2 text-gray-400 text-xs mb-2">
             <MapPin size={14} />
-            <span>GPS</span>
+            <span>Registry</span>
           </div>
           <div className="text-xs font-mono text-terminal-text">
-            {location.lat.toFixed(4)}, {location.lng.toFixed(4)}
+            {registry.buildingId} / Floor {registry.floor} / {registry.installedLocation}
           </div>
         </div>
       </div>
@@ -121,8 +121,8 @@ export default function FLARESimulator() {
       <div className="bg-terminal-bg border-2 border-terminal-accent p-4">
         <p className="text-terminal-accent font-mono text-sm">
           {isActive 
-            ? `📡 Broadcasting SOS signal on 868 MHz... Beacon #${beaconCount}` 
-            : '⏸️ Beacon standby mode. Press ACTIVATE SOS to start.'}
+            ? `Broadcasting life sign report on 868 MHz... Beacon #${beaconCount}` 
+            : 'Beacon standby mode. Press SEND LIFE SIGN to start.'}
         </p>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom'
+import { Navigate, Routes, Route, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useEffect } from 'react'
 import Navigation from './components/Navigation'
@@ -10,7 +10,7 @@ import BlogPost from './pages/BlogPost'
 import Projects from './pages/Projects'
 import Analytics from './pages/Analytics'
 import Contact from './pages/Contact'
-import FLAREDemo from './pages/FLAREDemo'
+import ConcreteWebDemo from './pages/ConcreteWebDemo'
 import DCESOFCDemo from './pages/DCESOFCDemo'
 import GeoSocialDemo from './pages/GeoSocialDemo'
 import MiniGames from './pages/MiniGames'
@@ -19,6 +19,12 @@ import CV from './pages/CV'
 import MatrixRain from './components/MatrixRain'
 
 function App() {
+  const location = useLocation()
+  const searchParams = new URLSearchParams(location.search)
+  const isConcreteWebPresentation =
+    (location.pathname === '/demos/concreteweb' || location.pathname === '/demos/flare') &&
+    (searchParams.get('presentation') === '1' || searchParams.get('mode') === 'presentation')
+
   // Google Analytics page view tracking
   useEffect(() => {
     // Google Analytics varsa sayfa görüntüleme kaydı
@@ -32,9 +38,9 @@ function App() {
   return (
     <ErrorBoundary>
       <div className="relative min-h-screen bg-terminal-bg">
-        <MatrixRain />
-        <Navigation />
-        <TerminalChatbot />
+        {!isConcreteWebPresentation && <MatrixRain />}
+        {!isConcreteWebPresentation && <Navigation />}
+        {!isConcreteWebPresentation && <TerminalChatbot />}
         
         <motion.div
           initial={{ opacity: 0 }}
@@ -49,7 +55,8 @@ function App() {
             <Route path="/projects" element={<Projects />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/demos/flare" element={<FLAREDemo />} />
+            <Route path="/demos/concreteweb" element={<ConcreteWebDemo />} />
+            <Route path="/demos/flare" element={<Navigate to={`/demos/concreteweb${location.search}`} replace />} />
             <Route path="/demos/dce-sofc" element={<DCESOFCDemo />} />
             <Route path="/demos/geosocial" element={<GeoSocialDemo />} />
             <Route path="/demos/takasla" element={<TakaslaPreview />} />

@@ -80,14 +80,14 @@ Bu proje bana product thinking'i öğretti. Bir marketplace'te kullanıcı güve
 `
   },
   {
-    slug: 'flare-6-subat',
+    slug: 'concreteweb-6-subat',
     title: 'ConcreteWeb: 6 Şubat\'tan Doğan Fikir',
     date: '2025-01-10',
     readTime: '8 min',
     tags: ['ConcreteWeb', 'Engineering', 'Disaster Response'],
     excerpt: '6 Şubat depremini Malatya\'da yaşadım. Enkaz altında ses dinlemenin ne kadar yetersiz olduğunu gördüm. İşte ConcreteWeb böyle doğdu.',
     projectLinks: [
-      { label: 'Canlı Demo', href: '/demos/flare' }
+      { label: 'Canlı Demo', href: '/demos/concreteweb' }
     ],
     content: `
 # ConcreteWeb: 6 Şubat'tan Doğan Fikir
@@ -111,9 +111,11 @@ ConcreteWeb'in pasif kurtarma özelliği tam da bu problemi çözüyor:
 if (accelerometer.detectEarthquake()) {
   beacon.wakeUp();
   beacon.transmit({
-    status: 'SOS',
-    location: GPS.getPosition(),
-    signal: 'ENCRYPTED_LORA_PACKET'
+    status: 'broadcast_only',
+    beaconId: registry.beaconId,
+    buildingId: registry.buildingId,
+    installedLocation: registry.installedLocation,
+    signal: 'LORA_REPORT_PACKET'
   });
 }
 \`\`\`
@@ -121,13 +123,13 @@ if (accelerometer.detectEarthquake()) {
 İnsan **hiçbir şey yapmasa bile**, cihaz otomatik olarak:
 1. Depremi algılar (MPU6050 ivmeölçer)
 2. Kendini uyandırır (deep sleep'ten)
-3. GPS konumunu yayar (LoRa mesh ağı ile)
-4. SOS sinyali gönderir (1-3 km menzil)
+3. Kurulumda kaydedilen bina, kat ve oda bilgisini rapora ekler
+4. Beacon raporunu binadaki tek HUB'a iletir
 
 ## Teknik Detaylar
 
-- **Teknoloji:** LoRa 868 MHz (beton delici)
-- **Menzil:** Şehir içi 1-3 km, açık alan 10+ km
+- **Teknoloji:** 868 MHz LoRa tabanlı HUB store-and-forward mesh
+- **Konum modeli:** Beacon GPS kullanmaz; kurulum kaydı bina, kat ve oda konumunu tutar
 - **Pil Ömrü:** Pasif modda yıllarca
 - **Maliyet:** ~$50 per beacon
 

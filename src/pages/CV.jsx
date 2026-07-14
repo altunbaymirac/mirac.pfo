@@ -88,10 +88,10 @@ export default function CV() {
               title="ConcreteWeb — Enkaz Altı Acil İletişim Sistemi"
               date="Şub 2025 – Devam ediyor"
               details={[
-                'LoRa 868 MHz mesh network ile enkaz altından otomatik SOS sinyali',
-                'MPU6050 ivmeölçer ile deprem algılama, GPS konum yayını',
-                'React + Leaflet ile canlı beacon tracker simülasyonu',
-                'Menzil: şehir içi 1-3 km, açık alan 10+ km'
+                'Bina başına tek HUB ile 868 MHz LoRa store-and-forward mesh mimarisi',
+                'Beacon ID, bina, kat ve yatak odası kurulum konumunu eşleştiren GPSsiz kayıt modeli',
+                'React + Leaflet ile bina HUB haritası ve Station triyaj simülasyonu',
+                'Confirmed alive, vibration detected, broadcast only, safe ve silent node önceliklendirmesi'
               ]}
             />
             <CVItem

@@ -116,7 +116,7 @@ export default function FLAREAdvancedSimulator() {
               <h3 className="text-xl font-bold text-terminal-accent">
                 ConcreteWeb Emergency Network
               </h3>
-              <p className="text-xs text-gray-500">LoRa Mesh Beacon Simulator</p>
+              <p className="text-xs text-gray-500">LoRa HUB Mesh Report Simulator</p>
             </div>
           </div>
 
@@ -226,7 +226,7 @@ export default function FLAREAdvancedSimulator() {
               <Popup>
                 <div className="text-sm">
                   <strong className={beacon.status === 'rescued' ? 'text-green-500' : 'text-orange-500'}>
-                    {beacon.status === 'rescued' ? '✓ Rescued' : '⚠ Active SOS'}
+                    {beacon.status === 'rescued' ? 'Cleared' : 'Life sign report'}
                   </strong><br/>
                   Battery: {beacon.battery}%<br/>
                   RSSI: {beacon.rssi.toFixed(0)} dBm<br/>

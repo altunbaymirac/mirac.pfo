@@ -1,7 +1,7 @@
 # ✅ FINAL TEST CHECKLIST
 
 ## 📁 Dosya Varlık Kontrolü
-- [x] src/pages/FLAREDemo.jsx (460 satır - Mesh Network)
+- [x] src/pages/ConcreteWebDemo.jsx (Mesh & Triage Simulation)
 - [x] src/pages/DCESOFCDemo.jsx (290 satır - Animated P&ID)
 - [x] src/pages/GeoSocialDemo.jsx (yeni - Android Mockup)
 - [x] src/App.jsx (routes güncellendi)
@@ -10,7 +10,7 @@
 
 ## 🎯 Özellik Kontrolü
 
-### ConcreteWeb Demo (/demos/flare)
+### ConcreteWeb Demo (/demos/concreteweb)
 - [x] Interactive Leaflet map
 - [x] Beacon spawn simulation
 - [x] Mesh network visualization (purple lines)
@@ -20,7 +20,7 @@
 - [x] Mesh Links counter
 - [x] Play/Pause/Reset controls
 - [x] How to Use collapsible panel
-- [x] Rescue beacon functionality
+- [x] Station triage queue functionality
 
 ### DCE-SOFC Demo (/demos/dce-sofc)
 - [x] Animated P&ID diagram
@@ -36,7 +36,7 @@
 
 ### GeoSocial Demo (/demos/geosocial)
 - [x] Android phone frame mockup
-- [x] GPS tracking simulation
+- [x] Building registry and HUB map simulation
 - [x] Real-time location updates
 - [x] Check-in system
 - [x] Nearby users detection

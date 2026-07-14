@@ -10,7 +10,7 @@ const RESPONSES = {
   ],
   
   projects: {
-    flare: "🔥 ConcreteWeb: LoRa tabanlı acil durum iletişim sistemi. 6 Şubat depreminden ilham aldı. Mesh network, GPS tracking ve beacon sistemli. /demos/flare'de canlı demo var!",
+    concreteweb: "ConcreteWeb: Building-level LoRa HUB mesh and rescue triage simulation. Beacons are registered to rooms during installation and do not report GPS. /demos/concreteweb has the live demo.",
     dce: "⚡ DCE-SOFC: Amonyak yakıtlı hibrid deniz taşıtı. Sıfır CO₂ emisyonu! Arrhenius kimyası ve yakıt hücresi teknolojisi. /demos/dce-sofc'de simülasyon var!",
     geosocial: "📱 GeoSocial: Lokasyon tabanlı sosyal network. React Native + Firebase. GPS tracking ve check-in sistemi. /demos/geosocial'da mockup var!",
     all: "Mirac 3 büyük proje üzerinde çalışıyor:\n\n1. ConcreteWeb - Acil durum LoRa sistemi\n2. DCE-SOFC - Amonyak hibrid motor\n3. GeoSocial - Lokasyon sosyal app\n\nHangisi hakkında detay istersin?"
@@ -50,7 +50,7 @@ const getResponse = (message) => {
   
   // Projects
   if (/(concreteweb|flare|lora|deprem|earthquake|sos|beacon)/i.test(msg)) {
-    return RESPONSES.projects.flare
+    return RESPONSES.projects.concreteweb
   }
   if (/(dce|sofc|amonyak|ammonia|yakıt|fuel|hibrid)/i.test(msg)) {
     return RESPONSES.projects.dce

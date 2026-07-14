@@ -5,13 +5,13 @@ import { Maximize2, Minimize2, ExternalLink, Code } from 'lucide-react'
 
 const DEMOS = [
   {
-    id: 'flare',
-    title: 'ConcreteWeb Emergency System',
-    description: 'LoRa-based disaster communication simulation',
+    id: 'concreteweb',
+    title: 'ConcreteWeb Mesh & Triage',
+    description: 'Building HUB mesh and rescue triage simulation',
     tech: ['React', 'Leaflet', 'LoRa Protocol'],
-    url: '/demos/flare',
+    url: '/demos/concreteweb',
     color: 'terminal-accent',
-    features: ['Interactive Map', 'Beacon Tracking', 'Mesh Network', 'How to Use Guide'],
+    features: ['Building HUB Map', 'Triage Queue', 'Heartbeat Status', 'Registered Beacon Zones'],
     status: 'Live Demo'
   },
   {

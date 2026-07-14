@@ -31,7 +31,7 @@ export default function Home() {
       tag: 'Emergency Communication',
       description: "6 Şubat'tan sonra aklıma gelen bir fikir: LoRa ile çalışan, enkaz altından sinyal yollayan bir cihaz",
       color: 'terminal-accent',
-      link: '/demos/flare',
+      link: '/demos/concreteweb',
       stats: ['868 MHz', '1-3 km Range', 'Auto-Activation']
     },
     {

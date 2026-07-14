@@ -4,7 +4,7 @@ Modern, terminal-themed portfolio website with live project demonstrations.
 
 ## 🚀 Features
 
-- ✅ **ConcreteWeb Advanced Simulator** - Interactive LoRa beacon tracking with Leaflet maps
+- ✅ **ConcreteWeb Mesh & Triage Simulator** - Building HUB map, registered beacon zones, and Station triage queue
 - ✅ **DCE-SOFC Digital Twin** - Real thermodynamic simulation with Recharts graphs + P&ID
 - ✅ **Firebase Visitor Counter** - Real-time analytics
 - ✅ **3D Beacon Model** - Three.js interactive visualization

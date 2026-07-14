@@ -90,7 +90,7 @@ Deployment sonrası bu sayfaları test et:
 ```
 https://miracpfo.vercel.app/
 https://miracpfo.vercel.app/analytics       ← F5 bas, çalışmalı!
-https://miracpfo.vercel.app/demos/flare     ← F5 bas, çalışmalı!
+https://miracpfo.vercel.app/demos/concreteweb     ← F5 bas, çalışmalı!
 https://miracpfo.vercel.app/games           ← F5 bas, çalışmalı!
 ```
 

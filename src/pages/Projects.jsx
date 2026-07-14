@@ -10,7 +10,7 @@ const PROJECTS = [
     type: 'Emergency Communication',
     description: 'LoRa tabanlı afet sonrası enkaz altı sinyal ve mesh network simülasyonu.',
     tech: ['LoRa', 'React', 'Leaflet'],
-    href: '/demos/flare',
+    href: '/demos/concreteweb',
     color: 'terminal-accent'
   },
   {
