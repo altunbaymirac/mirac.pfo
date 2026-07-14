@@ -1,5 +1,6 @@
 /* ═══════════════════════════════════════════════════════════════════════════════
-   FLARE MESH NETWORK SIMULATOR v2.0 - ENGINE
+   ConcreteWeb MESH NETWORK SIMULATOR v2.0 - ENGINE
+   Beacon · HUB · Station  |  Wake-on-Shake, LoRa 868 MHz, RSSI localization
    With Tutorial, Info System, and Comprehensive Explanations
 ═══════════════════════════════════════════════════════════════════════════════ */
 
@@ -18,11 +19,11 @@ const INFO_CONTENT = {
     scenario: {
         title: '📡 Senaryolar Hakkında',
         content: `
-            <p><strong>NORMAL:</strong> GSM çalışıyor, FLARE yedek olarak bekliyor.</p>
-            <p><strong>DEPREM:</strong> GSM altyapısı çökmüş! Baz istasyonları hasar görmüş. FLARE mesh ağı devreye giriyor.</p>
-            <p><strong>SEL:</strong> Kısmi altyapı hasarı. Bazı node'lar su altında kalmış.</p>
+            <p><strong>NORMAL:</strong> GSM çalışıyor, ConcreteWeb düşük güçte uykuda bekliyor.</p>
+            <p><strong>DEPREM:</strong> GSM altyapısı çökmüş! Beacon'lar Wake-on-Shake ile uyanır, ConcreteWeb mesh ağı devreye girer.</p>
+            <p><strong>SEL:</strong> Kısmi altyapı hasarı. Bazı HUB'lar su altında kalmış.</p>
             <hr>
-            <p>Deprem senaryosunda rastgele node'lar hasar görür ve mesajlar alternatif rotalardan iletilir.</p>
+            <p>Deprem senaryosunda rastgele HUB'lar hasar görür ve sinyal alternatif rotalardan iletilir.</p>
         `
     },
     lora: {
@@ -54,7 +55,7 @@ const INFO_CONTENT = {
             <p>• <strong>-110 dBm:</strong> Zayıf (sınırda)</p>
             <p>• <strong>-130 dBm:</strong> Bağlantı yok</p>
             <hr>
-            <p>FLARE sisteminde -110 dBm altındaki bağlantılar güvenilir sayılmaz.</p>
+            <p>ConcreteWeb sisteminde -110 dBm altındaki bağlantılar güvenilir sayılmaz.</p>
         `
     }
 };
@@ -137,7 +138,7 @@ function initEventListeners() {
 
 function initTutorial() {
     // Check if user has seen tutorial
-    const hasSeenTutorial = localStorage.getItem('flare-tutorial-seen');
+    const hasSeenTutorial = localStorage.getItem('concreteweb-tutorial-seen');
     
     if (!hasSeenTutorial) {
         showTutorial();
@@ -162,7 +163,7 @@ function showTutorial() {
 }
 
 function skipTutorial() {
-    localStorage.setItem('flare-tutorial-seen', 'true');
+    localStorage.setItem('concreteweb-tutorial-seen', 'true');
     document.getElementById('tutorial-overlay').classList.add('hidden');
 }
 
@@ -251,57 +252,64 @@ function hideTooltip() {
 function createInitialNodes() {
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
-    
-    addNodeAt(centerX, centerY - 80, 'gateway');
-    addNodeAt(centerX - 120, centerY + 20, 'node');
-    addNodeAt(centerX + 130, centerY + 30, 'node');
-    addNodeAt(centerX - 60, centerY + 120, 'node');
-    addNodeAt(centerX + 70, centerY + 100, 'node');
-    addNodeAt(centerX + 10, centerY + 180, 'survivor');
-    
-    log('SYSTEM', '6 node ile demo ağ oluşturuldu');
+
+    addNodeAt(centerX, centerY - 80, 'station');
+    addNodeAt(centerX - 120, centerY + 20, 'hub');
+    addNodeAt(centerX + 130, centerY + 30, 'hub');
+    addNodeAt(centerX - 60, centerY + 120, 'hub');
+    addNodeAt(centerX + 70, centerY + 100, 'hub');
+    addNodeAt(centerX + 10, centerY + 180, 'beacon');
+
+    log('SYSTEM', '1 Station + 4 HUB + 1 Beacon ile demo ağ oluşturuldu');
 }
 
 function addNode() {
     const x = 50 + Math.random() * (canvas.width - 100);
     const y = 50 + Math.random() * (canvas.height - 100);
-    addNodeAt(x, y, 'node');
+    addNodeAt(x, y, 'hub');
 }
 
 function addSurvivor() {
     const x = 50 + Math.random() * (canvas.width - 100);
     const y = 50 + Math.random() * (canvas.height - 100);
-    addNodeAt(x, y, 'survivor');
+    addNodeAt(x, y, 'beacon');
 }
 
-function addNodeAt(x, y, type = 'node') {
+// STATION-1 / HUB-2 / BEACON-3 gibi tek biçimli etiket
+function nodeLabel(node) {
+    const t = node.type === 'station' ? 'STATION' : node.type === 'beacon' ? 'BEACON' : 'HUB';
+    return `${t}-${node.id}`;
+}
+
+function addNodeAt(x, y, type = 'hub') {
     nodeIdCounter++;
     const node = {
         id: nodeIdCounter,
         x, y, type,
         active: true,
+        // Beacon triage durumu: 'broadcast' (yayında) | 'vibration' (Wake-on-Shake) | 'confirmed' (lokalize)
+        beaconState: type === 'beacon' ? 'broadcast' : null,
         rssi: -50,
         snr: 10,
         messagesReceived: 0,
         pulseRadius: 0,
         isPulsing: false
     };
-    
+
     state.nodes.push(node);
     updateConnections();
     updateStats();
-    
-    const typeLabel = type === 'gateway' ? 'GATEWAY' : type === 'survivor' ? 'KULLANICI' : 'NODE';
-    log('SYSTEM', `${typeLabel}-${node.id} ağa eklendi`);
-    
+
+    log('SYSTEM', `${nodeLabel(node)} ağa eklendi`);
+
     return node;
 }
 
 function toggleSelectedNode() {
     if (state.selectedNode) {
         state.selectedNode.active = !state.selectedNode.active;
-        const status = state.selectedNode.active ? 'AKTİF' : 'DEVRE DIŞI';
-        log('SYSTEM', `NODE-${state.selectedNode.id} → ${status}`);
+        const status = state.selectedNode.active ? 'ONLINE' : 'OFFLINE';
+        log('SYSTEM', `${nodeLabel(state.selectedNode)} → ${status}`);
         updateConnections();
         updateStats();
     }
@@ -319,6 +327,55 @@ function resetNetwork() {
     document.getElementById('log-display').innerHTML = '';
     log('SYSTEM', 'Ağ sıfırlandı');
     createInitialNodes();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────────
+// TIER 3: STATION SAHAYA GELDİ — BEACON VERİ ÇEKİMİ
+// AFAD/arama-kurtarma Station ünitesi gelir, menzildeki Beacon paketlerini RSSI'ye
+// göre sırayla çeker ve her birini LIFE CONFIRMED olarak lokalize eder.
+// ─────────────────────────────────────────────────────────────────────────────────
+
+function stationArrival() {
+    if (state.stationPulling) {
+        log('SYSTEM', 'Station zaten veri çekiyor...');
+        return;
+    }
+
+    // Sahada aktif bir Station var mı? Yoksa Tier 3 ünitesi sahaya intikal eder.
+    let station = state.nodes.find(n => n.type === 'station' && n.active);
+    if (!station) {
+        station = addNodeAt(canvas.width / 2, 60, 'station');
+        log('SYSTEM', `TIER 3: ${nodeLabel(station)} sahaya intikal etti`);
+    }
+    station.isPulsing = true;
+    station.pulseRadius = 0;
+
+    const beacons = state.nodes.filter(n => n.type === 'beacon' && n.active);
+    if (beacons.length === 0) {
+        log('ERROR', 'Menzilde aktif Beacon yok — önce [👤 BEACON EKLE] ile ekleyin');
+        return;
+    }
+
+    state.stationPulling = true;
+    log('SYSTEM', `TIER 3: ${nodeLabel(station)} veri çekimi başlıyor — ${beacons.length} Beacon hedefte`);
+
+    beacons.forEach((beacon, i) => {
+        setTimeout(() => {
+            beacon.beaconState = 'confirmed';
+            beacon.isPulsing = true;
+            beacon.pulseRadius = 0;
+            beacon.messagesReceived++;
+            log('SUCCESS', `STATION ← ${nodeLabel(beacon)} verisi çekildi (RSSI ${beacon.rssi} dBm → LIFE CONFIRMED)`);
+            updateStats();
+
+            if (i === beacons.length - 1) {
+                setTimeout(() => {
+                    log('SUCCESS', `✓ TIER 3 tamamlandı: ${beacons.length} Beacon lokalize edildi — yoğunluk haritası güncellendi`);
+                    state.stationPulling = false;
+                }, 500);
+            }
+        }, 600 * (i + 1));
+    });
 }
 
 // ─────────────────────────────────────────────────────────────────────────────────
@@ -415,7 +472,7 @@ function propagateMessage(sourceNode, text) {
     sourceNode.isPulsing = true;
     sourceNode.pulseRadius = 0;
     
-    log('PROPAGATION', `NODE-${sourceNode.id}'den mesaj: "${text.substring(0, 25)}${text.length > 25 ? '...' : ''}"`);
+    log('PROPAGATION', `${nodeLabel(sourceNode)} sinyal yayıyor: "${text.substring(0, 25)}${text.length > 25 ? '...' : ''}"`);
     propagateWave(message);
 }
 
@@ -439,7 +496,7 @@ function propagateWave(message) {
                 node.isPulsing = true;
                 node.pulseRadius = 0;
                 
-                log('PROPAGATION', `→ NODE-${node.id} mesajı aldı (HOP ${message.hops + 1})`);
+                log('PROPAGATION', `→ ${nodeLabel(node)} sinyali aldı (HOP ${message.hops + 1})`);
             }
         }
     }
@@ -454,7 +511,7 @@ function propagateWave(message) {
         const activeCount = state.nodes.filter(n => n.active).length;
         state.deliveredMessages += message.reachedNodes.size;
         
-        log('SUCCESS', `✓ Yayılım tamamlandı: ${message.reachedNodes.size}/${activeCount} node, ${message.hops} hop`);
+        log('SUCCESS', `✓ Yayılım tamamlandı: ${message.reachedNodes.size}/${activeCount} düğüm, ${message.hops} hop`);
         updatePropagationDisplay(message, true);
         updateStats();
         
@@ -503,6 +560,8 @@ function setScenario(scenario) {
             state.gsmOnline = true;
             systemStatus.textContent = 'STANDBY';
             systemStatus.classList.remove('active', 'emergency');
+            // Beacon'lar düşük güçte uykuda → yayına döner
+            state.nodes.forEach(n => { if (n.type === 'beacon') n.beaconState = 'broadcast'; });
             log('SYSTEM', 'Senaryo: Normal operasyon');
             break;
             
@@ -515,7 +574,14 @@ function setScenario(scenario) {
             systemStatus.textContent = 'EMERGENCY';
             systemStatus.classList.add('active', 'emergency');
             log('ERROR', '⚠️ DEPREM! GSM altyapısı çöktü!');
-            log('SYSTEM', 'FLARE mesh ağı aktif - Acil durum modu');
+            log('SYSTEM', 'ConcreteWeb mesh ağı aktif - Acil durum modu');
+            // Wake-on-Shake: ivmeölçerler sarsıntıyı algılar, Beacon'lar uyanır
+            state.nodes.forEach(n => {
+                if (n.type === 'beacon') {
+                    n.beaconState = 'vibration';
+                    log('SYSTEM', `${nodeLabel(n)} Wake-on-Shake ile uyandı → VIBRATION DETECTED`);
+                }
+            });
             simulateDamage(0.25);
             break;
             
@@ -538,9 +604,10 @@ function setScenario(scenario) {
 
 function simulateDamage(probability) {
     state.nodes.forEach(node => {
-        if (node.type !== 'gateway' && Math.random() < probability) {
+        // Station (AFAD alıcısı) ve Beacon'lar korunur; hasar HUB altyapısını vurur
+        if (node.type === 'hub' && Math.random() < probability) {
             node.active = false;
-            log('ERROR', `NODE-${node.id} hasar gördü`);
+            log('ERROR', `${nodeLabel(node)} hasar gördü → OFFLINE`);
         }
     });
 }
@@ -560,7 +627,7 @@ function handleCanvasClick(e) {
     
     if (state.nodeDisableMode && clickedNode) {
         clickedNode.active = !clickedNode.active;
-        log('SYSTEM', `NODE-${clickedNode.id} → ${clickedNode.active ? 'AKTİF' : 'DEVRE DIŞI'}`);
+        log('SYSTEM', `${nodeLabel(clickedNode)} → ${clickedNode.active ? 'ONLINE' : 'OFFLINE'}`);
         updateConnections();
         updateStats();
         return;
@@ -612,8 +679,7 @@ function selectNode(node) {
     state.selectedNode = node;
     document.getElementById('node-info').style.display = 'block';
     
-    const typeLabel = node.type === 'gateway' ? 'GATEWAY-' : node.type === 'survivor' ? 'USER-' : 'NODE-';
-    document.getElementById('selected-node-id').textContent = typeLabel + node.id;
+    document.getElementById('selected-node-id').textContent = nodeLabel(node);
     document.getElementById('node-rssi').textContent = node.rssi + ' dBm';
     document.getElementById('node-snr').textContent = node.snr + ' dB';
     document.getElementById('node-connections').textContent = state.connections.filter(c => c.from === node || c.to === node).length;
@@ -632,11 +698,11 @@ function toggleNodeMode() {
     if (state.nodeDisableMode) {
         btn.classList.add('active');
         document.getElementById('node-mode-text').textContent = '[✓ MODU KAPAT]';
-        document.getElementById('map-mode-indicator').textContent = '[NODE KAPAT MODU]';
+        document.getElementById('map-mode-indicator').textContent = '[HUB KAPAT MODU]';
         canvas.style.cursor = 'not-allowed';
     } else {
         btn.classList.remove('active');
-        document.getElementById('node-mode-text').textContent = '[🔴 NODE KAPAT MODU]';
+        document.getElementById('node-mode-text').textContent = '[🔴 HUB KAPAT MODU]';
         document.getElementById('map-mode-indicator').textContent = '';
         canvas.style.cursor = 'crosshair';
     }
@@ -738,27 +804,41 @@ function drawConnections() {
     }
 }
 
+// Bir düğümün rengini tip + (beacon ise) triage durumuna göre döndürür
+function nodeColor(node) {
+    if (!node.active) return { hex: '#333', rgb: '90, 90, 90' };
+    if (node.type === 'station') return { hex: '#00ff88', rgb: '0, 255, 136' };
+    if (node.type === 'hub') return { hex: '#d1ff00', rgb: '209, 255, 0' };
+    // beacon: durum katmanı
+    switch (node.beaconState) {
+        case 'confirmed': return { hex: '#00e5ff', rgb: '0, 229, 255' };   // LIFE CONFIRMED
+        case 'vibration': return { hex: '#ff9500', rgb: '255, 149, 0' };   // VIBRATION DETECTED
+        default:          return { hex: '#ffdd00', rgb: '255, 221, 0' };   // BROADCAST ONLY
+    }
+}
+
 function drawNodes() {
     for (const node of state.nodes) {
         const isSelected = state.selectedNode === node;
-        const size = node.type === 'gateway' ? 18 : node.type === 'survivor' ? 14 : 12;
-        
+        const size = node.type === 'station' ? 18 : node.type === 'beacon' ? 14 : 12;
+        const col = nodeColor(node);
+
         // Glow
         if (node.active) {
             const gradient = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, size + 10);
-            const color = node.type === 'gateway' ? '0, 255, 136' : node.type === 'survivor' ? '255, 221, 0' : '209, 255, 0';
-            gradient.addColorStop(0, `rgba(${color}, 0.3)`);
-            gradient.addColorStop(1, `rgba(${color}, 0)`);
+            gradient.addColorStop(0, `rgba(${col.rgb}, 0.3)`);
+            gradient.addColorStop(1, `rgba(${col.rgb}, 0)`);
             ctx.fillStyle = gradient;
             ctx.beginPath();
             ctx.arc(node.x, node.y, size + 10, 0, Math.PI * 2);
             ctx.fill();
         }
-        
+
         // Body
-        ctx.fillStyle = !node.active ? '#333' : node.type === 'gateway' ? '#00ff88' : node.type === 'survivor' ? '#ffdd00' : '#d1ff00';
-        
-        if (node.type === 'gateway') {
+        ctx.fillStyle = col.hex;
+
+        if (node.type === 'station') {
+            // Elmas (AFAD alıcısı)
             ctx.beginPath();
             ctx.moveTo(node.x, node.y - size);
             ctx.lineTo(node.x + size, node.y);
@@ -766,7 +846,8 @@ function drawNodes() {
             ctx.lineTo(node.x - size, node.y);
             ctx.closePath();
             ctx.fill();
-        } else if (node.type === 'survivor') {
+        } else if (node.type === 'beacon') {
+            // Üçgen (kişisel Beacon)
             ctx.beginPath();
             ctx.moveTo(node.x, node.y - size);
             ctx.lineTo(node.x + size, node.y + size);
@@ -774,11 +855,12 @@ function drawNodes() {
             ctx.closePath();
             ctx.fill();
         } else {
+            // Daire (binaya gömülü HUB)
             ctx.beginPath();
             ctx.arc(node.x, node.y, size, 0, Math.PI * 2);
             ctx.fill();
         }
-        
+
         // Selection ring
         if (isSelected) {
             ctx.strokeStyle = '#00d4ff';
@@ -787,14 +869,15 @@ function drawNodes() {
             ctx.arc(node.x, node.y, size + 5, 0, Math.PI * 2);
             ctx.stroke();
         }
-        
+
         // Label
-        ctx.fillStyle = node.active ? '#fff' : '#666';
+        ctx.fillStyle = node.active ? '#000' : '#666';
         ctx.font = 'bold 9px Courier New';
         ctx.textAlign = 'center';
-        ctx.fillText(node.type === 'gateway' ? 'GW' : node.type === 'survivor' ? '👤' : node.id, node.x, node.y + 3);
-        
-        // Inactive marker
+        const glyph = node.type === 'station' ? 'ST' : node.type === 'beacon' ? '👤' : node.id;
+        ctx.fillText(glyph, node.x, node.y + 3);
+
+        // Inactive (OFFLINE) marker
         if (!node.active) {
             ctx.fillStyle = '#ff3366';
             ctx.font = 'bold 12px Courier New';

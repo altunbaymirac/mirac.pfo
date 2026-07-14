@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════════════════════════
-   FLARE MESH NETWORK SIMULATOR v2.0 - STYLES
+   ConcreteWeb MESH NETWORK SIMULATOR v2.0 - STYLES
    With Tutorial, Tooltips, and Info Panels
 ═══════════════════════════════════════════════════════════════════════════════ */
 
@@ -634,6 +634,18 @@
     box-shadow: 0 0 10px rgba(209, 255, 0, 0.2);
 }
 
+.action-btn.tier3 {
+    border-color: #00e5ff;
+    color: #00e5ff;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+.action-btn.tier3:hover {
+    background: rgba(0, 229, 255, 0.12);
+    box-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+}
+
 .action-btn.danger {
     border-color: var(--danger-red);
     color: var(--danger-red);
@@ -728,27 +740,42 @@
     border-radius: 50%;
 }
 
-.legend-dot.node-gateway {
+/* STATION — AFAD alıcısı (yeşil elmas) */
+.legend-dot.node-station {
     background: #00ff88;
     box-shadow: 0 0 6px #00ff88;
-}
-
-.legend-dot.node-active {
-    background: var(--neon-green);
-    box-shadow: 0 0 6px var(--neon-green);
-}
-
-.legend-dot.node-inactive {
-    background: var(--danger-red);
-    opacity: 0.5;
-}
-
-.legend-dot.node-survivor {
-    background: var(--survivor-yellow);
     border-radius: 0;
     transform: rotate(45deg);
     width: 8px;
     height: 8px;
+}
+
+/* HUB — binaya gömülü toplayıcı (lime daire) */
+.legend-dot.node-hub {
+    background: var(--neon-green);
+    box-shadow: 0 0 6px var(--neon-green);
+}
+
+/* Beacon triage durumları */
+.legend-dot.beacon-confirmed {
+    background: #00e5ff;
+    box-shadow: 0 0 6px #00e5ff;
+}
+
+.legend-dot.beacon-vibration {
+    background: #ff9500;
+    box-shadow: 0 0 6px #ff9500;
+}
+
+.legend-dot.beacon-broadcast {
+    background: var(--survivor-yellow);
+    box-shadow: 0 0 6px var(--survivor-yellow);
+}
+
+/* OFFLINE — devre dışı düğüm */
+.legend-dot.node-offline {
+    background: #555;
+    opacity: 0.6;
 }
 
 .legend-line {

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FLARE MESH SIMULATOR | MIRAÇ ALTUNBAY</title>
+    <title>ConcreteWeb MESH SIMULATOR | MIRAÇ ALTUNBAY</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="flare-simulation.css">
 </head>
@@ -12,7 +12,7 @@
     <div class="terminal flare-terminal">
         <header>
             <div class="system-meta">
-                [SYSTEM: FLARE EMERGENCY MESH NETWORK] <br>
+                [SYSTEM: ConcreteWeb AUTONOMOUS MESH NETWORK] <br>
                 [UNIT: AGU MECHANICAL ENGINEERING] <br>
                 [STATUS: <span id="system-status">STANDBY</span>]
             </div>
@@ -26,26 +26,27 @@
         <div id="tutorial-overlay" class="tutorial-overlay">
             <div class="tutorial-content">
                 <div class="tutorial-header">
-                    <h2>🎓 FLARE SİMÜLATÖR REHBERİ</h2>
+                    <h2>🎓 ConcreteWeb SİMÜLATÖR REHBERİ</h2>
                     <button class="tutorial-skip" onclick="skipTutorial()">[ATLA]</button>
                 </div>
-                
+
                 <div class="tutorial-steps">
                     <div class="tutorial-step active" data-step="1">
-                        <div class="step-icon">📡</div>
-                        <h3>FLARE Nedir?</h3>
-                        <p>FLARE, deprem gibi afetlerde GSM altyapısı çöktüğünde <strong>LoRa tabanlı mesh ağ</strong> ile haberleşme sağlayan bir acil durum sistemidir.</p>
+                        <div class="step-icon">🧱</div>
+                        <h3>ConcreteWeb Nedir?</h3>
+                        <p>ConcreteWeb, depremde şebekeler çöktüğünde devreye giren, <strong>betonun içinden sinyal geçirebilen</strong>, bina bina örülen otonom bir acil durum iletişim ağıdır.</p>
                         <div class="step-detail">
-                            <strong>Gerçek Dünya Örneği:</strong><br>
-                            6 Şubat 2023 depreminde GSM kuleleri saatlerce çalışmadı. FLARE ile her telefon/cihaz bir "mini kule" olur ve mesajlar zincir şeklinde iletilir.
+                            <strong>Neyi çözüyoruz:</strong><br>
+                            Enkaz altındaki kişi çoğunlukla bilinci kapalıdır, bir tuşa basamaz. ConcreteWeb kimsenin bir eylem yapmasına gerek kalmadan, hiçbir altyapıya bağlı olmadan çalışır — enkaz altındaki kişiyi <strong>bulunur kılar</strong>.
                         </div>
                     </div>
-                    
+
                     <div class="tutorial-step" data-step="2">
-                        <div class="step-icon">🔗</div>
-                        <h3>Mesh Ağ Nasıl Çalışır?</h3>
-                        <p>Geleneksel ağlarda tüm cihazlar TEK bir baz istasyonuna bağlıdır. O düşerse → herkes kopuk.</p>
-                        <p>Mesh ağda her cihaz hem ALICI hem VERİCİ. Bir yol kapanırsa → alternatif yol bulunur.</p>
+                        <div class="step-icon">🧩</div>
+                        <h3>Üç Bileşen: Beacon · HUB · Station</h3>
+                        <p><strong>BEACON</strong> — kişisel giyilebilir cihaz. Depremde otomatik uyanır (Wake-on-Shake) ve kimlik sinyali yayar.</p>
+                        <p><strong>HUB</strong> — binaya kalıcı gömülü toplayıcı. Beacon'ları dinler, komşu HUB'lara aktarır. Ağı asıl ören bileşen.</p>
+                        <p><strong>STATION</strong> — AFAD/arama-kurtarma alıcısı. Gelen sinyalleri RSSI'ye göre haritalar.</p>
                         <div class="comparison-box">
                             <div class="comp-item bad">
                                 <span>❌ GSM</span>
@@ -53,47 +54,43 @@
                             </div>
                             <div class="comp-item good">
                                 <span>✅ MESH</span>
-                                <small>Dağıtık, dayanıklı</small>
+                                <small>Bina bina, dağıtık</small>
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="tutorial-step" data-step="3">
                         <div class="step-icon">📻</div>
-                        <h3>LoRa Parametreleri</h3>
-                        <p><strong>SF (Spreading Factor):</strong> Sinyal yayılma faktörü</p>
+                        <h3>Neden LoRa 868 MHz?</h3>
+                        <p><strong>Düşük frekans = daha iyi penetrasyon.</strong> 868 MHz, 2.4 GHz'e göre çok daha uzun dalga boyuna sahip — beton, moloz ve toprağın içinden geçebilir. Projenin adı buradan geliyor.</p>
                         <ul>
-                            <li>SF↑ = Menzil↑ ama Hız↓</li>
-                            <li>SF7: ~2km, hızlı | SF12: ~15km, yavaş</li>
+                            <li><strong>SF↑</strong> = Menzil↑ ama Hız↓ (SF7 ~2km · SF12 ~15km)</li>
+                            <li><strong>BW↓</strong> = Menzil↑ ama daha az veri</li>
+                            <li>Küçük veri yeterli: "şu kimlik, şurada, hayatta" = birkaç bayt</li>
                         </ul>
-                        <p><strong>BW (Bandwidth):</strong> Bant genişliği</p>
-                        <ul>
-                            <li>BW↓ = Menzil↑ ama daha az veri</li>
-                        </ul>
-                        <p><strong>TX Power:</strong> Verici gücü (dBm)</p>
                     </div>
-                    
+
                     <div class="tutorial-step" data-step="4">
                         <div class="step-icon">🎮</div>
                         <h3>Simülasyonu Kullanma</h3>
                         <ul>
-                            <li><strong>Node Ekle:</strong> Sol panelden butona bas</li>
-                            <li><strong>Node Seç:</strong> Haritada tıkla</li>
-                            <li><strong>Mesaj Gönder:</strong> Node'a çift tıkla</li>
-                            <li><strong>Node Taşı:</strong> Sürükle-bırak</li>
-                            <li><strong>Senaryo:</strong> Deprem modunu dene!</li>
+                            <li><strong>HUB / Beacon Ekle:</strong> Sol panelden butona bas</li>
+                            <li><strong>Düğüm Seç:</strong> Haritada tıkla</li>
+                            <li><strong>Sinyal Yay:</strong> Düğüme çift tıkla</li>
+                            <li><strong>Taşı:</strong> Sürükle-bırak</li>
+                            <li><strong>TIER 3:</strong> "STATION GELDİ" ile veri çekimini başlat!</li>
                         </ul>
                     </div>
-                    
+
                     <div class="tutorial-step" data-step="5">
                         <div class="step-icon">🚀</div>
                         <h3>Hazırsın!</h3>
-                        <p>Şimdi mesh ağı simüle edebilirsin. Dene:</p>
+                        <p>Şimdi ConcreteWeb ağını simüle edebilirsin. Dene:</p>
                         <ol>
-                            <li>"DEPREM" senaryosuna geç</li>
-                            <li>Bir node'a çift tıkla ve mesaj gönder</li>
-                            <li>Mesajın hop-by-hop yayılışını izle</li>
-                            <li>Bir node'u kapat, ağın adapte oluşunu gör</li>
+                            <li>"DEPREM" senaryosuna geç → Beacon'lar Wake-on-Shake ile uyanır</li>
+                            <li>Sinyalin HUB'lar üzerinden hop-by-hop yayılışını izle</li>
+                            <li>[+ STATION GELDİ — TIER 3] butonuna bas</li>
+                            <li>Station her Beacon'ı lokalize edip LIFE CONFIRMED'a çevirsin</li>
                         </ol>
                     </div>
                 </div>
@@ -193,20 +190,24 @@
 
                 <!-- Node Actions -->
                 <div class="param-section">
-                    <h4>// NODE İŞLEMLERİ</h4>
-                    
+                    <h4>// BİLEŞEN İŞLEMLERİ</h4>
+
                     <button class="action-btn" onclick="addNode()">
-                        [+ NODE EKLE]
+                        [+ HUB EKLE]
                     </button>
-                    
+
                     <button class="action-btn" onclick="addSurvivor()">
-                        [👤 KURBAN EKLE]
+                        [👤 BEACON EKLE]
                     </button>
-                    
+
+                    <button class="action-btn tier3" onclick="stationArrival()">
+                        [+ STATION GELDİ — TIER 3]
+                    </button>
+
                     <button class="action-btn danger" onclick="toggleNodeMode()">
-                        <span id="node-mode-text">[🔴 NODE KAPAT MODU]</span>
+                        <span id="node-mode-text">[🔴 HUB KAPAT MODU]</span>
                     </button>
-                    
+
                     <button class="action-btn" onclick="resetNetwork()">
                         [↺ AĞI SIFIRLA]
                     </button>
@@ -235,9 +236,9 @@
 
                 <!-- Info Box -->
                 <div class="info-box">
-                    <span class="info-label">// FLARE NEDİR?</span>
-                    <p>Afet durumlarında GSM çöktüğünde LoRa mesh ağ ile haberleşme sağlar.</p>
-                    <p>Her node hem alıcı hem verici → Tek noktaya bağımlılık yok!</p>
+                    <span class="info-label">// ConcreteWeb NEDİR?</span>
+                    <p>Depremde şebekeler çöktüğünde betonun içinden sinyal geçirip enkaz altındaki kişiyi bulunur kılar.</p>
+                    <p>Her HUB hem dinler hem aktarır → Tek noktaya bağımlılık yok!</p>
                 </div>
             </section>
 
@@ -249,9 +250,9 @@
                     <!-- Mesaj gönderme overlay -->
                     <div id="message-overlay" class="message-overlay" style="display:none;">
                         <div class="message-popup">
-                            <h4>[📡 ACİL MESAJ GÖNDER]</h4>
-                            <p class="popup-desc">Bu mesaj tüm ağa yayılacak. Gerçek FLARE sisteminde GPS koordinatları da eklenir.</p>
-                            <input type="text" id="msg-input" placeholder="YARDIM! ENKAZ ALTINDAYIM..." maxlength="100">
+                            <h4>[📡 SİNYAL YAY]</h4>
+                            <p class="popup-desc">Bu sinyal HUB'lar üzerinden tüm ağa yayılacak. Gerçek ConcreteWeb sisteminde kimlik + RSSI verisi taşınır.</p>
+                            <input type="text" id="msg-input" placeholder="BEACON-ID · ENKAZ ALTINDA · HAYATTA..." maxlength="100">
                             <div class="popup-buttons">
                                 <button onclick="sendMessage()">[📡 GÖNDER]</button>
                                 <button onclick="closeMessagePopup()">[İPTAL]</button>
@@ -260,14 +261,16 @@
                     </div>
                 </div>
                 <div class="map-legend">
-                    <span class="legend-item"><span class="legend-dot node-gateway"></span> GATEWAY (Ana İstasyon)</span>
-                    <span class="legend-item"><span class="legend-dot node-active"></span> AKTİF NODE</span>
-                    <span class="legend-item"><span class="legend-dot node-inactive"></span> DEVRE DIŞI</span>
-                    <span class="legend-item"><span class="legend-dot node-survivor"></span> KURBAN/KULLANICI</span>
-                    <span class="legend-item"><span class="legend-line"></span> LoRa BAĞLANTI</span>
+                    <span class="legend-item"><span class="legend-dot node-station"></span> STATION</span>
+                    <span class="legend-item"><span class="legend-dot node-hub"></span> HUB</span>
+                    <span class="legend-item"><span class="legend-dot beacon-confirmed"></span> LIFE CONFIRMED</span>
+                    <span class="legend-item"><span class="legend-dot beacon-vibration"></span> VIBRATION DETECTED</span>
+                    <span class="legend-item"><span class="legend-dot beacon-broadcast"></span> BROADCAST ONLY</span>
+                    <span class="legend-item"><span class="legend-dot node-offline"></span> OFFLINE</span>
+                    <span class="legend-item"><span class="legend-line"></span> LoRa LINK</span>
                 </div>
                 <div class="map-instructions">
-                    💡 TIKLA: Node seç | ÇİFT TIKLA: Mesaj gönder | SÜRÜKLE: Taşı
+                    💡 TIKLA: Düğüm seç | ÇİFT TIKLA: Sinyal yay | SÜRÜKLE: Taşı
                 </div>
             </section>
 
@@ -296,7 +299,7 @@
 
                 <!-- Log display -->
                 <div id="log-display" class="log-display">
-                    <div class="log-entry system">[SYSTEM] FLARE Mesh Simulator v2.0 başlatıldı...</div>
+                    <div class="log-entry system">[SYSTEM] ConcreteWeb Mesh Simulator v2.0 başlatıldı...</div>
                     <div class="log-entry system">[SYSTEM] Rehber için sağ üstteki 📖 butonuna tıklayın.</div>
                 </div>
 
@@ -348,8 +351,8 @@
                     <h4>// NEDEN ÖNEMLİ?</h4>
                     <p>🔹 6 Şubat depreminde GSM saatlerce çöktü</p>
                     <p>🔹 Enkaz altındaki insanlar iletişim kuramadı</p>
-                    <p>🔹 FLARE ile her cihaz bir "mini kule" olur</p>
-                    <p>🔹 Mesajlar zincir şeklinde iletilebilir</p>
+                    <p>🔹 ConcreteWeb ile her bina bir "toplayıcı HUB" olur</p>
+                    <p>🔹 Beacon sinyali bina bina zıplayarak dışarı taşınır</p>
                 </div>
             </section>
         </main>
@@ -357,7 +360,7 @@
         <!-- FOOTER -->
         <footer class="flare-footer">
             <span>[AGÜ MAKİNE MÜHENDİSLİĞİ]</span>
-            <span>[FLARE EMERGENCY MESH NETWORK]</span>
+            <span>[ConcreteWeb AUTONOMOUS MESH NETWORK]</span>
             <span>[v2.0 INTERACTIVE SIMULATOR]</span>
         </footer>
     </div>
