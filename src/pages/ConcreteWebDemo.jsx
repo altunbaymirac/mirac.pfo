@@ -373,6 +373,7 @@ function BeaconDetail({ report }) {
 export default function ConcreteWebDemo() {
   const [isRunning, setIsRunning] = useState(true)
   const [showMesh, setShowMesh] = useState(true)
+  const [showInfo, setShowInfo] = useState(false)
   const [buildings, setBuildings] = useState(INITIAL_BUILDINGS)
   const [reports, setReports] = useState(INITIAL_REPORTS)
   const [selectedBuildingId, setSelectedBuildingId] = useState('BLD-04')
@@ -487,6 +488,17 @@ export default function ConcreteWebDemo() {
 
             <div className="flex flex-wrap items-center gap-2">
               <button
+                onClick={() => setShowInfo(!showInfo)}
+                className={`p-3 border-2 ${
+                  showInfo
+                    ? 'bg-terminal-text border-terminal-text text-terminal-bg'
+                    : 'border-terminal-text text-terminal-text hover:bg-terminal-text hover:text-terminal-bg'
+                }`}
+                title="How the simulation works"
+              >
+                <Info size={20} />
+              </button>
+              <button
                 onClick={() => setShowMesh(!showMesh)}
                 className={`p-3 border-2 ${
                   showMesh
@@ -533,6 +545,39 @@ export default function ConcreteWebDemo() {
             <span>One HUB per building</span>
             <span>Beacon positions are registered during installation, not reported as GPS coordinates.</span>
           </div>
+
+          {showInfo && (
+            <motion.div
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mt-5 grid lg:grid-cols-4 gap-3 bg-terminal-bg border-2 border-terminal-text p-4"
+            >
+              <div>
+                <div className="text-terminal-text font-bold mb-1">1. Registered beacons</div>
+                <p className="text-xs text-gray-400">
+                  Each bedroom beacon is paired with a Beacon ID, building, floor, and installed location during setup.
+                </p>
+              </div>
+              <div>
+                <div className="text-terminal-text font-bold mb-1">2. One HUB per building</div>
+                <p className="text-xs text-gray-400">
+                  The map shows buildings and their single HUB. Beacon reports do not create GPS points on the map.
+                </p>
+              </div>
+              <div>
+                <div className="text-terminal-text font-bold mb-1">3. HUB mesh relay</div>
+                <p className="text-xs text-gray-400">
+                  HUBs forward reports through neighbouring HUBs over a simulated 868 MHz store-and-forward mesh.
+                </p>
+              </div>
+              <div>
+                <div className="text-terminal-text font-bold mb-1">4. Station triage</div>
+                <p className="text-xs text-gray-400">
+                  The Station merges repeated packets by Beacon ID and sorts reports by life sign priority.
+                </p>
+              </div>
+            </motion.div>
+          )}
         </div>
       </header>
 
