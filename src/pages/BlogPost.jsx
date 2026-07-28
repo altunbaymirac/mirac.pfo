@@ -211,16 +211,25 @@ export default function BlogPost() {
               hr: () => (
                 <hr className="border-terminal-border my-8" />
               ),
-              a: ({ href, children }) => (
-                <a
-                  href={href}
-                  className="text-terminal-secondary hover:text-terminal-text underline transition-colors"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {children}
-                </a>
-              ),
+              a: ({ href, children }) => {
+                const className = "text-terminal-secondary hover:text-terminal-text underline transition-colors"
+
+                // Site içi linkler router ile açılsın, sayfa yeniden yüklenmesin
+                return href?.startsWith('/') ? (
+                  <Link to={href} className={className}>
+                    {children}
+                  </Link>
+                ) : (
+                  <a
+                    href={href}
+                    className={className}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {children}
+                  </a>
+                )
+              },
             }}
           >
             {post.content}

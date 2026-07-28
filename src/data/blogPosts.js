@@ -82,7 +82,12 @@ Makine Mühendisliği, AGÜ
     tags: ['ConcreteWeb', 'Disaster Response', 'LoRa', 'Demo'],
     excerpt: 'FLARE adını ConcreteWeb yaptık ve demoyu "sinyal var mı" ekranından kurtarma ekibinin kime önce gideceğini söyleyen bir triyaj ekranına çevirdik.',
     projectLinks: [
-      { label: 'Canlı Demo', href: '/demos/concreteweb' }
+      { label: 'Canlı Demo', href: '/demos/concreteweb' },
+      {
+        label: 'James Dyson Award 2026',
+        href: 'https://www.jamesdysonaward.org/tr-TR/2026/project/concreteweb',
+        external: true
+      }
     ],
     content: `
 # ConcreteWeb: Haritadan Triyaj Ekranına
@@ -144,6 +149,12 @@ Bunu eklememizin sebebi şuydu: demoyu yanında durup anlatmadığın zaman ekra
 Teknik olarak en zor kısım mesh simülasyonu değildi — **neyi göstermemek gerektiğine karar vermekti**. Her beacon'ı haritaya nokta olarak basmak teknik olarak kolay ve görsel olarak etkileyici olurdu, ama sistemin nasıl çalıştığı hakkında yalan söylerdi.
 
 Bir de şunu gördüm: acil durum arayüzünde "veri göstermek" yetmiyor. Ekranın cevaplaması gereken tek bir soru var — **şimdi nereye koşayım?** Geri kalan her şey o sorunun önünde duran gürültü.
+
+## James Dyson Award 2026
+
+Bu turdaki işlerin bir sebebi de vardı: ConcreteWeb'i **James Dyson Award 2026**'ya başvurduk. Triyaj ekranı, üç katmanlı relay görünümü ve info paneli büyük ölçüde bu başvuru için — jüri projeyi ben yanında anlatmadan, tek bir linke tıklayarak değerlendirecek.
+
+Başvuru sayfası: [jamesdysonaward.org/tr-TR/2026/project/concreteweb](https://www.jamesdysonaward.org/tr-TR/2026/project/concreteweb)
 
 ## Sırada Ne Var?
 
@@ -245,7 +256,12 @@ Bu proje bana product thinking'i öğretti. Bir marketplace'te kullanıcı güve
     tags: ['ConcreteWeb', 'Engineering', 'Disaster Response'],
     excerpt: '6 Şubat depremini Malatya\'da yaşadım. Enkaz altında ses dinlemenin ne kadar yetersiz olduğunu gördüm. İşte ConcreteWeb böyle doğdu.',
     projectLinks: [
-      { label: 'Canlı Demo', href: '/demos/concreteweb' }
+      { label: 'Canlı Demo', href: '/demos/concreteweb' },
+      {
+        label: 'James Dyson Award 2026',
+        href: 'https://www.jamesdysonaward.org/tr-TR/2026/project/concreteweb',
+        external: true
+      }
     ],
     content: `
 # ConcreteWeb: 6 Şubat'tan Doğan Fikir
