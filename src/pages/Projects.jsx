@@ -3,12 +3,14 @@ import { Link } from 'react-router-dom'
 import { ExternalLink, ArrowRight } from 'lucide-react'
 import LiveProjectDemos from '../components/LiveProjectDemos'
 import FlareBeacon3D from '../components/FlareBeacon3D'
+import { useLanguage } from '../contexts/LanguageContext'
 
 const PROJECTS = [
   {
     title: 'ConcreteWeb',
     type: 'Emergency Communication',
     description: 'LoRa tabanlı afet sonrası enkaz altı sinyal ve mesh network simülasyonu.',
+    descriptionEn: 'Post-disaster under-rubble signalling and mesh network simulation built on LoRa.',
     tech: ['LoRa', 'React', 'Leaflet'],
     href: '/demos/concreteweb',
     color: 'terminal-accent'
@@ -17,6 +19,7 @@ const PROJECTS = [
     title: 'DCE-SOFC',
     type: 'Marine Propulsion',
     description: 'Amonyak yakıtlı hibrit gemi tahrik sistemi için canlı dijital ikiz.',
+    descriptionEn: 'A live digital twin of an ammonia-fuelled hybrid marine propulsion system.',
     tech: ['Thermodynamics', 'Recharts', 'Simulation'],
     href: '/demos/dce-sofc',
     color: 'terminal-secondary'
@@ -25,6 +28,7 @@ const PROJECTS = [
     title: 'GeoSocial',
     type: 'Mobile App',
     description: 'Konum tabanlı sosyal ağ fikri için React Native tarzı interaktif demo.',
+    descriptionEn: 'An interactive React Native style demo of a location-based social network.',
     tech: ['React Native', 'Firebase', 'GPS'],
     href: '/demos/geosocial',
     color: 'terminal-text'
@@ -33,6 +37,7 @@ const PROJECTS = [
     title: 'FedaGrup',
     type: 'Client Website',
     description: 'FedaGrup İnşaat için hazırlanmış canlı kurumsal web sitesi.',
+    descriptionEn: 'The live corporate website built for FedaGrup İnşaat.',
     tech: ['Web Design', 'Responsive', 'Production'],
     href: 'https://www.fedagrupinsaat.com',
     external: true,
@@ -42,6 +47,7 @@ const PROJECTS = [
     title: 'Takaslat',
     type: 'Marketplace Platform',
     description: 'Para kullanmadan eşya takası yapabileceğin, AI destekli öneri ve müzakere sistemli marketplace.',
+    descriptionEn: 'A marketplace for swapping items without money, with AI-assisted suggestions and negotiation.',
     tech: ['React', 'TypeScript', 'Node.js', 'AI'],
     href: 'https://takaslat.vercel.app',
     external: true,
@@ -50,6 +56,8 @@ const PROJECTS = [
 ]
 
 export default function Projects() {
+  const { lang, t } = useLanguage()
+
   return (
     <div className="min-h-screen pt-24 px-4 pb-12">
       <div className="max-w-7xl mx-auto space-y-12">
@@ -58,16 +66,16 @@ export default function Projects() {
           animate={{ opacity: 1, y: 0 }}
         >
           <h1 className="text-5xl font-bold text-terminal-text neon-glow mb-3">
-            💼 Projects
+            💼 {t.projects.title}
           </h1>
           <p className="text-gray-400">
-            Live demos, 3D visualizations, and interactive APIs
+            {t.projects.subtitle}
           </p>
         </motion.div>
 
         <section>
           <h2 className="text-2xl font-bold text-terminal-text neon-glow mb-6">
-            Current Projects
+            {t.projects.currentTitle}
           </h2>
           <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-5">
             {PROJECTS.map((project, index) => {
@@ -101,7 +109,7 @@ export default function Projects() {
                     )}
                   </div>
                   <p className="text-sm text-gray-400 leading-relaxed mb-5">
-                    {project.description}
+                    {lang === 'en' ? project.descriptionEn : project.description}
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {project.tech.map((tech) => (

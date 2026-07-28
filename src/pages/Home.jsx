@@ -7,7 +7,9 @@ import LiveProjectDemos from '../components/LiveProjectDemos'
 import { useLanguage } from '../contexts/LanguageContext'
 
 export default function Home() {
-  const { t } = useLanguage()
+  const { lang, t } = useLanguage()
+  // İngilizce alan yoksa Türkçesine düş
+  const pick = (item, key) => (lang === 'en' ? item[`${key}En`] ?? item[key] : item[key])
   const [terminalText, setTerminalText] = useState('')
   const fullText = 'mirac@portfolio:~$ ./deploy_future.sh'
 
@@ -30,6 +32,7 @@ export default function Home() {
       name: 'ConcreteWeb',
       tag: 'Emergency Communication',
       description: "6 Şubat'tan sonra aklıma gelen bir fikir: LoRa ile çalışan, enkaz altından sinyal yollayan bir cihaz",
+      descriptionEn: 'An idea that came to me after February 6th: a LoRa device that sends a signal from under rubble',
       color: 'terminal-accent',
       link: '/demos/concreteweb',
       stats: ['868 MHz', '1-3 km Range', 'Auto-Activation']
@@ -38,6 +41,7 @@ export default function Home() {
       name: 'DCE-SOFC',
       tag: 'Marine Propulsion',
       description: 'Amonyak yakıtlı gemi motoru simülasyonu. Gerçek termodinamik hesaplamalarla çalışan bir dijital ikiz',
+      descriptionEn: 'An ammonia-fuelled ship engine simulation. A digital twin running on real thermodynamic calculations',
       color: 'terminal-secondary',
       link: '/demos/dce-sofc',
       stats: ['Arrhenius Kinetics', 'Zero CO₂', 'Digital Twin']
@@ -46,6 +50,7 @@ export default function Home() {
       name: 'Takaslat',
       tag: 'Marketplace Platform',
       description: 'Para kullanmadan eşya takası yapabileceğin, AI destekli öneri ve müzakere sistemi olan marketplace',
+      descriptionEn: 'A marketplace for swapping items without money, with AI-assisted suggestions and negotiation',
       color: 'terminal-text',
       link: 'https://takaslat.vercel.app',
       external: true,
@@ -55,6 +60,7 @@ export default function Home() {
       name: 'FedaGrup',
       tag: 'Client Website',
       description: 'FedaGrup İnşaat için hazırladığım kurumsal web sitesi. Mobil uyumlu, hızlı, güven veren tasarım',
+      descriptionEn: 'The corporate website I built for FedaGrup İnşaat. Mobile friendly, fast, designed to inspire trust',
       color: 'terminal-accent',
       link: 'https://www.fedagrupinsaat.com',
       external: true,
@@ -64,6 +70,7 @@ export default function Home() {
       name: 'GeoSocial',
       tag: 'Mobile App',
       description: 'Konuma dayalı sosyal ağ. React Native ile yaptım, GPS tracking ve gamification var',
+      descriptionEn: 'A location-based social network built with React Native, with GPS tracking and gamification',
       color: 'terminal-secondary',
       link: '/demos/geosocial',
       stats: ['React Native', 'Firebase', 'GPS Tracking']
@@ -73,44 +80,64 @@ export default function Home() {
   const timeline = [
     {
       date: 'Eyl 2024',
+      dateEn: 'Sep 2024',
       title: 'AGÜ Makine Mühendisliği',
+      titleEn: 'Mechanical Engineering at AGÜ',
       desc: "Abdullah Gül Üniversitesi'nde Makine Mühendisliği'ne başladım. Mühendislik düşüncesiyle tanıştım.",
+      descEn: 'I started Mechanical Engineering at Abdullah Gül University and met engineering thinking for the first time.',
       tag: '🎓 Eğitim',
+      tagEn: '🎓 Education',
       active: true
     },
     {
       date: 'Şub 2025',
+      dateEn: 'Feb 2025',
       title: 'ConcreteWeb — İlk Prototip',
+      titleEn: 'ConcreteWeb — First Prototype',
       desc: '6 Şubat depreminden ilham aldım. LoRa 868 MHz ile enkaz altı beacon simülasyonu geliştirdim.',
+      descEn: 'Inspired by the February 6th earthquake, I built an under-rubble beacon simulation on 868 MHz LoRa.',
       tag: '📡 LoRa / IoT',
       active: true
     },
     {
       date: 'Mar 2025',
+      dateEn: 'Mar 2025',
       title: 'DCE-SOFC Dijital İkiz',
+      titleEn: 'DCE-SOFC Digital Twin',
       desc: 'Amonyak yakıtlı hibrit gemi tahrik sistemi için Arrhenius kinetikleriyle çalışan dijital ikiz simülasyonu.',
+      descEn: 'A digital twin simulation of an ammonia-fuelled hybrid marine propulsion system, driven by Arrhenius kinetics.',
       tag: '⚗️ Termodinamik',
+      tagEn: '⚗️ Thermodynamics',
       active: true
     },
     {
       date: 'Nis 2025',
+      dateEn: 'Apr 2025',
       title: 'FedaGrup İnşaat Web Sitesi',
+      titleEn: 'FedaGrup İnşaat Website',
       desc: "İlk müşteri projem. Mobil uyumlu, hızlı kurumsal web sitesi — production'da yayında.",
+      descEn: 'My first client project. A fast, mobile-friendly corporate website — live in production.',
       tag: '🌐 Client Project',
       active: true
     },
     {
       date: 'May 2025',
+      dateEn: 'May 2025',
       title: 'Takaslat Marketplace',
       desc: 'React + TypeScript ile AI destekli takas marketplace. Müzakere sistemi ve harita entegrasyonu.',
+      descEn: 'An AI-assisted barter marketplace in React + TypeScript, with a negotiation system and map integration.',
       tag: '🛒 Full-Stack',
       active: true
     },
     {
       date: '2025 →',
+      dateEn: '2025 →',
       title: 'ConcreteWeb Donanım Prototipi',
+      titleEn: 'ConcreteWeb Hardware Prototype',
       desc: 'ESP32 + LoRa modülü ile fiziksel prototip. AGÜ kampüsünde menzil testi planlanıyor.',
+      descEn: 'A physical prototype with an ESP32 + LoRa module. A range test on the AGÜ campus is planned.',
       tag: '🔩 Sonraki Adım',
+      tagEn: '🔩 Next Step',
       active: false
     }
   ]
@@ -230,7 +257,7 @@ export default function Home() {
                       <ArrowRight size={24} />
                     </motion.div>
                   </div>
-                  <p className="text-gray-400 text-sm mb-4 leading-relaxed">{project.description}</p>
+                  <p className="text-gray-400 text-sm mb-4 leading-relaxed">{pick(project, 'description')}</p>
                   <div className="flex flex-wrap gap-2">
                     {project.stats.map((stat) => (
                       <span key={stat} className={`px-2 py-1 bg-terminal-bg ${colors.border} border text-xs font-mono text-gray-400`}>
@@ -263,7 +290,7 @@ export default function Home() {
               🚀 Live Project Simulations
             </h3>
             <p className="text-gray-400 text-center mb-8">
-              ConcreteWeb beacon tracker ve DCE-SOFC motor simülasyonları - gerçek zamanlı çalışıyor!
+              {lang === 'en' ? 'ConcreteWeb beacon tracker and DCE-SOFC engine simulations — running in real time!' : 'ConcreteWeb beacon tracker ve DCE-SOFC motor simülasyonları - gerçek zamanlı çalışıyor!'}
             </p>
             <LiveProjectDemos />
           </div>
@@ -290,15 +317,15 @@ export default function Home() {
                 <div className={`absolute left-4 w-5 h-5 border-2 rotate-45 ${item.active ? 'bg-terminal-text border-terminal-text' : 'bg-terminal-bg border-terminal-border'}`} />
                 <div className="bg-terminal-darker border border-terminal-border p-4">
                   <div className="flex items-start justify-between gap-3 mb-2 flex-wrap">
-                    <h3 className="text-terminal-text font-bold font-mono">{item.title}</h3>
+                    <h3 className="text-terminal-text font-bold font-mono">{pick(item, 'title')}</h3>
                     <span className={`text-xs font-mono px-2 py-1 border ${item.active ? 'text-terminal-accent border-terminal-accent' : 'text-gray-500 border-terminal-border'}`}>
-                      {item.date}
+                      {pick(item, 'date')}
                     </span>
                   </div>
-                  <p className="text-gray-400 text-sm">{item.desc}</p>
+                  <p className="text-gray-400 text-sm">{pick(item, 'desc')}</p>
                   {item.tag && (
                     <span className="inline-block mt-2 text-xs font-mono text-terminal-secondary border border-terminal-secondary px-2 py-0.5">
-                      {item.tag}
+                      {pick(item, 'tag')}
                     </span>
                   )}
                 </div>

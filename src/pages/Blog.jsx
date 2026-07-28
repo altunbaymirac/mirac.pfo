@@ -1,9 +1,13 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Calendar, Clock, Tag, ArrowRight } from 'lucide-react'
-import { blogPosts } from '../data/blogPosts'
+import { blogPosts, localizePost } from '../data/blogPosts'
+import { useLanguage } from '../contexts/LanguageContext'
 
 export default function Blog() {
+  const { lang, t } = useLanguage()
+  const posts = blogPosts.map((post) => localizePost(post, lang))
+
   return (
     <div className="min-h-screen pt-24 px-4 pb-12">
       <div className="max-w-4xl mx-auto">
@@ -13,15 +17,15 @@ export default function Blog() {
           className="mb-12"
         >
           <h1 className="text-5xl font-bold text-terminal-text neon-glow mb-3">
-            📝 Blog & Dev Log
+            📝 {t.blog.title}
           </h1>
           <p className="text-gray-400">
-            Engineering insights, project updates, and technical deep-dives
+            {t.blog.subtitle}
           </p>
         </motion.div>
 
         <div className="space-y-6">
-          {blogPosts.map((post, index) => (
+          {posts.map((post, index) => (
             <motion.article
               key={post.slug}
               initial={{ opacity: 0, x: -20 }}
@@ -50,7 +54,7 @@ export default function Blog() {
                 <div className="flex items-center space-x-4 text-xs text-gray-500">
                   <div className="flex items-center space-x-1">
                     <Calendar size={14} />
-                    <span>{new Date(post.date).toLocaleDateString('en-US', {
+                    <span>{new Date(post.date).toLocaleDateString(lang === 'en' ? 'en-US' : 'tr-TR', {
                       year: 'numeric',
                       month: 'short',
                       day: 'numeric'
@@ -58,7 +62,7 @@ export default function Blog() {
                   </div>
                   <div className="flex items-center space-x-1">
                     <Clock size={14} />
-                    <span>{post.readTime}</span>
+                    <span>{lang === 'en' ? post.readTime : post.readTime.replace('min', 'dk')}</span>
                   </div>
                 </div>
 

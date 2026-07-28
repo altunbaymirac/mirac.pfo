@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { AreaChart, Area, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
+import { useLanguage } from '../contexts/LanguageContext'
 
 const CATALYSTS = {
   Ru: { Ea: 80000, A: 1.2e12, label: 'Eₐ = 80 kJ/mol' },
@@ -27,6 +28,48 @@ const S = {
   panelTitle: { color: C.orange, fontSize: '11px', margin: '0 0 15px 0', paddingBottom: '8px', borderBottom: `1px solid ${C.borderDim}`, letterSpacing: '0.1em', fontFamily: 'inherit' },
   formulaBox: { border: `1px solid ${C.borderDim}`, padding: '10px', marginBottom: '10px', background: 'rgba(0,0,0,0.3)' },
   formulaTitle: { fontSize: '9px', color: C.textDim, display: 'block', marginBottom: '8px' },
+}
+
+
+const LABELS = {
+  tr: {
+    electric: 'ELEKTRİK', heat: 'ISI',
+    stop: '[■ SİSTEMİ DURDUR]', start: '[▶ SİSTEMİ BAŞLAT]',
+    controlPanel: 'KONTROL PANELİ',
+    motorLoad: 'MOTOR YÜKÜ', residence: 'REZİDANS SÜRESİ (τ)', tempTarget: 'SICAKLIK HEDEFİ',
+    sofcCell: 'SOFC YAKIT PİLİ', whr: 'ATIK ISI GERİ KAZANIMI',
+    catalystType: 'KATALİZÖR TİPİ',
+    systemInfo: '// SİSTEM BİLGİSİ', molarExpansion: 'MOLAR GENİŞLEME: 2x', combustion: 'YANMA: YOK',
+    pid: 'P&ID AKIŞ DİYAGRAMI', thermoData: 'TERMODİNAMİK VERİLER',
+    arrhenius: '// ARRHENİUS KİNETİĞİ', dceReaction: '// DCE REAKSİYONU', conversionRate: '// DÖNÜŞÜM ORANI',
+    reactorTemp: 'REAKTÖR SICAKLIK', pressure: 'BASINÇ', conversion: 'DÖNÜŞÜM',
+    motorPower: 'MOTOR GÜCÜ', sofcElectric: 'SOFC ELEKTRİK', wtwEff: 'WtW VERİM',
+    liveStream: '// CANLI VERİ AKIŞI', temperature: '■ SICAKLIK', conversionLegend: '■ DÖNÜŞÜM',
+    igfCode: L.igfCode,
+    powerHistory: 'GÜÇ ÇIKIŞ GEÇMİŞİ',
+    footerDept: '[AGÜ MAKİNE MÜHENDİSLİĞİ]',
+    footerSystem: '[DCE-SOFC HİBRİT TAHRİK SİSTEMİ]',
+    footerTwin: '[DİJİTAL İKİZ v2.0]'
+  },
+  en: {
+    electric: 'ELECTRIC', heat: 'HEAT',
+    stop: '[■ STOP SYSTEM]', start: '[▶ START SYSTEM]',
+    controlPanel: 'CONTROL PANEL',
+    motorLoad: 'ENGINE LOAD', residence: 'RESIDENCE TIME (τ)', tempTarget: 'TEMPERATURE TARGET',
+    sofcCell: 'SOFC FUEL CELL', whr: 'WASTE HEAT RECOVERY',
+    catalystType: 'CATALYST TYPE',
+    systemInfo: '// SYSTEM INFO', molarExpansion: 'MOLAR EXPANSION: 2x', combustion: 'COMBUSTION: NONE',
+    pid: 'P&ID FLOW DIAGRAM', thermoData: 'THERMODYNAMIC DATA',
+    arrhenius: '// ARRHENIUS KINETICS', dceReaction: '// DCE REACTION', conversionRate: '// CONVERSION RATE',
+    reactorTemp: 'REACTOR TEMP', pressure: 'PRESSURE', conversion: 'CONVERSION',
+    motorPower: 'ENGINE POWER', sofcElectric: 'SOFC ELECTRIC', wtwEff: 'WtW EFFICIENCY',
+    liveStream: '// LIVE DATA STREAM', temperature: '■ TEMPERATURE', conversionLegend: '■ CONVERSION',
+    igfCode: 'IGF CODE CERTIFICATION',
+    powerHistory: 'POWER OUTPUT HISTORY',
+    footerDept: '[AGÜ MECHANICAL ENGINEERING]',
+    footerSystem: '[DCE-SOFC HYBRID PROPULSION SYSTEM]',
+    footerTwin: '[DIGITAL TWIN v2.0]'
+  }
 }
 
 function ControlSlider({ label, value, min, max, unit, ticks, onChange, disabled }) {
@@ -88,7 +131,7 @@ function DataCell({ label, value, unit, barColor, barPct }) {
   )
 }
 
-function PIDDiagram({ running, sofcOn, whrOn, data }) {
+function PIDDiagram({ running, sofcOn, whrOn, data, L }) {
   const mono = "'Courier New', monospace"
   const lv = (v, max) => Math.min(100, Math.max(0, (v / max) * 100))
 
@@ -216,8 +259,8 @@ function PIDDiagram({ running, sofcOn, whrOn, data }) {
         {[
           { color: C.nh3Blue, label: 'NH₃', x: 0 },
           { color: C.productGreen, label: 'N₂+H₂', x: 60 },
-          { color: C.heatOrange, label: 'ISI', x: 130 },
-          { color: C.electricYellow, label: 'ELEKTRİK', x: 180 }
+          { color: C.heatOrange, label: L.heat, x: 130 },
+          { color: C.electricYellow, label: L.electric, x: 180 }
         ].map(l => (
           <g key={l.label}>
             <rect x={l.x} y="-8" width="10" height="10" fill={l.color}/>
@@ -230,6 +273,8 @@ function PIDDiagram({ running, sofcOn, whrOn, data }) {
 }
 
 export default function DCESOFCDemo() {
+  const { lang } = useLanguage()
+  const L = LABELS[lang] || LABELS.tr
   const [isRunning, setIsRunning] = useState(false)
   const [motorLoad, setMotorLoad] = useState(75)
   const [residenceTime, setResidenceTime] = useState(25)
@@ -351,7 +396,7 @@ export default function DCESOFCDemo() {
           padding: '8px 20px', fontFamily: mono, fontSize: '12px',
           cursor: 'pointer', fontWeight: 'bold'
         }}>
-          {isRunning ? '[■ SISTEMI DURDUR]' : '[▶ SİSTEMİ BAŞLAT]'}
+          {isRunning ? L.stop : L.start}
         </button>
         <button onClick={reset} style={{
           background: 'none', border: `1px solid ${C.green}`, color: C.green,
@@ -385,25 +430,25 @@ export default function DCESOFCDemo() {
 
         {/* LEFT: CONTROLS */}
         <div style={S.panel}>
-          <h3 style={S.panelTitle}>&gt; KONTROL PANELİ</h3>
+          <h3 style={S.panelTitle}>&gt; {L.controlPanel}</h3>
 
-          <ControlSlider label="MOTOR YÜKÜ" value={motorLoad} min={0} max={100}
+          <ControlSlider label={L.motorLoad} value={motorLoad} min={0} max={100}
             unit={`${motorLoad}%`} ticks={['0', '25', '50', '75', '100']}
             onChange={setMotorLoad} disabled={isRunning} />
 
-          <ControlSlider label="REZİDANS SÜRESİ (τ)" value={residenceTime} min={5} max={50}
+          <ControlSlider label={L.residence} value={residenceTime} min={5} max={50}
             unit={`${tau}s`} onChange={setResidenceTime} disabled={isRunning} />
 
-          <ControlSlider label="SICAKLIK HEDEFİ" value={targetTemp} min={400} max={850}
+          <ControlSlider label={L.tempTarget} value={targetTemp} min={400} max={850}
             unit={`${targetTemp}°C`} ticks={['400', '600', '800']}
             onChange={setTargetTemp} disabled={isRunning} />
 
-          <ToggleSwitch label="SOFC YAKIT PİLİ" active={sofcOn} onToggle={() => setSofcOn(v => !v)} />
-          <ToggleSwitch label="ATIK ISI GERİ KAZANIMI" active={whrOn} onToggle={() => setWhrOn(v => !v)} />
+          <ToggleSwitch label={L.sofcCell} active={sofcOn} onToggle={() => setSofcOn(v => !v)} />
+          <ToggleSwitch label={L.whr} active={whrOn} onToggle={() => setWhrOn(v => !v)} />
 
           {/* Catalyst selector */}
           <div style={{ marginBottom: '15px' }}>
-            <div style={{ fontSize: '9px', color: C.textDim, marginBottom: '6px', letterSpacing: '0.15em' }}>KATALİZÖR TİPİ</div>
+            <div style={{ fontSize: '9px', color: C.textDim, marginBottom: '6px', letterSpacing: '0.15em' }}>{L.catalystType}</div>
             <div style={{ display: 'flex', gap: '5px' }}>
               {['Ru', 'Ni'].map(cat => (
                 <button key={cat} onClick={() => !isRunning && setCatalyst(cat)} style={{
@@ -423,26 +468,26 @@ export default function DCESOFCDemo() {
 
           {/* Info box */}
           <div style={{ marginTop: '20px', padding: '10px', border: `1px dashed ${C.borderDim}`, fontSize: '10px' }}>
-            <span style={{ color: C.textDim, display: 'block', marginBottom: '8px' }}>// SİSTEM BİLGİSİ</span>
+            <span style={{ color: C.textDim, display: 'block', marginBottom: '8px' }}>{L.systemInfo}</span>
             <p style={{ margin: '4px 0', color: C.green }}>2NH₃ → N₂ + 3H₂</p>
-            <p style={{ margin: '4px 0', color: C.green }}>MOLAR GENİŞLEME: 2x</p>
-            <p style={{ margin: '4px 0', color: C.green }}>YANMA: YOK</p>
+            <p style={{ margin: '4px 0', color: C.green }}>{L.molarExpansion}</p>
+            <p style={{ margin: '4px 0', color: C.green }}>{L.combustion}</p>
           </div>
         </div>
 
         {/* CENTER: P&ID */}
         <div style={S.panel}>
-          <h3 style={S.panelTitle}>&gt; P&amp;ID AKIŞ DİYAGRAMI</h3>
-          <PIDDiagram running={isRunning} sofcOn={sofcOn} whrOn={whrOn} data={data} />
+          <h3 style={S.panelTitle}>&gt; {L.pid}</h3>
+          <PIDDiagram running={isRunning} sofcOn={sofcOn} whrOn={whrOn} data={data} L={L} />
         </div>
 
         {/* RIGHT: DATA & FORMULAS */}
         <div style={S.panel}>
-          <h3 style={S.panelTitle}>&gt; TERMODİNAMİK VERİLER</h3>
+          <h3 style={S.panelTitle}>&gt; {L.thermoData}</h3>
 
           {/* Arrhenius */}
           <div style={S.formulaBox}>
-            <span style={S.formulaTitle}>// ARRHENİUS KİNETİĞİ</span>
+            <span style={S.formulaTitle}>{L.arrhenius}</span>
             <div style={{ fontSize: '13px', color: C.green, textAlign: 'center', padding: '5px 0' }}>
               <span style={{ color: C.cyan }}>k</span>
               {' = '}
@@ -461,7 +506,7 @@ export default function DCESOFCDemo() {
 
           {/* DCE Reaction */}
           <div style={S.formulaBox}>
-            <span style={S.formulaTitle}>// DCE REAKSİYONU</span>
+            <span style={S.formulaTitle}>{L.dceReaction}</span>
             <div style={{ fontSize: '15px', textAlign: 'center', padding: '5px 0' }}>
               <span style={{ color: C.nh3Blue }}>2NH₃</span>
               <span style={{ color: C.textDim, margin: '0 8px' }}>→</span>
@@ -476,7 +521,7 @@ export default function DCESOFCDemo() {
 
           {/* Conversion */}
           <div style={S.formulaBox}>
-            <span style={S.formulaTitle}>// DÖNÜŞÜM ORANI</span>
+            <span style={S.formulaTitle}>{L.conversionRate}</span>
             <div style={{ fontSize: '13px', color: C.green, textAlign: 'center', padding: '5px 0' }}>
               <span style={{ color: C.productGreen }}>X</span> = 1 − exp(−kτ)
             </div>
@@ -488,24 +533,24 @@ export default function DCESOFCDemo() {
 
           {/* Data Grid */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', margin: '15px 0' }}>
-            <DataCell label="REAKTÖR SICAKLIK" value={data.temp.toFixed(0)} unit="°C"
+            <DataCell label={L.reactorTemp} value={data.temp.toFixed(0)} unit="°C"
               barColor={C.heatOrange} barPct={(data.temp / 850) * 100} />
-            <DataCell label="BASINÇ" value={data.pressure.toFixed(2)} unit="MPa"
+            <DataCell label={L.pressure} value={data.pressure.toFixed(2)} unit="MPa"
               barColor={C.nh3Blue} barPct={(data.pressure / 3.5) * 100} />
-            <DataCell label="DÖNÜŞÜM" value={data.conversion.toFixed(1)} unit="%"
+            <DataCell label={L.conversion} value={data.conversion.toFixed(1)} unit="%"
               barColor={C.productGreen} barPct={data.conversion} />
-            <DataCell label="MOTOR GÜCÜ" value={data.motorPower.toFixed(1)} unit="kW"
+            <DataCell label={L.motorPower} value={data.motorPower.toFixed(1)} unit="kW"
               barColor={C.green} barPct={Math.min(100, data.motorPower / 3.5)} />
-            <DataCell label="SOFC ELEKTRİK" value={data.sofcPower.toFixed(1)} unit="kW"
+            <DataCell label={L.sofcElectric} value={data.sofcPower.toFixed(1)} unit="kW"
               barColor={C.electricYellow} barPct={Math.min(100, data.sofcPower / 3.5)} />
-            <DataCell label="WtW VERİM" value={data.wtwEff.toFixed(1)} unit="%"
+            <DataCell label={L.wtwEff} value={data.wtwEff.toFixed(1)} unit="%"
               barColor={C.cyan} barPct={data.wtwEff} />
           </div>
 
           {/* Mini chart */}
           {history.length > 1 && (
             <div style={{ border: `1px solid ${C.borderDim}`, padding: '10px', marginBottom: '10px', background: 'rgba(0,0,0,0.3)' }}>
-              <span style={{ fontSize: '9px', color: C.textDim, display: 'block', marginBottom: '8px' }}>// CANLI VERİ AKIŞI</span>
+              <span style={{ fontSize: '9px', color: C.textDim, display: 'block', marginBottom: '8px' }}>{L.liveStream}</span>
               <ResponsiveContainer width="100%" height={80}>
                 <LineChart data={history}>
                   <Line type="monotone" dataKey="temp" stroke={C.heatOrange} dot={false} strokeWidth={1.5} />
@@ -513,8 +558,8 @@ export default function DCESOFCDemo() {
                 </LineChart>
               </ResponsiveContainer>
               <div style={{ display: 'flex', justifyContent: 'center', gap: '15px', marginTop: '5px', fontSize: '8px' }}>
-                <span style={{ color: C.heatOrange }}>■ SICAKLIK</span>
-                <span style={{ color: C.productGreen }}>■ DÖNÜŞÜM</span>
+                <span style={{ color: C.heatOrange }}>{L.temperature}</span>
+                <span style={{ color: C.productGreen }}>{L.conversionLegend}</span>
               </div>
             </div>
           )}
@@ -522,7 +567,7 @@ export default function DCESOFCDemo() {
           {/* IMO Compliance */}
           <div style={{ border: `1px dashed ${C.borderDim}`, padding: '10px', fontSize: '9px' }}>
             <span style={{ color: C.textDim, display: 'block', marginBottom: '5px' }}>// UYUMLULUK</span>
-            {['IMO MSC.1/Circ.1687', 'IGF KOD SERTİFİKASYONU', 'SOLAS II-1'].map(s => (
+            {['IMO MSC.1/Circ.1687', L.igfCode, 'SOLAS II-1'].map(s => (
               <p key={s} style={{ margin: '3px 0', color: C.green }}>◆ {s}</p>
             ))}
           </div>
@@ -533,7 +578,7 @@ export default function DCESOFCDemo() {
       {/* AREA CHART */}
       {history.length > 1 && (
         <div style={{ border: `1px solid ${C.borderDim}`, background: C.panelBg, padding: '15px', marginBottom: '15px' }}>
-          <h3 style={{ ...S.panelTitle, marginBottom: '10px' }}>&gt; GÜÇ ÇIKIŞ GEÇMİŞİ</h3>
+          <h3 style={{ ...S.panelTitle, marginBottom: '10px' }}>&gt; {L.powerHistory}</h3>
           <ResponsiveContainer width="100%" height={150}>
             <AreaChart data={history}>
               <defs>
@@ -561,9 +606,9 @@ export default function DCESOFCDemo() {
 
       {/* FOOTER */}
       <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 15px', border: `1px solid ${C.borderDim}`, background: C.panelBg, fontSize: '9px', flexWrap: 'wrap', gap: '8px' }}>
-        <span style={{ color: C.textDim }}>[AGÜ MAKİNE MÜHENDİSLİĞİ]</span>
-        <span style={{ color: C.textDim }}>[DCE-SOFC HİBRİT TAHRİK SİSTEMİ]</span>
-        <span style={{ color: C.cyan }}>[DİJİTAL İKİZ v2.0]</span>
+        <span style={{ color: C.textDim }}>{L.footerDept}</span>
+        <span style={{ color: C.textDim }}>{L.footerSystem}</span>
+        <span style={{ color: C.cyan }}>{L.footerTwin}</span>
       </div>
     </div>
   )

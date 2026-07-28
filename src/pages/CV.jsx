@@ -1,7 +1,177 @@
 import { motion } from 'framer-motion'
 import { Download, Mail, Github, Linkedin, MapPin, GraduationCap, Briefcase, Code, Award } from 'lucide-react'
+import { useLanguage } from '../contexts/LanguageContext'
+
+const CV_CONTENT = {
+  tr: {
+    pageTitle: 'Özgeçmiş',
+    print: 'YAZDIR / İNDİR',
+    role: 'Makine Mühendisliği Öğrencisi & Yazılım Geliştirici',
+    location: 'Kayseri, Türkiye',
+    aboutTitle: 'Hakkımda',
+    about: 'Abdullah Gül Üniversitesi Makine Mühendisliği 1. sınıf öğrencisiyim. Yazılım geliştirme ve mühendislik simülasyonlarına ilgi duyuyorum. 6 Şubat depreminden ilham alarak ConcreteWeb adlı enkaz altı LoRa beacon sistemini tasarladım; amonyak yakıtlı gemi tahrik sistemleri için termodinamik simülasyon geliştirdim. Öğrenirken yapmayı, yaparken öğrenmeyi tercih ediyorum.',
+    educationTitle: 'Eğitim',
+    education: [
+      {
+        title: 'Makine Mühendisliği',
+        subtitle: 'Abdullah Gül Üniversitesi (AGÜ) — Kayseri',
+        date: 'Eyl 2024 – Devam ediyor',
+        details: ['1. Sınıf öğrencisi', 'Odak: termodinamik simülasyon, IoT ve mühendislik tasarımı']
+      }
+    ],
+    projectsTitle: 'Projeler',
+    projects: [
+      {
+        title: 'ConcreteWeb — Enkaz Altı Acil İletişim Sistemi',
+        date: 'Şub 2025 – Devam ediyor',
+        details: [
+          'Bina başına tek HUB ile 868 MHz LoRa store-and-forward mesh mimarisi',
+          'Beacon ID, bina, kat ve yatak odası kurulum konumunu eşleştiren GPSsiz kayıt modeli',
+          'React + Leaflet ile bina HUB haritası ve Station triyaj simülasyonu',
+          'Confirmed alive, vibration detected, broadcast only, safe ve silent node önceliklendirmesi',
+          'James Dyson Award 2026 başvurusu'
+        ]
+      },
+      {
+        title: 'DCE-SOFC Dijital İkiz — Hibrit Gemi Tahrik Sistemi',
+        date: 'Mar 2025 – Devam ediyor',
+        details: [
+          'Amonyak (NH₃) yakıtlı SOFC + Dual-Cycle Engine hibrit sistemi',
+          'Arrhenius kinetikleri: k = A·exp(-Ea/RT), dönüşüm hesabı',
+          'Recharts ile gerçek zamanlı enerji verimliliği ve emisyon grafikleri',
+          'Terminal-stil P&ID mühendislik diyagramı (SVG animasyonlu)'
+        ]
+      },
+      {
+        title: 'Takaslat — Takas Marketplace',
+        date: 'May 2025',
+        details: [
+          'React + TypeScript + Vite + Zustand full-stack marketplace',
+          'AI destekli ilan açıklaması ve fiyat tahmini',
+          'Takas teklifi, müzakere simülatörü, güven puanı sistemi',
+          'Harita görünümü, paket teklifi, ürün karşılaştırma'
+        ]
+      },
+      {
+        title: 'FedaGrup İnşaat — Kurumsal Web Sitesi',
+        date: 'Nis 2025',
+        details: [
+          'Müşteri projesi — production\'da canlı: fedagrupinsaat.com',
+          'Mobil uyumlu, hızlı yüklenen kurumsal site',
+          'Güven odaklı tasarım, net hizmet mimarisi'
+        ]
+      },
+      {
+        title: 'GeoSocial — Konuma Dayalı Sosyal Ağ',
+        date: '2024',
+        details: [
+          'React Native + Firebase + GPS tracking',
+          'Gamification, yakın kullanıcıları bulma, sosyal akış'
+        ]
+      }
+    ],
+    skillsTitle: 'Teknik Beceriler',
+    skills: [
+      { label: 'Frontend', items: ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'Framer Motion'] },
+      { label: 'Backend & DB', items: ['Node.js', 'Express', 'Firebase', 'Zustand'] },
+      { label: 'Mobil', items: ['React Native', 'Expo'] },
+      { label: 'Mühendislik', items: ['Termodinamik', 'LoRa / IoT', 'Arrhenius Kinetik', 'P&ID Diyagram'] },
+      { label: 'Araçlar', items: ['Git', 'Vercel', 'Recharts', 'Leaflet', 'Figma'] },
+      { label: 'Diller', items: ['JavaScript', 'TypeScript', 'Python', 'Java', 'Dart (öğreniyorum)'] }
+    ],
+    languagesTitle: 'Diller',
+    languages: [
+      { lang: 'Türkçe', level: 'Anadil' },
+      { lang: 'İngilizce', level: 'İyi (B2)' }
+    ]
+  },
+  en: {
+    pageTitle: 'Curriculum Vitae',
+    print: 'PRINT / DOWNLOAD',
+    role: 'Mechanical Engineering Student & Software Developer',
+    location: 'Kayseri, Türkiye',
+    aboutTitle: 'About',
+    about: 'I am a first-year Mechanical Engineering student at Abdullah Gül University, interested in software development and engineering simulation. Inspired by the February 6th earthquake I designed ConcreteWeb, an under-rubble LoRa beacon system, and built a thermodynamic simulation for ammonia-fuelled marine propulsion. I prefer building while learning, and learning while building.',
+    educationTitle: 'Education',
+    education: [
+      {
+        title: 'Mechanical Engineering',
+        subtitle: 'Abdullah Gül University (AGÜ) — Kayseri',
+        date: 'Sep 2024 – Present',
+        details: ['First-year student', 'Focus: thermodynamic simulation, IoT and engineering design']
+      }
+    ],
+    projectsTitle: 'Projects',
+    projects: [
+      {
+        title: 'ConcreteWeb — Under-Rubble Emergency Communication System',
+        date: 'Feb 2025 – Present',
+        details: [
+          '868 MHz LoRa store-and-forward mesh architecture with a single HUB per building',
+          'GPS-free registry model mapping Beacon ID to building, floor and installed room',
+          'Building HUB map and Station triage simulation with React + Leaflet',
+          'Prioritisation across confirmed alive, vibration detected, broadcast only, safe and silent node',
+          'Submitted to the James Dyson Award 2026'
+        ]
+      },
+      {
+        title: 'DCE-SOFC Digital Twin — Hybrid Marine Propulsion System',
+        date: 'Mar 2025 – Present',
+        details: [
+          'Ammonia (NH₃) fuelled SOFC + Dual-Cycle Engine hybrid system',
+          'Arrhenius kinetics: k = A·exp(-Ea/RT), with conversion calculation',
+          'Real-time energy efficiency and emission charts with Recharts',
+          'Terminal-style P&ID engineering diagram (animated SVG)'
+        ]
+      },
+      {
+        title: 'Takaslat — Barter Marketplace',
+        date: 'May 2025',
+        details: [
+          'Full-stack marketplace in React + TypeScript + Vite + Zustand',
+          'AI-assisted listing descriptions and price estimation',
+          'Swap offers, negotiation simulator, trust score system',
+          'Map view, bundle offers, item comparison'
+        ]
+      },
+      {
+        title: 'FedaGrup İnşaat — Corporate Website',
+        date: 'Apr 2025',
+        details: [
+          'Client project — live in production: fedagrupinsaat.com',
+          'Mobile-friendly, fast-loading corporate site',
+          'Trust-focused design with a clear service architecture'
+        ]
+      },
+      {
+        title: 'GeoSocial — Location-Based Social Network',
+        date: '2024',
+        details: [
+          'React Native + Firebase + GPS tracking',
+          'Gamification, nearby user discovery, social feed'
+        ]
+      }
+    ],
+    skillsTitle: 'Technical Skills',
+    skills: [
+      { label: 'Frontend', items: ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'Framer Motion'] },
+      { label: 'Backend & DB', items: ['Node.js', 'Express', 'Firebase', 'Zustand'] },
+      { label: 'Mobile', items: ['React Native', 'Expo'] },
+      { label: 'Engineering', items: ['Thermodynamics', 'LoRa / IoT', 'Arrhenius Kinetics', 'P&ID Diagrams'] },
+      { label: 'Tools', items: ['Git', 'Vercel', 'Recharts', 'Leaflet', 'Figma'] },
+      { label: 'Languages', items: ['JavaScript', 'TypeScript', 'Python', 'Java', 'Dart (learning)'] }
+    ],
+    languagesTitle: 'Languages',
+    languages: [
+      { lang: 'Turkish', level: 'Native' },
+      { lang: 'English', level: 'Good (B2)' }
+    ]
+  }
+}
 
 export default function CV() {
+  const { lang } = useLanguage()
+  const cv = CV_CONTENT[lang] || CV_CONTENT.tr
   const handlePrint = () => window.print()
 
   return (
@@ -14,7 +184,7 @@ export default function CV() {
           animate={{ opacity: 1, y: 0 }}
           className="flex items-center justify-between mb-8 print:hidden"
         >
-          <h1 className="text-4xl font-bold text-terminal-text neon-glow">📄 Curriculum Vitae</h1>
+          <h1 className="text-4xl font-bold text-terminal-text neon-glow">📄 {cv.pageTitle}</h1>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -22,7 +192,7 @@ export default function CV() {
             className="flex items-center space-x-2 px-6 py-3 bg-terminal-text border-2 border-terminal-text text-terminal-bg font-bold font-mono hover:bg-transparent hover:text-terminal-text transition-all"
           >
             <Download size={18} />
-            <span>YAZDIR / İNDİR</span>
+            <span>{cv.print}</span>
           </motion.button>
         </motion.div>
 
@@ -35,7 +205,7 @@ export default function CV() {
               Mirac Altunbay
             </h2>
             <p className="text-terminal-secondary font-mono text-lg mb-4 print:text-gray-600">
-              Mechanical Engineering Student & Software Developer
+              {cv.role}
             </p>
             <div className="flex flex-wrap gap-4 text-sm font-mono text-gray-400 print:text-gray-600">
               <span className="flex items-center gap-1.5">
@@ -60,98 +230,45 @@ export default function CV() {
               </a>
               <span className="flex items-center gap-1.5">
                 <MapPin size={14} className="text-terminal-accent print:text-gray-500" />
-                Kayseri, Türkiye
+                {cv.location}
               </span>
             </div>
           </div>
 
           {/* About */}
-          <Section icon={<Code size={18} />} title="Hakkımda / About">
+          <Section icon={<Code size={18} />} title={cv.aboutTitle}>
             <p className="text-gray-300 leading-relaxed print:text-gray-700">
-              Abdullah Gül Üniversitesi Makine Mühendisliği 1. sınıf öğrencisiyim. Yazılım geliştirme ve mühendislik simülasyonlarına ilgi duyuyorum. 6 Şubat depreminden ilham alarak ConcreteWeb adlı enkaz altı LoRa beacon sistemini tasarladım; amonyak yakıtlı gemi tahrik sistemleri için termodinamik simülasyon geliştirdim. Öğrenirken yapmayı, yaparken öğrenmeyi tercih ediyorum.
+              {cv.about}
             </p>
           </Section>
 
           {/* Education */}
-          <Section icon={<GraduationCap size={18} />} title="Eğitim / Education">
-            <CVItem
-              title="Makine Mühendisliği"
-              subtitle="Abdullah Gül Üniversitesi (AGÜ) — Kayseri"
-              date="Eyl 2024 – Devam ediyor"
-              details={['1. Sınıf öğrencisi', 'Odak: termodinamik simülasyon, IoT ve mühendislik tasarımı']}
-            />
+          <Section icon={<GraduationCap size={18} />} title={cv.educationTitle}>
+            {cv.education.map((item) => (
+              <CVItem key={item.title} {...item} />
+            ))}
           </Section>
 
           {/* Projects */}
-          <Section icon={<Briefcase size={18} />} title="Projeler / Projects">
-            <CVItem
-              title="ConcreteWeb — Enkaz Altı Acil İletişim Sistemi"
-              date="Şub 2025 – Devam ediyor"
-              details={[
-                'Bina başına tek HUB ile 868 MHz LoRa store-and-forward mesh mimarisi',
-                'Beacon ID, bina, kat ve yatak odası kurulum konumunu eşleştiren GPSsiz kayıt modeli',
-                'React + Leaflet ile bina HUB haritası ve Station triyaj simülasyonu',
-                'Confirmed alive, vibration detected, broadcast only, safe ve silent node önceliklendirmesi'
-              ]}
-            />
-            <CVItem
-              title="DCE-SOFC Dijital İkiz — Hibrit Gemi Tahrik Sistemi"
-              date="Mar 2025 – Devam ediyor"
-              details={[
-                'Amonyak (NH₃) yakıtlı SOFC + Dual-Cycle Engine hibrit sistemi',
-                'Arrhenius kinetikleri: k = A·exp(-Ea/RT), dönüşüm hesabı',
-                'Recharts ile gerçek zamanlı enerji verimliliği ve emisyon grafikleri',
-                'Terminal-stil P&ID mühendislik diyagramı (SVG animasyonlu)'
-              ]}
-            />
-            <CVItem
-              title="Takaslat — Takas Marketplace"
-              date="May 2025"
-              details={[
-                'React + TypeScript + Vite + Zustand full-stack marketplace',
-                'AI destekli ilan açıklaması ve fiyat tahmini',
-                'Takas teklifi, müzakere simülatörü, güven puanı sistemi',
-                'Harita görünümü, paket teklifi, ürün karşılaştırma'
-              ]}
-            />
-            <CVItem
-              title="FedaGrup İnşaat — Kurumsal Web Sitesi"
-              date="Nis 2025"
-              details={[
-                'Müşteri projesi — production\'da canlı: fedagrupinsaat.com',
-                'Mobil uyumlu, hızlı yüklenen kurumsal site',
-                'Güven odaklı tasarım, net hizmet mimarisi'
-              ]}
-            />
-            <CVItem
-              title="GeoSocial — Konuma Dayalı Sosyal Ağ"
-              date="2024"
-              details={[
-                'React Native + Firebase + GPS tracking',
-                'Gamification, yakın kullanıcıları bulma, sosyal akış'
-              ]}
-            />
+          <Section icon={<Briefcase size={18} />} title={cv.projectsTitle}>
+            {cv.projects.map((item) => (
+              <CVItem key={item.title} {...item} />
+            ))}
           </Section>
 
           {/* Skills */}
-          <Section icon={<Code size={18} />} title="Teknik Beceriler / Technical Skills">
+          <Section icon={<Code size={18} />} title={cv.skillsTitle}>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <SkillGroup label="Frontend" items={['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'Framer Motion']} />
-              <SkillGroup label="Backend & DB" items={['Node.js', 'Express', 'Firebase', 'Zustand']} />
-              <SkillGroup label="Mobile" items={['React Native', 'Expo']} />
-              <SkillGroup label="Engineering" items={['Termodinamik', 'LoRa / IoT', 'Arrhenius Kinetik', 'P&ID Diyagram']} />
-              <SkillGroup label="Tools" items={['Git', 'Vercel', 'Recharts', 'Leaflet', 'Figma']} />
-              <SkillGroup label="Languages" items={['JavaScript', 'TypeScript', 'Python', 'Java', 'Dart (öğreniyorum)']} />
+              {cv.skills.map((group) => (
+                <SkillGroup key={group.label} label={group.label} items={group.items} />
+              ))}
             </div>
           </Section>
 
           {/* Languages */}
-          <Section icon={<Award size={18} />} title="Diller / Languages">
+          <Section icon={<Award size={18} />} title={cv.languagesTitle}>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-              {[
-                { lang: 'Türkçe', level: 'Anadil' },
-                { lang: 'İngilizce', level: 'İyi (B2)' },
-              ].map(l => (
+              {cv.languages.map(l => (
                 <div key={l.lang} className="bg-terminal-bg border border-terminal-border p-3 print:border-gray-300">
                   <div className="text-terminal-text font-mono font-bold text-sm print:text-black">{l.lang}</div>
                   <div className="text-gray-400 text-xs font-mono print:text-gray-600">{l.level}</div>

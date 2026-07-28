@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { MessageCircle, X, Send, Terminal, Zap } from 'lucide-react'
+import { useLanguage } from '../contexts/LanguageContext'
 
-const RESPONSES = {
+const RESPONSES_TR = {
   greetings: [
     "Merhaba! Ben Mirac'ın portfolio asistanıyım. Size nasıl yardımcı olabilirim?",
     "Hey! Mirac hakkında merak ettiğin bir şey var mı?",
@@ -35,8 +36,60 @@ const RESPONSES = {
   help: "💡 Şunları sorabilirsin:\n\n• 'projeler' - ConcreteWeb, DCE, GeoSocial\n• 'concreteweb' - ConcreteWeb projesi detay\n• 'eğitim' veya 'okul' - Üniversite bilgisi\n• 'iletişim' - Email, sosyal medya\n• 'beceriler' veya 'skills' - Teknik yetenekler\n• 'oyunlar' - Mini games\n• 'cv' - CV indirme"
 }
 
-const getResponse = (message) => {
+const RESPONSES_EN = {
+  greetings: [
+    "Hi! I'm Mirac's portfolio assistant. How can I help you?",
+    "Hey! Anything you're curious about regarding Mirac?",
+    "Hello! You can ask about the projects, education or contact details."
+  ],
+
+  projects: {
+    concreteweb: "ConcreteWeb: Building-level LoRa HUB mesh and rescue triage simulation. Beacons are registered to rooms during installation and do not report GPS. /demos/concreteweb has the live demo.",
+    dce: "⚡ DCE-SOFC: An ammonia-fuelled hybrid marine vessel. Zero CO₂ emissions! Arrhenius chemistry and fuel cell technology. There's a simulation at /demos/dce-sofc!",
+    geosocial: "📱 GeoSocial: A location-based social network. React Native + Firebase, with GPS tracking and a check-in system. There's a mockup at /demos/geosocial!",
+    all: "Mirac is working on 3 major projects:\n\n1. ConcreteWeb - emergency LoRa system\n2. DCE-SOFC - ammonia hybrid engine\n3. GeoSocial - location-based social app\n\nWhich one would you like to hear more about?"
+  },
+
+  education: "🎓 Mirac is a first-year Mechanical Engineering student at Abdullah Gül University (AGÜ), studying in Kayseri.",
+
+  skills: "💻 Skills:\n• React, React Native, Firebase\n• Java, JavaScript, full-stack\n• LoRa, GPS, mesh networks\n• Thermodynamics, Arrhenius chemistry\n• Mobile app development",
+
+  contact: "📧 Contact:\n• Email: mirac.altunbay@agu.edu.tr\n• GitHub: github.com/altunbaymirac\n• LinkedIn: Miraç Altunbay\n• Instagram: @altunbay.mirac\n\nYou can also use the form on the /contact page!",
+
+  games: "🎮 There are 2 retro games in the portfolio! Snake and Pong, playable on the /games page. Terminal aesthetic, pixel-perfect!",
+
+  cv: "📄 To download the CV, go to the /contact page. There's a download button there for the detailed PDF.",
+
+  default: [
+    "Hmm, I didn't quite get that. You could ask about:\n• The projects\n• Education/school\n• Contact details\n• Games\n• Downloading the CV",
+    "I don't know about that one. Try asking about 'projects', 'contact', 'education', 'cv' or 'games'!",
+    "I didn't understand 🤔 Type 'help' and I'll show you what I can do!"
+  ],
+
+  help: "💡 You can ask me about:\n\n• 'projects' - ConcreteWeb, DCE, GeoSocial\n• 'concreteweb' - ConcreteWeb project details\n• 'education' or 'school' - university info\n• 'contact' - email, social media\n• 'skills' - technical abilities\n• 'games' - mini games\n• 'cv' - downloading the CV"
+}
+
+const UI = {
+  tr: {
+    welcome: "Merhaba! Ben Mirac'ın portfolio asistanıyım 🤖\n\n✨ Hızlı komutlar:\n• 'projeler' - Tüm projeler\n• 'iletişim' - Email/sosyal medya\n• 'cv' - CV indirme\n• 'help' - Tüm komutlar",
+    suggestions: ['projeler', 'ConcreteWeb nedir?', 'iletişim', 'cv', 'oyunlar'],
+    typing: 'Yazıyor...',
+    placeholder: 'Bir şey sor...',
+    hint: "'help' yazarak komutları görebilirsin"
+  },
+  en: {
+    welcome: "Hi! I'm Mirac's portfolio assistant 🤖\n\n✨ Quick commands:\n• 'projects' - all projects\n• 'contact' - email/social media\n• 'cv' - download the CV\n• 'help' - all commands",
+    suggestions: ['projects', 'What is ConcreteWeb?', 'contact', 'cv', 'games'],
+    typing: 'Typing...',
+    placeholder: 'Ask me something...',
+    hint: "Type 'help' to see the commands"
+  }
+}
+
+
+const getResponse = (message, lang = 'tr') => {
   const msg = message.toLowerCase().trim()
+  const RESPONSES = lang === 'en' ? RESPONSES_EN : RESPONSES_TR
   
   // Greetings
   if (/(merhaba|selam|hey|hi|hello|sa)/i.test(msg)) {
@@ -92,23 +145,19 @@ const getResponse = (message) => {
 }
 
 export default function TerminalChatbot() {
+  const { lang } = useLanguage()
+  const ui = UI[lang] || UI.tr
   const [isOpen, setIsOpen] = useState(false)
-  const [messages, setMessages] = useState([
-    { 
-      type: 'bot', 
-      text: "Merhaba! Ben Mirac'ın portfolio asistanıyım 🤖\n\n✨ Hızlı komutlar:\n• 'projeler' - Tüm projeler\n• 'iletişim' - Email/sosyal medya\n• 'cv' - CV indirme\n• 'help' - Tüm komutlar"
-    }
-  ])
+  const [messages, setMessages] = useState([{ type: 'bot', text: ui.welcome }])
   const [input, setInput] = useState('')
   const [isTyping, setIsTyping] = useState(false)
-  const [suggestions] = useState([
-    'projeler',
-    'ConcreteWeb nedir?',
-    'iletişim',
-    'cv',
-    'oyunlar'
-  ])
+  const suggestions = ui.suggestions
   const messagesEndRef = useRef(null)
+
+  // Dil değişince açılış mesajı da çevrilsin
+  useEffect(() => {
+    setMessages(prev => (prev.length === 1 && prev[0].type === 'bot' ? [{ type: 'bot', text: ui.welcome }] : prev))
+  }, [ui.welcome])
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -118,17 +167,17 @@ export default function TerminalChatbot() {
     scrollToBottom()
   }, [messages])
 
-  const handleSend = () => {
-    if (!input.trim()) return
+  const handleSend = (text = input) => {
+    if (!text.trim()) return
 
-    const userMessage = { type: 'user', text: input }
+    const userMessage = { type: 'user', text }
     setMessages(prev => [...prev, userMessage])
     setInput('')
     setIsTyping(true)
 
     // Simulate typing delay
     setTimeout(() => {
-      const botResponse = { type: 'bot', text: getResponse(input) }
+      const botResponse = { type: 'bot', text: getResponse(text, lang) }
       setMessages(prev => [...prev, botResponse])
       setIsTyping(false)
     }, 500 + Math.random() * 500)
@@ -220,7 +269,7 @@ export default function TerminalChatbot() {
                   className="flex justify-start"
                 >
                   <div className="bg-terminal-darker border-2 border-terminal-accent text-terminal-text p-3 font-mono text-sm">
-                    <span className="animate-pulse">Yazıyor...</span>
+                    <span className="animate-pulse">{ui.typing}</span>
                   </div>
                 </motion.div>
               )}
@@ -236,10 +285,7 @@ export default function TerminalChatbot() {
                   {suggestions.map((suggestion, i) => (
                     <button
                       key={i}
-                      onClick={() => {
-                        setInput(suggestion)
-                        setTimeout(() => handleSend(), 100)
-                      }}
+                      onClick={() => handleSend(suggestion)}
                       className="px-3 py-1 bg-terminal-bg border border-terminal-accent text-terminal-accent text-xs font-mono hover:bg-terminal-accent hover:text-white transition-all"
                     >
                       {suggestion}
@@ -254,11 +300,11 @@ export default function TerminalChatbot() {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyPress={handleKeyPress}
-                  placeholder="Bir şey sor..."
+                  placeholder={ui.placeholder}
                   className="flex-1 bg-terminal-bg border-2 border-terminal-border text-terminal-text px-4 py-2 font-mono text-sm focus:outline-none focus:border-terminal-accent"
                 />
                 <button
-                  onClick={handleSend}
+                  onClick={() => handleSend()}
                   disabled={!input.trim()}
                   className={`px-4 py-2 ${
                     input.trim()
@@ -270,7 +316,7 @@ export default function TerminalChatbot() {
                 </button>
               </div>
               <div className="mt-2 text-xs text-gray-500 font-mono">
-                'help' yazarak komutları görebilirsin
+                {ui.hint}
               </div>
             </div>
           </motion.div>

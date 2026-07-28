@@ -5,12 +5,15 @@ import remarkGfm from 'remark-gfm'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { ArrowLeft, Calendar, Clock, Share2, Copy, Check, ExternalLink } from 'lucide-react'
-import { blogPosts } from '../data/blogPosts'
+import { blogPosts, localizePost } from '../data/blogPosts'
+import { useLanguage } from '../contexts/LanguageContext'
 import { useState } from 'react'
 
 export default function BlogPost() {
   const { slug } = useParams()
-  const post = blogPosts.find(p => p.slug === slug)
+  const { lang, t } = useLanguage()
+  const source = blogPosts.find(p => p.slug === slug)
+  const post = source ? localizePost(source, lang) : null
   const [copied, setCopied] = useState(false)
 
   if (!post) {
@@ -18,9 +21,9 @@ export default function BlogPost() {
       <div className="min-h-screen pt-24 px-4 flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-4xl font-bold text-terminal-text mb-4">404</h1>
-          <p className="text-gray-400 mb-6">Post not found</p>
+          <p className="text-gray-400 mb-6">{t.blog.notFound}</p>
           <Link to="/blog" className="text-terminal-secondary hover:underline">
-            ← Back to blog
+            ← {t.blog.back}
           </Link>
         </div>
       </div>
@@ -44,7 +47,7 @@ export default function BlogPost() {
             className="flex items-center space-x-2 text-terminal-secondary mb-8 hover:underline"
           >
             <ArrowLeft size={20} />
-            <span>Back to blog</span>
+            <span>{t.blog.back}</span>
           </motion.div>
         </Link>
 
@@ -61,7 +64,7 @@ export default function BlogPost() {
           <div className="flex items-center flex-wrap gap-4 text-sm text-gray-400 mb-4">
             <div className="flex items-center space-x-2">
               <Calendar size={16} />
-              <span>{new Date(post.date).toLocaleDateString('en-US', {
+              <span>{new Date(post.date).toLocaleDateString(lang === 'en' ? 'en-US' : 'tr-TR', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric'
@@ -69,7 +72,7 @@ export default function BlogPost() {
             </div>
             <div className="flex items-center space-x-2">
               <Clock size={16} />
-              <span>{post.readTime} read</span>
+              <span>{lang === 'en' ? post.readTime : post.readTime.replace('min', 'dk')} {t.blog.read}</span>
             </div>
           </div>
 
@@ -93,12 +96,12 @@ export default function BlogPost() {
             {copied ? (
               <>
                 <Check size={16} />
-                <span className="text-sm font-mono">Copied!</span>
+                <span className="text-sm font-mono">{t.blog.copied}</span>
               </>
             ) : (
               <>
                 <Share2 size={16} />
-                <span className="text-sm font-mono">Share</span>
+                <span className="text-sm font-mono">{t.blog.share}</span>
               </>
             )}
           </motion.button>

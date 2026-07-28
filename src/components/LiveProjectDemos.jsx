@@ -48,7 +48,7 @@ const DEMOS = [
   {
     id: 'takasla',
     title: 'Takaslat',
-    description: 'Para kullanmadan eşya takası — AI destekli öneri ve müzakere sistemi olan marketplace',
+    description: 'Swap items without money — a marketplace with AI-assisted suggestions and negotiation',
     tech: ['React', 'TypeScript', 'Node.js', 'AI'],
     url: 'https://takaslat.vercel.app',
     external: true,

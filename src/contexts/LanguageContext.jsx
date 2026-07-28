@@ -44,6 +44,15 @@ export const translations = {
       title: 'Projects',
       subtitle: 'Live demos, 3D visualizations, and interactive APIs',
       currentTitle: 'Current Projects'
+    },
+    blog: {
+      title: 'Blog & Dev Log',
+      subtitle: 'Engineering insights, project updates, and technical deep-dives',
+      back: 'Back to blog',
+      read: 'read',
+      share: 'Share',
+      copied: 'Copied!',
+      notFound: 'Post not found'
     }
   },
   tr: {
@@ -87,13 +96,32 @@ export const translations = {
       title: 'Projeler',
       subtitle: 'Canlı demolar, 3D görseller ve interaktif API\'lar',
       currentTitle: 'Mevcut Projeler'
+    },
+    blog: {
+      title: 'Blog & Geliştirme Günlüğü',
+      subtitle: 'Mühendislik notları, proje güncellemeleri ve teknik yazılar',
+      back: 'Bloga dön',
+      read: 'okuma',
+      share: 'Paylaş',
+      copied: 'Kopyalandı!',
+      notFound: 'Yazı bulunamadı'
     }
   }
 }
 
 export function LanguageProvider({ children }) {
-  const [lang, setLang] = useState('tr')
-  const toggle = () => setLang(l => l === 'tr' ? 'en' : 'tr')
+  // Dil seçimi sayfa yenilendiğinde kaybolmasın
+  const [lang, setLang] = useState(() => {
+    if (typeof window === 'undefined') return 'tr'
+    return window.localStorage.getItem('lang') === 'en' ? 'en' : 'tr'
+  })
+
+  const toggle = () => setLang(l => {
+    const next = l === 'tr' ? 'en' : 'tr'
+    if (typeof window !== 'undefined') window.localStorage.setItem('lang', next)
+    return next
+  })
+
   const t = translations[lang]
   return (
     <LanguageContext.Provider value={{ lang, toggle, t }}>
