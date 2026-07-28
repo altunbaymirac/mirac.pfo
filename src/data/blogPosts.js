@@ -1,5 +1,163 @@
 export const blogPosts = [
   {
+    slug: 'geosocial-interaktif-demo',
+    title: 'GeoSocial: Uygulamayı Tarayıcıda Canlandırmak',
+    date: '2026-07-28',
+    readTime: '5 min',
+    tags: ['GeoSocial', 'React', 'Framer Motion', 'Demo'],
+    excerpt: 'GeoSocial mobil uygulamasını kimseye APK göndermeden anlatabilmek için portfolyoya çalışan bir telefon mockup demosu ekledim.',
+    projectLinks: [
+      { label: 'Canlı Demo', href: '/demos/geosocial' }
+    ],
+    content: `
+# GeoSocial: Uygulamayı Tarayıcıda Canlandırmak
+
+GeoSocial, React Native + Firebase ile yazdığım konum tabanlı bir sosyal ağ uygulaması. Sorun şuydu: mobil bir projeyi portfolyoda anlatmak zor. Ekran görüntüsü ölü duruyor, APK göndermek kimsenin yapmak istemediği bir iş.
+
+Çözüm: uygulamanın kendisini tarayıcıda çalışır hale getirmek.
+
+## Ne Yaptık?
+
+Portfolyoya \`/demos/geosocial\` altında interaktif bir demo ekledim. Ziyaretçi hiçbir şey kurmadan uygulamayı deneyebiliyor.
+
+- **Telefon mockup'ı** — notch, status bar, alt navigasyon çubuğu dahil gerçek bir Android çerçevesi
+- **GPS tracking toggle** — açtığında konum koordinatları canlı olarak oynamaya başlıyor
+- **Check-in sistemi** — butona bastığında sayaç artıyor ve akışın en üstüne senin girişin düşüyor
+- **Yakındaki kullanıcılar** — haritada nabız gibi yanıp sönen mavi noktalar
+- **Üç sekme** — Map, Feed, Profile; aralarında geçiş animasyonlu
+- **Yan panel** — tech stack ve özellik listesi, demoyu izlerken okunacak bağlam
+
+## Teknik Tarafta İlginç Olan Kısımlar
+
+**Sahte GPS.** Gerçek konum izni istemek yerine \`setInterval\` ile koordinatlara küçük rastgele sapmalar ekledim. Tracking kapalıyken interval hiç kurulmuyor, açıldığında 3 saniyede bir güncelleniyor:
+
+\`\`\`javascript
+useEffect(() => {
+  if (!isTracking) return
+
+  const interval = setInterval(() => {
+    setCurrentLocation(prev => ({
+      ...prev,
+      lat: prev.lat + (Math.random() - 0.5) * 0.0001,
+      lng: prev.lng + (Math.random() - 0.5) * 0.0001
+    }))
+    setNearbyUsers(Math.floor(Math.random() * 15) + 3)
+  }, 3000)
+
+  return () => clearInterval(interval)
+}, [isTracking])
+\`\`\`
+
+Sapma değeri önemliydi: çok büyük olunca pin zıplıyor, çok küçük olunca hiçbir şey olmuyormuş gibi duruyor. \`0.0001\` derecelik oynama "cihaz gerçekten konumu dinliyor" hissini veriyor.
+
+**Sekme geçişleri.** Framer Motion'ın \`AnimatePresence\` bileşeni ile sekmeler soldan kayarak giriyor, sağdan çıkıyor. \`mode="wait"\` sayesinde iki sekme aynı anda ekranda olmuyor.
+
+**Akış her zaman dolu.** Check-in yaptığında yeni kayıt başa ekleniyor ve liste \`slice(0, 4)\` ile kırpılıyor. Böylece demo ne kadar kurcalanırsa kurcalansın telefon ekranı taşmıyor.
+
+## Ne Öğrendim?
+
+Demo yazarken en çok vakit alan şey mantık değil, **inandırıcılık** oldu. Sayılar durağan kalınca ekran ölü görünüyor; her şey aynı anda oynayınca gürültü oluyor. Aradaki dengeyi bulmak — hangi değer ne sıklıkla değişecek — asıl işin kendisiydi.
+
+Bir de şunu gördüm: bir projeyi anlatmanın en iyi yolu onu anlatmamak. Ziyaretçi "Check In" butonuna bir kez basınca uygulamanın ne yaptığını zaten anlıyor.
+
+## Sırada Ne Var?
+
+- Gerçek harita katmanı (şu an CSS grid ile çizilmiş bir mock)
+- Feed öğelerine yorum akışı
+- Demoyu React Native tarafındaki gerçek Firebase şemasıyla hizalamak
+
+React Native ve Flutter tarafındaki karşılaştırmam için [React Native vs Flutter yazıma](/blog/react-native-vs-flutter) bakabilirsin.
+
+---
+
+**Mirac Altunbay**
+Makine Mühendisliği, AGÜ
+`
+  },
+  {
+    slug: 'concreteweb-triage-demo',
+    title: 'ConcreteWeb: Haritadan Triyaj Ekranına',
+    date: '2026-07-28',
+    readTime: '6 min',
+    tags: ['ConcreteWeb', 'Disaster Response', 'LoRa', 'Demo'],
+    excerpt: 'FLARE adını ConcreteWeb yaptık ve demoyu "sinyal var mı" ekranından kurtarma ekibinin kime önce gideceğini söyleyen bir triyaj ekranına çevirdik.',
+    projectLinks: [
+      { label: 'Canlı Demo', href: '/demos/concreteweb' }
+    ],
+    content: `
+# ConcreteWeb: Haritadan Triyaj Ekranına
+
+ConcreteWeb'in çıkış hikâyesini [6 Şubat yazısında](/blog/concreteweb-6-subat) anlatmıştım. Bu yazı fikrin değil, **demonun** hikâyesi: son turda projeyi baştan aşağı elden geçirdik.
+
+## Önce İsim: FLARE → ConcreteWeb
+
+Proje eskiden FLARE'di. Sorun şuydu: "flare" kelimesi işaret fişeği çağrıştırıyor — yani birinin bilinçli olarak ateşlediği bir şey. Halbuki bu sistemin bütün fikri, **enkaz altındaki kişi hiçbir şey yapamasa bile** cihazın konuşması. İsim mesajın tam tersini söylüyordu.
+
+ConcreteWeb ise ne yaptığını anlatıyor: betonun içine gömülü bir ağ. Kod tabanının tamamında, chatbot cevaplarında, CV'de ve demo sayfasında isim değiştirildi; eski \`/demos/flare\` adresi yeni adrese yönlendiriliyor ki paylaşılmış linkler kırılmasın.
+
+## Asıl Değişiklik: Triyaj
+
+Eski demo ikili düşünüyordu — sinyal var ya da yok. Ama kurtarma ekibinin ihtiyacı bu değil. Onların sorusu şu: **hangi binaya, hangi kata önce gideyim?**
+
+Yeni demoda her beacon raporu beş durumdan birinde:
+
+- **Confirmed alive** (öncelik 1, kırmızı) — cihaz canlılık teyidi aldı
+- **Vibration detected** (öncelik 2, turuncu) — titreşim var ama teyit yok
+- **Broadcast only** (öncelik 3, gri) — cihaz yayında, canlılık verisi yok
+- **Safe** (temizlendi, yeşil) — kişi güvende olarak işaretlenmiş
+- **Silent node** (incelenmeli) — HUB'dan hiç paket gelmiyor
+
+Rapor listesi bu önceliğe göre sıralanıyor, harita pinleri duruma göre renkleniyor (kırmızı → turuncu → gri → yeşil), ve üstteki sayaç kartları her durumdan kaç tane olduğunu canlı gösteriyor.
+
+En kritik nokta **silent node**. Sessizlik "kimse yok" demek değil — HUB'ın ezilmiş, pilinin bitmiş ya da menzil dışında kalmış olması demek olabilir. Bu yüzden sessiz düğümler listeden düşmüyor, ayrı bir "incelenmeli" kutusunda duruyor.
+
+## Tier 3: Raporun İstasyona Varışı
+
+Sistem üç katmanlı çalışıyor ve demo artık üçünü de gösteriyor:
+
+1. **Beacon** (oda içi) — deprem algılar, uyanır, kayıtlı bina/kat/oda bilgisiyle rapor üretir
+2. **HUB** (bina başına bir tane) — raporu alır, komşu HUB'lara 868 MHz store-and-forward mesh üzerinden aktarır
+3. **Station** — raporların toplandığı komuta noktası
+
+Her raporun bir **relay path**'i var ve seçtiğinde detay panelinde görünüyor:
+
+\`\`\`
+HUB-04 -> HUB-07 -> STATION-01
+\`\`\`
+
+İstasyonun işi sadece toplamak değil, **tekilleştirmek**. Aynı beacon aynı raporu defalarca yayınlıyor (mesh'te paket kaybı normal); istasyon bunları Beacon ID'ye göre birleştirip tek satır gösteriyor. Yoksa ekran aynı kişinin yüzlerce kopyasıyla dolardı.
+
+## GPS Yok, Kurulum Kaydı Var
+
+Demoda sık gelen soruyu baştan kesmek için haritayı da değiştirdik: **beacon'lar haritada nokta üretmiyor.** Haritada sadece binalar ve HUB'ları var.
+
+Sebep basit — enkaz altında GPS zaten çalışmaz, ve her beacon'a GPS koymak hem maliyeti hem pil tüketimini uçurur. Bunun yerine konum **kurulum anında** kaydediliyor: bina, kat, oda. Rapor geldiğinde ekip "BLD-04, 3. kat, yatak odası" görüyor; bu enkazda bir koordinattan çok daha kullanışlı.
+
+## Demoyu Kendi Kendini Anlatır Hale Getirmek
+
+Son eklenen şey sağ üstteki **info butonu**. Basınca simülasyonun nasıl çalıştığını dört adımda açıklayan bir panel açılıyor: kayıtlı beacon'lar → bina başına bir HUB → HUB mesh aktarımı → istasyon triyajı.
+
+Bunu eklememizin sebebi şuydu: demoyu yanında durup anlatmadığın zaman ekran sadece yanıp sönen renkli kutulara benziyordu. Artık link tek başına gönderilebiliyor.
+
+## Ne Öğrendim?
+
+Teknik olarak en zor kısım mesh simülasyonu değildi — **neyi göstermemek gerektiğine karar vermekti**. Her beacon'ı haritaya nokta olarak basmak teknik olarak kolay ve görsel olarak etkileyici olurdu, ama sistemin nasıl çalıştığı hakkında yalan söylerdi.
+
+Bir de şunu gördüm: acil durum arayüzünde "veri göstermek" yetmiyor. Ekranın cevaplaması gereken tek bir soru var — **şimdi nereye koşayım?** Geri kalan her şey o sorunun önünde duran gürültü.
+
+## Sırada Ne Var?
+
+- ESP32 + LoRa ile fiziksel prototip
+- AGÜ kampüsünde gerçek menzil testi
+- Bina içi kat planı görünümü (harita pini yerine kat şeması)
+
+---
+
+**Mirac Altunbay**
+Makine Mühendisliği, AGÜ
+`
+  },
+  {
     slug: 'fedagrup-insaat-web-sitesi',
     title: 'FedaGrup: Kurumsal İnşaat Web Sitesi',
     date: '2026-05-20',
