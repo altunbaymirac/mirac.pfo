@@ -1,5 +1,151 @@
 export const blogPosts = [
   {
+    slug: 'titresimli-gomlekten-lora-agina',
+    title: 'Titreşimli gömlekten LoRa ağına',
+    date: '2026-08-06',
+    readTime: '8 min',
+    tags: ['Arduino', 'Embedded Systems', 'Cryptography', 'TÜBİTAK'],
+    excerpt: 'Sekiz yılda üç proje, ve her birinde yanlış anladığım bir şey.',
+    en: {
+      title: 'From a Vibrating Shirt to a LoRa Network',
+      excerpt: 'Three projects in eight years, and one thing I got wrong in each of them.',
+      content: `
+# From a Vibrating Shirt to a LoRa Network
+
+## Three projects in eight years, and one thing I got wrong in each of them
+
+Going through my old TÜBİTAK documents the other day, I noticed something: the things I've built since middle school look unrelated, but they aren't. A vibrating shirt, a talking bin, a file encryption system, and now a LoRa mesh network for earthquakes. Written out like that, the list looks scattered.
+
+But they all share the same skeleton: **read something from the environment, make a decision, do something to the physical world.** Sensor, logic, actuator. I've apparently been doing that for eight years; only the parts got bigger.
+
+This post is about those three older projects. Not as "I built it and it worked" — in each of them there was something I later realised I had misunderstood, and that's the part I actually want to write about.
+
+## 2018 — The Massaging Shirt
+
+My first TÜBİTAK 4006 project, back in middle school. The idea was simple: people who sit all day get stiff shoulders, so let's put vibration motors into the shoulder area of a shirt.
+
+What I built was technically modest. Small vibration motors, placed at the shoulders, switchable on and off. At that age getting it wired up and running felt like a big deal, and I still think it was a decent start.
+
+**What I'd do differently today:** I presented the project as "it relaxes the muscles". I never measured that. I had not a single piece of data on what the vibration did to muscle tension — no before-and-after comparison, no user feedback, nothing. It just sounded plausible.
+
+I know what that is now: **an unverified claim.** And a project's weakest point is usually not its technical part but sentences like that, glued on top. Today I'd describe it as: "pointwise feedback through vibration motors placed at the shoulders, for people who sit for long stretches." It says what I did, without claiming what it achieves.
+
+Don't claim what you haven't measured. I learned that from a shirt.
+
+## 2022 — The Talking Bin
+
+High school, same programme. An ultrasonic sensor detected a person approaching, a servo opened the lid, and when rubbish was dropped in the system said thank you — in both Turkish and English. It ran on an Arduino Uno.
+
+Being bilingual was the part that drew the most attention at the fair, but it wasn't the part that taught me anything.
+
+**What I'd do differently today:** two things.
+
+First, **I trusted the sensor reading as-is.** An ultrasonic sensor can produce nonsense on a single reading — the sound wave hits a soft surface and scatters, an echo comes off a wall to the side, the room is noisy. I had written "if distance is under 30, open". The result: the lid sometimes opened when nobody was there. Back then I called that "a fault", when it was a design error. Today I'd take several readings in a row and use their average or median; triggering physical motion off a single measurement is wrong.
+
+Second, **I had no concept of system state.** If someone kept standing in front of an open lid, the sensor triggered again and the servo got another command. The code made a decision from scratch at every moment, holding the fact "I'm already open" nowhere. Today I'd write a small state machine: closed → opening → open → closing. Four states, with clear transitions between them.
+
+Here's the interesting part: years later, working on a LoRa mesh, I ran into exactly those two problems. Not trusting noisy data, and tracking which state the system is in. The scale changed; the problem didn't.
+
+## 2022 — The Fon-Mod Encryption System
+
+My second project at the same fair. It encrypted files: take each character's ASCII value, shift it through a function I wrote, convert the result back to a character and write it out. I wrote the key generation and the encrypt/decrypt modules myself.
+
+At the time I thought I had built something very strong. The function was one I made up, nobody else knew it, therefore it couldn't be broken.
+
+**What I'd do differently today:** what I got wrong here isn't a single technical detail — it's the whole picture of what security is.
+
+What I wrote was a **monoalphabetic substitution** system. My function took only the character as input — it didn't care where in the text that character sat. The consequence: an 'e' turned into the same character wherever it appeared in the file. In other words there was a single substitution table valid for the entire file.
+
+Which means: someone who knows which letters are frequent in Turkish can count the most frequent characters in the ciphertext and recover the table with a few guesses. How convoluted my function was makes no difference, because the attacker isn't trying to find the function — they're deriving the table of its output.
+
+Then there's the key space. My key amounted to a few numbers for a single operation; the number of possibilities was small enough for an ordinary computer to exhaust in under a second. Back then I claimed "brute forcing it would take days", which wasn't true either.
+
+So why are genuinely unbreakable systems unbreakable? Researching that, what I really grasped was this: security comes **not from the complexity of the function, but from three separate things.** The key space being too large to search. The same key never being reused. And the ciphertext not leaking the statistical structure of the plaintext.
+
+When all three hold — the key as long as the message, fully random, and used once — the system isn't "hard to break", it becomes **mathematically unsolvable**. Because every possible plaintext that could produce your ciphertext becomes equally likely; brute force hands you every possibility, which is to say none of them.
+
+I was weak on all three. But if I hadn't written that project, I wouldn't have gone and read about any of this years later.
+
+## By way of a conclusion
+
+What these three have in common is that in all of them **I built something that worked without quite knowing why it worked.** The shirt vibrated, the bin opened its lid, the file got encrypted. All of them worked at the fair. But I had asked none of the questions: why is a sensor reading unreliable, what state is the system in, where does security actually come from?
+
+Right now I'm working on ConcreteWeb — an autonomous mesh network that carries messages over LoRa when infrastructure collapses after an earthquake. A much bigger project, but the skeleton is the same: read, decide, relay. And this time I know which questions to ask, because every time I didn't ask them, I paid for it somewhere.
+
+Eight years ago I was placing a vibration motor on a shoulder. I think I've been trying to do the same thing all along, just knowing a little more about what I'm doing each time.
+
+*The TÜBİTAK 4006 records for these projects are on ARBİS. I'm looking for the Fon-Mod source; if I find it I'll put it on GitHub and link it here.*
+`
+    },
+    content: `
+# Titreşimli gömlekten LoRa ağına
+
+## Sekiz yılda üç proje, ve her birinde yanlış anladığım bir şey
+
+Geçen gün eski TÜBİTAK belgelerimi karıştırırken fark ettim: ortaokuldan bugüne yaptığım şeyler birbirinden bağımsız görünüyor ama değil. Titreşimli bir gömlek, konuşan bir çöp kovası, bir dosya şifreleme sistemi, şimdi de deprem için LoRa mesh ağı. Listeye böyle bakınca dağınık duruyor.
+
+Ama hepsinde aynı iskelet var: **ortamdan bir şey oku, bir karar ver, fiziksel dünyaya bir şey yap.** Sensör, mantık, aktüatör. Sekiz yıldır bunu yapıyormuşum, sadece parçalar büyümüş.
+
+Bu yazı o üç eski projeyi anlatıyor. Ama "işte yaptım, çalıştı" diye değil — her birinde sonradan yanlış anladığımı gördüğüm bir şey vardı, asıl anlatmak istediğim o.
+
+## 2018 — Masaj Yapan Gömlek
+
+Ortaokuldayken TÜBİTAK 4006 için yaptığım ilk proje. Fikir basitti: gün boyu oturan insanların omuzları tutuluyor, gömleğin omuz bölgesine titreşim motorları koyalım.
+
+Yaptığım şey teknik olarak mütevazı. Küçük titreşim motorları, omuz bölgesine yerleştirilmiş, açılıp kapanabiliyor. O yaşta bunu kurup çalıştırmak bana büyük geliyordu, hâlâ da güzel bir başlangıç olduğunu düşünüyorum.
+
+**Bugün ne farklı yapardım:** projeyi "kas gevşetiyor" diye anlatıyordum. Bunu hiç ölçmedim. Titreşimin kas gerginliğine ne yaptığına dair elimde tek bir veri yoktu — ne öncesi sonrası bir kıyas, ne bir kullanıcı geri bildirimi, hiçbir şey. Sadece mantıklı geliyordu.
+
+Bunun ne olduğunu şimdi biliyorum: **doğrulanmamış iddia.** Ve bir projenin en zayıf noktası genelde teknik kısmı değil, üzerine yapıştırılan bu tür cümleler oluyor. Bugün olsa şöyle anlatırdım: "uzun süre oturan kişiler için omuz bölgesine yerleştirilmiş titreşim motorlarıyla noktasal geri bildirim." Ne yaptığımı söylüyor, ne işe yaradığını iddia etmiyor.
+
+Ölçmediğin şeyi iddia etme. Bunu bir gömlekten öğrendim.
+
+## 2022 — Konuşan Çöp Kovası
+
+Lisedeyken, aynı program kapsamında. Ultrasonik sensör önüne gelen kişiyi algılıyor, servo motor kapağı açıyor, çöp atıldığında sistem teşekkür ediyordu — hem Türkçe hem İngilizce. Arduino Uno üzerinde koşuyordu.
+
+Çift dilli olması fuarda en çok ilgi çeken kısımdı, ama bana asıl bir şey öğreten kısım değil.
+
+**Bugün ne farklı yapardım:** iki şey.
+
+Birincisi, **sensör okumasına olduğu gibi güveniyordum.** Ultrasonik sensör tek bir okumada saçmalayabilir — ses dalgası yumuşak bir yüzeye çarpar döner, yandaki duvardan yankı gelir, ortam gürültülüdür. Ben "mesafe 30'un altındaysa aç" diye yazmıştım. Sonuç: bazen kimse yokken kapak açılıyordu. O zaman buna "arıza" diyordum, halbuki tasarım hatasıydı. Bugün arka arkaya birkaç okuma alıp ortalamasına ya da medyanına bakardım; tek bir ölçüme dayanarak fiziksel bir hareket tetiklemek yanlış.
+
+İkincisi, **sistemin durumu diye bir kavramım yoktu.** Kapak açıkken biri önünde durmaya devam ederse sensör yine tetikleniyor, servo yine komut alıyordu. Kod her an sıfırdan karar veriyordu, "şu an zaten açığım" bilgisini hiçbir yerde tutmuyordu. Bugün olsa küçük bir durum makinesi yazardım: kapalı → açılıyor → açık → kapanıyor. Dört durum, aralarında net geçişler.
+
+İlginç olan şu: yıllar sonra LoRa mesh üzerinde çalışırken tam olarak aynı iki problemle karşılaştım. Gürültülü veriye güvenmemek ve sistemin hangi durumda olduğunu takip etmek. Ölçek değişti, problem değişmedi.
+
+## 2022 — Fon-Mod Şifreleme Sistemi
+
+Aynı fuarda ikinci projem. Dosya şifreleme yapıyordu: her karakterin ASCII değerini alıp yazdığım bir fonksiyonla öteliyor, çıkan sayıyı geri karaktere çevirip yazıyordu. Anahtar üretimini ve şifreleme/çözme modüllerini kendim yazmıştım.
+
+Bunu yaptığımda çok güçlü bir şey yaptığımı düşünüyordum. Fonksiyon benim uydurduğum bir fonksiyondu, kimse bilmiyordu, o halde kırılamazdı.
+
+**Bugün ne farklı yapardım:** burada yanıldığım şey tek bir teknik detay değil, güvenliğin ne olduğuna dair bütün resimdi.
+
+Yazdığım şey **tek alfabeli bir yer değiştirme** sistemiydi. Fonksiyonum girdi olarak sadece karakteri alıyordu — karakterin metnin neresinde durduğunu umursamıyordu. Bunun sonucu şu: 'e' harfi dosyanın neresinde geçerse geçsin hep aynı karaktere dönüşüyordu. Yani ortada dosyanın tamamı için geçerli, tek bir dönüşüm tablosu vardı.
+
+Bu da şu demek: Türkçe metinde hangi harflerin sık geçtiğini bilen biri, şifreli metindeki en sık karakterleri sayıp birkaç tahminle tabloyu çıkarabilir. Fonksiyonumun ne kadar karışık olduğu hiç fark etmiyor, çünkü saldıran kişi fonksiyonu bulmaya çalışmıyor — sonucun tablosunu çıkarıyor.
+
+Bir de anahtar uzayı meselesi var. Anahtarım tek bir işlem için birkaç sayıdan ibaretti; denenebilecek ihtimal sayısı sıradan bir bilgisayarın saniyenin altında bitireceği kadar azdı. O zamanlar "brute force ile kırmak günler sürer" diye anlatıyordum, bu da doğru değildi.
+
+Peki gerçekten kırılamayan sistemler neden kırılamıyor? Bunu araştırınca asıl kavradığım şey şuydu: güvenlik, **fonksiyonun karmaşıklığından değil, üç ayrı şeyden geliyor.** Anahtar uzayının denenemeyecek kadar büyük olması. Aynı anahtarın tekrar kullanılmaması. Ve şifreli metnin, düz metnin istatistiksel yapısını dışarı sızdırmaması.
+
+Bu üçü sağlandığında — anahtar mesaj kadar uzun, tamamen rastgele ve tek kullanımlıksa — sistem "kırması zor" olmuyor, **matematiksel olarak çözülemez** oluyor. Çünkü elindeki şifreli metinden üretilebilecek her olası düz metin eşit derecede mümkün hale geliyor; brute force sana bütün ihtimalleri veriyor, yani hiçbirini vermiyor.
+
+Ben üçünde de zayıftım. Ama bu projeyi yazmasaydım, yıllar sonra bunları merak edip okumazdım.
+
+## Sonuç niyetine
+
+Bu üç projenin ortak noktası, üçünde de **çalışan bir şey yapmış ama neden çalıştığını tam bilmiyor olmam.** Gömlek titreşiyordu, kova kapağını açıyordu, dosya şifreleniyordu. Hepsi fuarda çalıştı. Ama "sensör okuması neden güvenilmez", "sistem hangi durumda", "güvenlik nereden geliyor" sorularının hiçbirini sormamıştım.
+
+Şu an ConcreteWeb üzerinde çalışıyorum — deprem sonrası altyapı çöktüğünde telefonların birbirine LoRa üzerinden mesaj taşıdığı otonom bir mesh ağı. Çok daha büyük bir proje, ama iskeleti aynı: oku, karar ver, ilet. Ve bu sefer sorulacak soruları biliyorum, çünkü sormadığım her sefer bir yerde bedelini gördüm.
+
+Sekiz yıl önce omuz için titreşim motoru yerleştiriyordum. Sanırım aslında hep aynı şeyi yapmaya çalışıyormuşum, sadece her seferinde biraz daha ne yaptığımı bilerek.
+
+*Bu projelerin TÜBİTAK 4006 kayıtları ARBİS üzerinde duruyor. Fon-Mod'un kodunu arıyorum, bulursam GitHub'a koyup buraya link eklerim.*
+`
+  },
+  {
     slug: 'geosocial-interaktif-demo',
     title: 'GeoSocial: Uygulamayı Tarayıcıda Canlandırmak',
     date: '2026-07-28',
@@ -1096,7 +1242,7 @@ Gemi tahrik sistemlerinde devrim: Amonyak (NH₃) yakıtlı hibrit propulsion.
 
 ## Mevcut Problemler
 
-**Deniz taşımacılığı** dünya CO₂ emisyonlarının %3'ünden sorumlu. Bunalık fuel oil (HFO):
+**Deniz taşımacılığı** dünya CO₂ emisyonlarının %3'ünden sorumlu. Ağır fuel oil (HFO):
 - Yüksek SOx emisyonu
 - Pahalı yakıt
 - Karbon ayak izi yüksek
