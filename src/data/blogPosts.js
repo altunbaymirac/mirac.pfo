@@ -18,51 +18,51 @@ Going through my old TÜBİTAK documents the other day, I noticed something: the
 
 But they all share the same skeleton: **read something from the environment, make a decision, do something to the physical world.** Sensor, logic, actuator. I've apparently been doing that for eight years; only the parts got bigger.
 
-This post is about those three older projects. Not as "I built it and it worked" — in each of them there was something I later realised I had misunderstood, and that's the part I actually want to write about.
+This post is about those three older projects. Not as "I built it and it worked", in each of them there was something I later realised I had misunderstood, and that's the part I actually want to write about.
 
-## 2018 — The Massaging Shirt
+## 2018: The Massaging Shirt
 
 My first TÜBİTAK 4006 project, back in middle school. The idea was simple: people who sit all day get stiff shoulders, so let's put vibration motors into the shoulder area of a shirt.
 
 What I built was technically modest. Small vibration motors, placed at the shoulders, switchable on and off. At that age getting it wired up and running felt like a big deal, and I still think it was a decent start.
 
-**What I'd do differently today:** I presented the project as "it relaxes the muscles". I never measured that. I had not a single piece of data on what the vibration did to muscle tension — no before-and-after comparison, no user feedback, nothing. It just sounded plausible.
+**What I'd do differently today:** I presented the project as "it relaxes the muscles". I never measured that. I had not a single piece of data on what the vibration did to muscle tension, no before-and-after comparison, no user feedback, nothing. It just sounded plausible.
 
 I know what that is now: **an unverified claim.** And a project's weakest point is usually not its technical part but sentences like that, glued on top. Today I'd describe it as: "pointwise feedback through vibration motors placed at the shoulders, for people who sit for long stretches." It says what I did, without claiming what it achieves.
 
 Don't claim what you haven't measured. I learned that from a shirt.
 
-## 2022 — The Talking Bin
+## 2022: The Talking Bin
 
-High school, same programme. An ultrasonic sensor detected a person approaching, a servo opened the lid, and when rubbish was dropped in the system said thank you — in both Turkish and English. It ran on an Arduino Uno.
+High school, same programme. An ultrasonic sensor detected a person approaching, a servo opened the lid, and when rubbish was dropped in the system said thank you, in both Turkish and English. It ran on an Arduino Uno.
 
 Being bilingual was the part that drew the most attention at the fair, but it wasn't the part that taught me anything.
 
 **What I'd do differently today:** two things.
 
-First, **I trusted the sensor reading as-is.** An ultrasonic sensor can produce nonsense on a single reading — the sound wave hits a soft surface and scatters, an echo comes off a wall to the side, the room is noisy. I had written "if distance is under 30, open". The result: the lid sometimes opened when nobody was there. Back then I called that "a fault", when it was a design error. Today I'd take several readings in a row and use their average or median; triggering physical motion off a single measurement is wrong.
+First, **I trusted the sensor reading as-is.** An ultrasonic sensor can produce nonsense on a single reading, the sound wave hits a soft surface and scatters, an echo comes off a wall to the side, the room is noisy. I had written "if distance is under 30, open". The result: the lid sometimes opened when nobody was there. Back then I called that "a fault", when it was a design error. Today I'd take several readings in a row and use their average or median; triggering physical motion off a single measurement is wrong.
 
 Second, **I had no concept of system state.** If someone kept standing in front of an open lid, the sensor triggered again and the servo got another command. The code made a decision from scratch at every moment, holding the fact "I'm already open" nowhere. Today I'd write a small state machine: closed → opening → open → closing. Four states, with clear transitions between them.
 
 Here's the interesting part: years later, working on a LoRa mesh, I ran into exactly those two problems. Not trusting noisy data, and tracking which state the system is in. The scale changed; the problem didn't.
 
-## 2022 — The Fon-Mod Encryption System
+## 2022: The Fon-Mod Encryption System
 
 My second project at the same fair. It encrypted files: take each character's ASCII value, shift it through a function I wrote, convert the result back to a character and write it out. I wrote the key generation and the encrypt/decrypt modules myself.
 
 At the time I thought I had built something very strong. The function was one I made up, nobody else knew it, therefore it couldn't be broken.
 
-**What I'd do differently today:** what I got wrong here isn't a single technical detail — it's the whole picture of what security is.
+**What I'd do differently today:** what I got wrong here isn't a single technical detail, it's the whole picture of what security is.
 
-What I wrote was a **monoalphabetic substitution** system. My function took only the character as input — it didn't care where in the text that character sat. The consequence: an 'e' turned into the same character wherever it appeared in the file. In other words there was a single substitution table valid for the entire file.
+What I wrote was a **monoalphabetic substitution** system. My function took only the character as input, it didn't care where in the text that character sat. The consequence: an 'e' turned into the same character wherever it appeared in the file. In other words there was a single substitution table valid for the entire file.
 
-Which means: someone who knows which letters are frequent in Turkish can count the most frequent characters in the ciphertext and recover the table with a few guesses. How convoluted my function was makes no difference, because the attacker isn't trying to find the function — they're deriving the table of its output.
+Which means: someone who knows which letters are frequent in Turkish can count the most frequent characters in the ciphertext and recover the table with a few guesses. How convoluted my function was makes no difference, because the attacker isn't trying to find the function, they're deriving the table of its output.
 
 Then there's the key space. My key amounted to a few numbers for a single operation; the number of possibilities was small enough for an ordinary computer to exhaust in under a second. Back then I claimed "brute forcing it would take days", which wasn't true either.
 
 So why are genuinely unbreakable systems unbreakable? Researching that, what I really grasped was this: security comes **not from the complexity of the function, but from three separate things.** The key space being too large to search. The same key never being reused. And the ciphertext not leaking the statistical structure of the plaintext.
 
-When all three hold — the key as long as the message, fully random, and used once — the system isn't "hard to break", it becomes **mathematically unsolvable**. Because every possible plaintext that could produce your ciphertext becomes equally likely; brute force hands you every possibility, which is to say none of them.
+When all three hold (the key as long as the message, fully random, and used once) the system isn't "hard to break", it becomes **mathematically unsolvable**. Because every possible plaintext that could produce your ciphertext becomes equally likely; brute force hands you every possibility, which is to say none of them.
 
 I was weak on all three. But if I hadn't written that project, I wouldn't have gone and read about any of this years later.
 
@@ -70,7 +70,7 @@ I was weak on all three. But if I hadn't written that project, I wouldn't have g
 
 What these three have in common is that in all of them **I built something that worked without quite knowing why it worked.** The shirt vibrated, the bin opened its lid, the file got encrypted. All of them worked at the fair. But I had asked none of the questions: why is a sensor reading unreliable, what state is the system in, where does security actually come from?
 
-Right now I'm working on ConcreteWeb — an autonomous mesh network that carries messages over LoRa when infrastructure collapses after an earthquake. A much bigger project, but the skeleton is the same: read, decide, relay. And this time I know which questions to ask, because every time I didn't ask them, I paid for it somewhere.
+Right now I'm working on ConcreteWeb: an autonomous LoRa mesh network that, when infrastructure collapses after an earthquake, carries reports from beacons installed in rooms through building HUBs to a station. A much bigger project, but the skeleton is the same: read, decide, relay. And this time I know which questions to ask, because every time I didn't ask them, I paid for it somewhere.
 
 Eight years ago I was placing a vibration motor on a shoulder. I think I've been trying to do the same thing all along, just knowing a little more about what I'm doing each time.
 
@@ -86,35 +86,35 @@ Geçen gün eski TÜBİTAK belgelerimi karıştırırken fark ettim: ortaokuldan
 
 Ama hepsinde aynı iskelet var: **ortamdan bir şey oku, bir karar ver, fiziksel dünyaya bir şey yap.** Sensör, mantık, aktüatör. Sekiz yıldır bunu yapıyormuşum, sadece parçalar büyümüş.
 
-Bu yazı o üç eski projeyi anlatıyor. Ama "işte yaptım, çalıştı" diye değil — her birinde sonradan yanlış anladığımı gördüğüm bir şey vardı, asıl anlatmak istediğim o.
+Bu yazı o üç eski projeyi anlatıyor. Ama "işte yaptım, çalıştı" diye değil, her birinde sonradan yanlış anladığımı gördüğüm bir şey vardı, asıl anlatmak istediğim o.
 
-## 2018 — Masaj Yapan Gömlek
+## 2018: Masaj Yapan Gömlek
 
 Ortaokuldayken TÜBİTAK 4006 için yaptığım ilk proje. Fikir basitti: gün boyu oturan insanların omuzları tutuluyor, gömleğin omuz bölgesine titreşim motorları koyalım.
 
 Yaptığım şey teknik olarak mütevazı. Küçük titreşim motorları, omuz bölgesine yerleştirilmiş, açılıp kapanabiliyor. O yaşta bunu kurup çalıştırmak bana büyük geliyordu, hâlâ da güzel bir başlangıç olduğunu düşünüyorum.
 
-**Bugün ne farklı yapardım:** projeyi "kas gevşetiyor" diye anlatıyordum. Bunu hiç ölçmedim. Titreşimin kas gerginliğine ne yaptığına dair elimde tek bir veri yoktu — ne öncesi sonrası bir kıyas, ne bir kullanıcı geri bildirimi, hiçbir şey. Sadece mantıklı geliyordu.
+**Bugün ne farklı yapardım:** projeyi "kas gevşetiyor" diye anlatıyordum. Bunu hiç ölçmedim. Titreşimin kas gerginliğine ne yaptığına dair elimde tek bir veri yoktu, ne öncesi sonrası bir kıyas, ne bir kullanıcı geri bildirimi, hiçbir şey. Sadece mantıklı geliyordu.
 
 Bunun ne olduğunu şimdi biliyorum: **doğrulanmamış iddia.** Ve bir projenin en zayıf noktası genelde teknik kısmı değil, üzerine yapıştırılan bu tür cümleler oluyor. Bugün olsa şöyle anlatırdım: "uzun süre oturan kişiler için omuz bölgesine yerleştirilmiş titreşim motorlarıyla noktasal geri bildirim." Ne yaptığımı söylüyor, ne işe yaradığını iddia etmiyor.
 
 Ölçmediğin şeyi iddia etme. Bunu bir gömlekten öğrendim.
 
-## 2022 — Konuşan Çöp Kovası
+## 2022: Konuşan Çöp Kovası
 
-Lisedeyken, aynı program kapsamında. Ultrasonik sensör önüne gelen kişiyi algılıyor, servo motor kapağı açıyor, çöp atıldığında sistem teşekkür ediyordu — hem Türkçe hem İngilizce. Arduino Uno üzerinde koşuyordu.
+Lisedeyken, aynı program kapsamında. Ultrasonik sensör önüne gelen kişiyi algılıyor, servo motor kapağı açıyor, çöp atıldığında sistem teşekkür ediyordu, hem Türkçe hem İngilizce. Arduino Uno üzerinde koşuyordu.
 
 Çift dilli olması fuarda en çok ilgi çeken kısımdı, ama bana asıl bir şey öğreten kısım değil.
 
 **Bugün ne farklı yapardım:** iki şey.
 
-Birincisi, **sensör okumasına olduğu gibi güveniyordum.** Ultrasonik sensör tek bir okumada saçmalayabilir — ses dalgası yumuşak bir yüzeye çarpar döner, yandaki duvardan yankı gelir, ortam gürültülüdür. Ben "mesafe 30'un altındaysa aç" diye yazmıştım. Sonuç: bazen kimse yokken kapak açılıyordu. O zaman buna "arıza" diyordum, halbuki tasarım hatasıydı. Bugün arka arkaya birkaç okuma alıp ortalamasına ya da medyanına bakardım; tek bir ölçüme dayanarak fiziksel bir hareket tetiklemek yanlış.
+Birincisi, **sensör okumasına olduğu gibi güveniyordum.** Ultrasonik sensör tek bir okumada saçmalayabilir, ses dalgası yumuşak bir yüzeye çarpar döner, yandaki duvardan yankı gelir, ortam gürültülüdür. Ben "mesafe 30'un altındaysa aç" diye yazmıştım. Sonuç: bazen kimse yokken kapak açılıyordu. O zaman buna "arıza" diyordum, halbuki tasarım hatasıydı. Bugün arka arkaya birkaç okuma alıp ortalamasına ya da medyanına bakardım; tek bir ölçüme dayanarak fiziksel bir hareket tetiklemek yanlış.
 
 İkincisi, **sistemin durumu diye bir kavramım yoktu.** Kapak açıkken biri önünde durmaya devam ederse sensör yine tetikleniyor, servo yine komut alıyordu. Kod her an sıfırdan karar veriyordu, "şu an zaten açığım" bilgisini hiçbir yerde tutmuyordu. Bugün olsa küçük bir durum makinesi yazardım: kapalı → açılıyor → açık → kapanıyor. Dört durum, aralarında net geçişler.
 
 İlginç olan şu: yıllar sonra LoRa mesh üzerinde çalışırken tam olarak aynı iki problemle karşılaştım. Gürültülü veriye güvenmemek ve sistemin hangi durumda olduğunu takip etmek. Ölçek değişti, problem değişmedi.
 
-## 2022 — Fon-Mod Şifreleme Sistemi
+## 2022: Fon-Mod Şifreleme Sistemi
 
 Aynı fuarda ikinci projem. Dosya şifreleme yapıyordu: her karakterin ASCII değerini alıp yazdığım bir fonksiyonla öteliyor, çıkan sayıyı geri karaktere çevirip yazıyordu. Anahtar üretimini ve şifreleme/çözme modüllerini kendim yazmıştım.
 
@@ -122,15 +122,15 @@ Bunu yaptığımda çok güçlü bir şey yaptığımı düşünüyordum. Fonksi
 
 **Bugün ne farklı yapardım:** burada yanıldığım şey tek bir teknik detay değil, güvenliğin ne olduğuna dair bütün resimdi.
 
-Yazdığım şey **tek alfabeli bir yer değiştirme** sistemiydi. Fonksiyonum girdi olarak sadece karakteri alıyordu — karakterin metnin neresinde durduğunu umursamıyordu. Bunun sonucu şu: 'e' harfi dosyanın neresinde geçerse geçsin hep aynı karaktere dönüşüyordu. Yani ortada dosyanın tamamı için geçerli, tek bir dönüşüm tablosu vardı.
+Yazdığım şey **tek alfabeli bir yer değiştirme** sistemiydi. Fonksiyonum girdi olarak sadece karakteri alıyordu, karakterin metnin neresinde durduğunu umursamıyordu. Bunun sonucu şu: 'e' harfi dosyanın neresinde geçerse geçsin hep aynı karaktere dönüşüyordu. Yani ortada dosyanın tamamı için geçerli, tek bir dönüşüm tablosu vardı.
 
-Bu da şu demek: Türkçe metinde hangi harflerin sık geçtiğini bilen biri, şifreli metindeki en sık karakterleri sayıp birkaç tahminle tabloyu çıkarabilir. Fonksiyonumun ne kadar karışık olduğu hiç fark etmiyor, çünkü saldıran kişi fonksiyonu bulmaya çalışmıyor — sonucun tablosunu çıkarıyor.
+Bu da şu demek: Türkçe metinde hangi harflerin sık geçtiğini bilen biri, şifreli metindeki en sık karakterleri sayıp birkaç tahminle tabloyu çıkarabilir. Fonksiyonumun ne kadar karışık olduğu hiç fark etmiyor, çünkü saldıran kişi fonksiyonu bulmaya çalışmıyor, sonucun tablosunu çıkarıyor.
 
 Bir de anahtar uzayı meselesi var. Anahtarım tek bir işlem için birkaç sayıdan ibaretti; denenebilecek ihtimal sayısı sıradan bir bilgisayarın saniyenin altında bitireceği kadar azdı. O zamanlar "brute force ile kırmak günler sürer" diye anlatıyordum, bu da doğru değildi.
 
 Peki gerçekten kırılamayan sistemler neden kırılamıyor? Bunu araştırınca asıl kavradığım şey şuydu: güvenlik, **fonksiyonun karmaşıklığından değil, üç ayrı şeyden geliyor.** Anahtar uzayının denenemeyecek kadar büyük olması. Aynı anahtarın tekrar kullanılmaması. Ve şifreli metnin, düz metnin istatistiksel yapısını dışarı sızdırmaması.
 
-Bu üçü sağlandığında — anahtar mesaj kadar uzun, tamamen rastgele ve tek kullanımlıksa — sistem "kırması zor" olmuyor, **matematiksel olarak çözülemez** oluyor. Çünkü elindeki şifreli metinden üretilebilecek her olası düz metin eşit derecede mümkün hale geliyor; brute force sana bütün ihtimalleri veriyor, yani hiçbirini vermiyor.
+Bu üçü sağlandığında (anahtar mesaj kadar uzun, tamamen rastgele ve tek kullanımlıksa) sistem "kırması zor" olmuyor, **matematiksel olarak çözülemez** oluyor. Çünkü elindeki şifreli metinden üretilebilecek her olası düz metin eşit derecede mümkün hale geliyor; brute force sana bütün ihtimalleri veriyor, yani hiçbirini vermiyor.
 
 Ben üçünde de zayıftım. Ama bu projeyi yazmasaydım, yıllar sonra bunları merak edip okumazdım.
 
@@ -138,7 +138,7 @@ Ben üçünde de zayıftım. Ama bu projeyi yazmasaydım, yıllar sonra bunları
 
 Bu üç projenin ortak noktası, üçünde de **çalışan bir şey yapmış ama neden çalıştığını tam bilmiyor olmam.** Gömlek titreşiyordu, kova kapağını açıyordu, dosya şifreleniyordu. Hepsi fuarda çalıştı. Ama "sensör okuması neden güvenilmez", "sistem hangi durumda", "güvenlik nereden geliyor" sorularının hiçbirini sormamıştım.
 
-Şu an ConcreteWeb üzerinde çalışıyorum — deprem sonrası altyapı çöktüğünde telefonların birbirine LoRa üzerinden mesaj taşıdığı otonom bir mesh ağı. Çok daha büyük bir proje, ama iskeleti aynı: oku, karar ver, ilet. Ve bu sefer sorulacak soruları biliyorum, çünkü sormadığım her sefer bir yerde bedelini gördüm.
+Şu an ConcreteWeb üzerinde çalışıyorum: deprem sonrası altyapı çöktüğünde, odalara kurulu beacon'ların raporlarını bina HUB'ları üzerinden istasyona taşıyan otonom bir LoRa mesh ağı. Çok daha büyük bir proje, ama iskeleti aynı: oku, karar ver, ilet. Ve bu sefer sorulacak soruları biliyorum, çünkü sormadığım her sefer bir yerde bedelini gördüm.
 
 Sekiz yıl önce omuz için titreşim motoru yerleştiriyordum. Sanırım aslında hep aynı şeyi yapmaya çalışıyormuşum, sadece her seferinde biraz daha ne yaptığımı bilerek.
 
@@ -169,12 +169,12 @@ The fix: make the app itself run in a browser.
 
 I added an interactive demo under \`/demos/geosocial\`. Visitors can try the app without installing anything.
 
-- **Phone mockup** — a real Android frame, notch, status bar and bottom navigation included
-- **GPS tracking toggle** — flip it on and the coordinates start drifting live
-- **Check-in system** — the counter goes up and your entry lands at the top of the feed
-- **Nearby users** — blue dots pulsing on the map
-- **Three tabs** — Map, Feed, Profile, with animated transitions
-- **Side panel** — tech stack and feature list, context to read while watching the demo
+- **Phone mockup**: a real Android frame, notch, status bar and bottom navigation included
+- **GPS tracking toggle**: flip it on and the coordinates start drifting live
+- **Check-in system**: the counter goes up and your entry lands at the top of the feed
+- **Nearby users**: blue dots pulsing on the map
+- **Three tabs**: Map, Feed, Profile, with animated transitions
+- **Side panel**: tech stack and feature list, context to read while watching the demo
 
 ## The Interesting Technical Bits
 
@@ -205,7 +205,7 @@ The offset value mattered more than I expected: too large and the pin jumps arou
 
 ## What I Learned
 
-The slow part of writing a demo wasn't the logic — it was **believability**. Static numbers make a screen look dead; everything moving at once turns into noise. Finding the balance — which value changes how often — was the actual work.
+The slow part of writing a demo wasn't the logic, it was **believability**. Static numbers make a screen look dead; everything moving at once turns into noise. Finding the balance, which value changes how often, was the actual work.
 
 I also learned this: the best way to explain a project is not to explain it. One tap on "Check In" and the visitor already understands what the app does.
 
@@ -234,12 +234,12 @@ GeoSocial, React Native + Firebase ile yazdığım konum tabanlı bir sosyal ağ
 
 Portfolyoya \`/demos/geosocial\` altında interaktif bir demo ekledim. Ziyaretçi hiçbir şey kurmadan uygulamayı deneyebiliyor.
 
-- **Telefon mockup'ı** — notch, status bar, alt navigasyon çubuğu dahil gerçek bir Android çerçevesi
-- **GPS tracking toggle** — açtığında konum koordinatları canlı olarak oynamaya başlıyor
-- **Check-in sistemi** — butona bastığında sayaç artıyor ve akışın en üstüne senin girişin düşüyor
-- **Yakındaki kullanıcılar** — haritada nabız gibi yanıp sönen mavi noktalar
-- **Üç sekme** — Map, Feed, Profile; aralarında geçiş animasyonlu
-- **Yan panel** — tech stack ve özellik listesi, demoyu izlerken okunacak bağlam
+- **Telefon mockup'ı**: notch, status bar, alt navigasyon çubuğu dahil gerçek bir Android çerçevesi
+- **GPS tracking toggle**: açtığında konum koordinatları canlı olarak oynamaya başlıyor
+- **Check-in sistemi**: butona bastığında sayaç artıyor ve akışın en üstüne senin girişin düşüyor
+- **Yakındaki kullanıcılar**: haritada nabız gibi yanıp sönen mavi noktalar
+- **Üç sekme**: Map, Feed, Profile; aralarında geçiş animasyonlu
+- **Yan panel**: tech stack ve özellik listesi, demoyu izlerken okunacak bağlam
 
 ## Teknik Tarafta İlginç Olan Kısımlar
 
@@ -270,7 +270,7 @@ Sapma değeri önemliydi: çok büyük olunca pin zıplıyor, çok küçük olun
 
 ## Ne Öğrendim?
 
-Demo yazarken en çok vakit alan şey mantık değil, **inandırıcılık** oldu. Sayılar durağan kalınca ekran ölü görünüyor; her şey aynı anda oynayınca gürültü oluyor. Aradaki dengeyi bulmak — hangi değer ne sıklıkla değişecek — asıl işin kendisiydi.
+Demo yazarken en çok vakit alan şey mantık değil, **inandırıcılık** oldu. Sayılar durağan kalınca ekran ölü görünüyor; her şey aynı anda oynayınca gürültü oluyor. Aradaki dengeyi bulmak, yani hangi değer ne sıklıkla değişecek, asıl işin kendisiydi.
 
 Bir de şunu gördüm: bir projeyi anlatmanın en iyi yolu onu anlatmamak. Ziyaretçi "Check In" butonuna bir kez basınca uygulamanın ne yaptığını zaten anlıyor.
 
@@ -309,7 +309,7 @@ Makine Mühendisliği, AGÜ
       content: `
 # ConcreteWeb: From a Map to a Triage Screen
 
-I told the origin story of ConcreteWeb in the [February 6th post](/blog/concreteweb-6-subat). This post isn't about the idea — it's about the **demo**: in the last round we reworked the project from top to bottom.
+I told the origin story of ConcreteWeb in the [February 6th post](/blog/concreteweb-6-subat). This post isn't about the idea, it's about the **demo**: in the last round we reworked the project from top to bottom.
 
 ## First, the Name: FLARE → ConcreteWeb
 
@@ -319,27 +319,27 @@ ConcreteWeb describes what it actually is: a network embedded in concrete. The n
 
 ## The Real Change: Triage
 
-The old demo thought in binary — signal or no signal. That isn't what a rescue team needs. Their question is: **which building, which floor do I go to first?**
+The old demo thought in binary, signal or no signal. That isn't what a rescue team needs. Their question is: **which building, which floor do I go to first?**
 
 In the new demo every beacon report sits in one of five states:
 
-- **Confirmed alive** (priority 1, red) — the device picked up a confirmed life sign
-- **Vibration detected** (priority 2, orange) — vibration, but no confirmation
-- **Broadcast only** (priority 3, grey) — the device is transmitting, no life-sign data
-- **Safe** (cleared, green) — the person has been marked safe
-- **Silent node** (needs review) — no packets arriving from the HUB at all
+- **Confirmed alive** (priority 1, red): the device picked up a confirmed life sign
+- **Vibration detected** (priority 2, orange): vibration, but no confirmation
+- **Broadcast only** (priority 3, grey): the device is transmitting, no life-sign data
+- **Safe** (cleared, green): the person has been marked safe
+- **Silent node** (needs review): no packets arriving from the HUB at all
 
 The report list is sorted by that priority, map pins are coloured by state (red → orange → grey → green), and the counter cards at the top show live totals for each state.
 
-The most critical one is **silent node**. Silence does not mean "nobody is there" — it can mean the HUB was crushed, its battery died, or it fell out of range. So silent nodes never drop off the list; they sit in a separate "needs review" box.
+The most critical one is **silent node**. Silence does not mean "nobody is there", it can mean the HUB was crushed, its battery died, or it fell out of range. So silent nodes never drop off the list; they sit in a separate "needs review" box.
 
 ## Tier 3: The Report Reaching the Station
 
 The system works in three tiers, and the demo now shows all three:
 
-1. **Beacon** (inside the room) — detects the quake, wakes up, produces a report with its registered building/floor/room
-2. **HUB** (one per building) — receives the report and passes it to neighbouring HUBs over an 868 MHz store-and-forward mesh
-3. **Station** — the command point where reports collect
+1. **Beacon** (inside the room), detects the quake, wakes up, produces a report with its registered building/floor/room
+2. **HUB** (one per building), receives the report and passes it to neighbouring HUBs over an 868 MHz store-and-forward mesh
+3. **Station**, the command point where reports collect
 
 Every report has a **relay path**, visible in the detail panel when you select it:
 
@@ -349,11 +349,11 @@ HUB-04 -> HUB-07 -> STATION-01
 
 The station's job isn't only to collect but to **deduplicate**. The same beacon broadcasts the same report many times over (packet loss is normal in a mesh); the station merges them by Beacon ID into a single row. Otherwise the screen would fill with hundreds of copies of the same person.
 
-## No GPS — an Installation Record Instead
+## No GPS, an Installation Record Instead
 
 To head off the question the demo always gets, we changed the map too: **beacons do not produce points on the map.** The map only shows buildings and their HUBs.
 
-The reason is simple — GPS doesn't work under rubble anyway, and putting GPS in every beacon would blow up both cost and battery drain. Instead the location is recorded **at installation time**: building, floor, room. When a report arrives the team sees "BLD-04, 3rd floor, bedroom", which is far more useful in rubble than a coordinate.
+The reason is simple: GPS doesn't work under rubble anyway, and putting GPS in every beacon would blow up both cost and battery drain. Instead the location is recorded **at installation time**: building, floor, room. When a report arrives the team sees "BLD-04, 3rd floor, bedroom", which is far more useful in rubble than a coordinate.
 
 ## Making the Demo Explain Itself
 
@@ -363,15 +363,15 @@ We added it because without someone standing next to it narrating, the screen ju
 
 ## James Dyson Award 2026
 
-There was a reason behind this round of work: we submitted ConcreteWeb to the **James Dyson Award 2026**. The triage screen, the three-tier relay view and the info panel are largely for that submission — the jury will judge the project from a single link, without me there to explain it.
+There was a reason behind this round of work: we submitted ConcreteWeb to the **James Dyson Award 2026**. The triage screen, the three-tier relay view and the info panel are largely for that submission, the jury will judge the project from a single link, without me there to explain it.
 
 Submission page: [jamesdysonaward.org/tr-TR/2026/project/concreteweb](https://www.jamesdysonaward.org/tr-TR/2026/project/concreteweb)
 
 ## What I Learned
 
-The hardest part technically wasn't the mesh simulation — it was **deciding what not to show**. Dropping every beacon onto the map as a point would have been easy to build and visually impressive, but it would have lied about how the system works.
+The hardest part technically wasn't the mesh simulation, it was **deciding what not to show**. Dropping every beacon onto the map as a point would have been easy to build and visually impressive, but it would have lied about how the system works.
 
-I also saw this: in an emergency interface, "showing data" isn't enough. The screen has exactly one question to answer — **where do I run right now?** Everything else is noise standing in front of that question.
+I also saw this: in an emergency interface, "showing data" isn't enough. The screen has exactly one question to answer: **where do I run right now?** Everything else is noise standing in front of that question.
 
 ## What's Next
 
@@ -392,33 +392,33 @@ ConcreteWeb'in çıkış hikâyesini [6 Şubat yazısında](/blog/concreteweb-6-
 
 ## Önce İsim: FLARE → ConcreteWeb
 
-Proje eskiden FLARE'di. Sorun şuydu: "flare" kelimesi işaret fişeği çağrıştırıyor — yani birinin bilinçli olarak ateşlediği bir şey. Halbuki bu sistemin bütün fikri, **enkaz altındaki kişi hiçbir şey yapamasa bile** cihazın konuşması. İsim mesajın tam tersini söylüyordu.
+Proje eskiden FLARE'di. Sorun şuydu: "flare" kelimesi işaret fişeği çağrıştırıyor, yani birinin bilinçli olarak ateşlediği bir şey. Halbuki bu sistemin bütün fikri, **enkaz altındaki kişi hiçbir şey yapamasa bile** cihazın konuşması. İsim mesajın tam tersini söylüyordu.
 
 ConcreteWeb ise ne yaptığını anlatıyor: betonun içine gömülü bir ağ. Kod tabanının tamamında, chatbot cevaplarında, CV'de ve demo sayfasında isim değiştirildi; eski \`/demos/flare\` adresi yeni adrese yönlendiriliyor ki paylaşılmış linkler kırılmasın.
 
 ## Asıl Değişiklik: Triyaj
 
-Eski demo ikili düşünüyordu — sinyal var ya da yok. Ama kurtarma ekibinin ihtiyacı bu değil. Onların sorusu şu: **hangi binaya, hangi kata önce gideyim?**
+Eski demo ikili düşünüyordu, sinyal var ya da yok. Ama kurtarma ekibinin ihtiyacı bu değil. Onların sorusu şu: **hangi binaya, hangi kata önce gideyim?**
 
 Yeni demoda her beacon raporu beş durumdan birinde:
 
-- **Confirmed alive** (öncelik 1, kırmızı) — cihaz canlılık teyidi aldı
-- **Vibration detected** (öncelik 2, turuncu) — titreşim var ama teyit yok
-- **Broadcast only** (öncelik 3, gri) — cihaz yayında, canlılık verisi yok
-- **Safe** (temizlendi, yeşil) — kişi güvende olarak işaretlenmiş
-- **Silent node** (incelenmeli) — HUB'dan hiç paket gelmiyor
+- **Confirmed alive** (öncelik 1, kırmızı): cihaz canlılık teyidi aldı
+- **Vibration detected** (öncelik 2, turuncu): titreşim var ama teyit yok
+- **Broadcast only** (öncelik 3, gri): cihaz yayında, canlılık verisi yok
+- **Safe** (temizlendi, yeşil): kişi güvende olarak işaretlenmiş
+- **Silent node** (incelenmeli): HUB'dan hiç paket gelmiyor
 
 Rapor listesi bu önceliğe göre sıralanıyor, harita pinleri duruma göre renkleniyor (kırmızı → turuncu → gri → yeşil), ve üstteki sayaç kartları her durumdan kaç tane olduğunu canlı gösteriyor.
 
-En kritik nokta **silent node**. Sessizlik "kimse yok" demek değil — HUB'ın ezilmiş, pilinin bitmiş ya da menzil dışında kalmış olması demek olabilir. Bu yüzden sessiz düğümler listeden düşmüyor, ayrı bir "incelenmeli" kutusunda duruyor.
+En kritik nokta **silent node**. Sessizlik "kimse yok" demek değil, HUB'ın ezilmiş, pilinin bitmiş ya da menzil dışında kalmış olması demek olabilir. Bu yüzden sessiz düğümler listeden düşmüyor, ayrı bir "incelenmeli" kutusunda duruyor.
 
 ## Tier 3: Raporun İstasyona Varışı
 
 Sistem üç katmanlı çalışıyor ve demo artık üçünü de gösteriyor:
 
-1. **Beacon** (oda içi) — deprem algılar, uyanır, kayıtlı bina/kat/oda bilgisiyle rapor üretir
-2. **HUB** (bina başına bir tane) — raporu alır, komşu HUB'lara 868 MHz store-and-forward mesh üzerinden aktarır
-3. **Station** — raporların toplandığı komuta noktası
+1. **Beacon** (oda içi), deprem algılar, uyanır, kayıtlı bina/kat/oda bilgisiyle rapor üretir
+2. **HUB** (bina başına bir tane), raporu alır, komşu HUB'lara 868 MHz store-and-forward mesh üzerinden aktarır
+3. **Station**, raporların toplandığı komuta noktası
 
 Her raporun bir **relay path**'i var ve seçtiğinde detay panelinde görünüyor:
 
@@ -432,7 +432,7 @@ HUB-04 -> HUB-07 -> STATION-01
 
 Demoda sık gelen soruyu baştan kesmek için haritayı da değiştirdik: **beacon'lar haritada nokta üretmiyor.** Haritada sadece binalar ve HUB'ları var.
 
-Sebep basit — enkaz altında GPS zaten çalışmaz, ve her beacon'a GPS koymak hem maliyeti hem pil tüketimini uçurur. Bunun yerine konum **kurulum anında** kaydediliyor: bina, kat, oda. Rapor geldiğinde ekip "BLD-04, 3. kat, yatak odası" görüyor; bu enkazda bir koordinattan çok daha kullanışlı.
+Sebep basit: enkaz altında GPS zaten çalışmaz ve her beacon'a GPS koymak hem maliyeti hem pil tüketimini uçurur. Bunun yerine konum **kurulum anında** kaydediliyor: bina, kat, oda. Rapor geldiğinde ekip "BLD-04, 3. kat, yatak odası" görüyor; bu enkazda bir koordinattan çok daha kullanışlı.
 
 ## Demoyu Kendi Kendini Anlatır Hale Getirmek
 
@@ -442,13 +442,13 @@ Bunu eklememizin sebebi şuydu: demoyu yanında durup anlatmadığın zaman ekra
 
 ## Ne Öğrendim?
 
-Teknik olarak en zor kısım mesh simülasyonu değildi — **neyi göstermemek gerektiğine karar vermekti**. Her beacon'ı haritaya nokta olarak basmak teknik olarak kolay ve görsel olarak etkileyici olurdu, ama sistemin nasıl çalıştığı hakkında yalan söylerdi.
+Teknik olarak en zor kısım mesh simülasyonu değildi, **neyi göstermemek gerektiğine karar vermekti**. Her beacon'ı haritaya nokta olarak basmak teknik olarak kolay ve görsel olarak etkileyici olurdu, ama sistemin nasıl çalıştığı hakkında yalan söylerdi.
 
-Bir de şunu gördüm: acil durum arayüzünde "veri göstermek" yetmiyor. Ekranın cevaplaması gereken tek bir soru var — **şimdi nereye koşayım?** Geri kalan her şey o sorunun önünde duran gürültü.
+Bir de şunu gördüm: acil durum arayüzünde "veri göstermek" yetmiyor. Ekranın cevaplaması gereken tek bir soru var: **şimdi nereye koşayım?** Geri kalan her şey o sorunun önünde duran gürültü.
 
 ## James Dyson Award 2026
 
-Bu turdaki işlerin bir sebebi de vardı: ConcreteWeb'i **James Dyson Award 2026**'ya başvurduk. Triyaj ekranı, üç katmanlı relay görünümü ve info paneli büyük ölçüde bu başvuru için — jüri projeyi ben yanında anlatmadan, tek bir linke tıklayarak değerlendirecek.
+Bu turdaki işlerin bir sebebi de vardı: ConcreteWeb'i **James Dyson Award 2026**'ya başvurduk. Triyaj ekranı, üç katmanlı relay görünümü ve info paneli büyük ölçüde bu başvuru için, jüri projeyi ben yanında anlatmadan, tek bir linke tıklayarak değerlendirecek.
 
 Başvuru sayfası: [jamesdysonaward.org/tr-TR/2026/project/concreteweb](https://www.jamesdysonaward.org/tr-TR/2026/project/concreteweb)
 
@@ -496,18 +496,18 @@ Four of those five steps exist only because money sits in the middle. Takaslat r
 
 ## What Does It Do?
 
-- **Listings** — photo, description, and what you would accept in return
-- **Direct swap offers** — propose your item against theirs
-- **Negotiation loop** — accept, reject, or counter-offer
-- **Bundle offers** — combine several items into one offer when values don't match
-- **Comparison view** — put two listings side by side
-- **Map view** — see nearby listings, because a swap usually means meeting in person
-- **Trust score** — ratings and badges, so you know who you're meeting
-- **AI assistant** — writes a description for your listing and estimates its value
+- **Listings**: photo, description, and what you would accept in return
+- **Direct swap offers**: propose your item against theirs
+- **Negotiation loop**: accept, reject, or counter-offer
+- **Bundle offers**: combine several items into one offer when values don't match
+- **Comparison view**: put two listings side by side
+- **Map view**: see nearby listings, because a swap usually means meeting in person
+- **Trust score**: ratings and badges, so you know who you're meeting
+- **AI assistant**: writes a description for your listing and estimates its value
 
 ## The Hard Part
 
-The hard part of a barter platform isn't the listings — it's **value matching**. In a sale, price settles the question. In a swap, both sides have to agree that a guitar is worth a bicycle, and there is no number to appeal to.
+The hard part of a barter platform isn't the listings, it's **value matching**. In a sale, price settles the question. In a swap, both sides have to agree that a guitar is worth a bicycle, and there is no number to appeal to.
 
 That's why the bundle offer and comparison features exist. They give people a way to close the gap rather than abandon the trade.
 
@@ -542,14 +542,14 @@ Bu beş adımın dördü sırf araya para girdiği için var. Takaslat aradakini
 
 ## Ne Yapıyor?
 
-- **İlan listeleme** — fotoğraf, açıklama ve karşılığında ne kabul edeceğin
-- **Doğrudan takas teklifi** — kendi eşyanı onunkine karşı öner
-- **Müzakere döngüsü** — kabul, ret veya karşı teklif
-- **Paket teklifi** — değerler tutmayınca birden fazla ürünü tek teklife ekle
-- **Karşılaştırma** — iki ilanı yan yana koy
-- **Harita görünümü** — yakındaki ilanlar, çünkü takas genelde yüz yüze buluşmak demek
-- **Güven puanı** — değerlendirme ve rozetler, kiminle buluştuğunu bilesin diye
-- **AI asistan** — ilanın için açıklama yazıyor ve değer tahmini yapıyor
+- **İlan listeleme**: fotoğraf, açıklama ve karşılığında ne kabul edeceğin
+- **Doğrudan takas teklifi**: kendi eşyanı onunkine karşı öner
+- **Müzakere döngüsü**: kabul, ret veya karşı teklif
+- **Paket teklifi**: değerler tutmayınca birden fazla ürünü tek teklife ekle
+- **Karşılaştırma**: iki ilanı yan yana koy
+- **Harita görünümü**: yakındaki ilanlar, çünkü takas genelde yüz yüze buluşmak demek
+- **Güven puanı**: değerlendirme ve rozetler, kiminle buluştuğunu bilesin diye
+- **AI asistan**: ilanın için açıklama yazıyor ve değer tahmini yapıyor
 
 ## Zor Kısım
 
@@ -595,18 +595,18 @@ That's useless for a question like "is anyone from my department in the library 
 
 ## What Does It Do?
 
-- **Check-in** — mark that you are at a place; it goes to the top of the local feed
-- **Nearby users** — see how many people are around you right now
-- **Location-based feed** — posts sorted by distance, not by who posted them
-- **Map view** — your own pin plus the activity around it
-- **Profile stats** — check-in count, friends, points
-- **Gamification** — points and repeat-visit history for places you go often
+- **Check-in**: mark that you are at a place; it goes to the top of the local feed
+- **Nearby users**: see how many people are around you right now
+- **Location-based feed**: posts sorted by distance, not by who posted them
+- **Map view**: your own pin plus the activity around it
+- **Profile stats**: check-in count, friends, points
+- **Gamification**: points and repeat-visit history for places you go often
 
 ## The Hard Part
 
 Two things, and neither is the feed.
 
-**GPS accuracy.** Indoors, a phone's location can drift by tens of metres. "Who is nearby" gets shaky exactly where people actually gather — inside a library, a café, a lecture hall.
+**GPS accuracy.** Indoors, a phone's location can drift by tens of metres. "Who is nearby" gets shaky exactly where people actually gather, inside a library, a café, a lecture hall.
 
 **Privacy.** Broadcasting your location is a serious thing. The design answer is that a check-in is deliberate: nothing is shared unless you press the button. Continuous tracking exists to compute distance, not to publish where you are.
 
@@ -614,7 +614,7 @@ Two things, and neither is the feed.
 
 React Native and Expo on the app side, Firebase for auth and real-time data, the device GPS API for location.
 
-There's an interactive demo on this site — a phone mockup you can try without installing anything: [Live Demo](/demos/geosocial)
+There's an interactive demo on this site, a phone mockup you can try without installing anything: [Live Demo](/demos/geosocial)
 
 ---
 
@@ -635,18 +635,18 @@ Bu, "şu an kütüphanede bölümden kimse var mı?" ya da "kampüse yakın hang
 
 ## Ne Yapıyor?
 
-- **Check-in** — bir yerde olduğunu işaretliyorsun, yerel akışın en üstüne düşüyor
-- **Yakındaki kullanıcılar** — şu anda çevrende kaç kişi var
-- **Konum tabanlı akış** — gönderiler kime ait olduğuna göre değil, mesafeye göre sıralı
-- **Harita görünümü** — kendi pinin ve etrafındaki hareket
-- **Profil istatistikleri** — check-in sayısı, arkadaşlar, puan
-- **Oyunlaştırma** — sık gittiğin yerler için puan ve tekrar ziyaret geçmişi
+- **Check-in**: bir yerde olduğunu işaretliyorsun, yerel akışın en üstüne düşüyor
+- **Yakındaki kullanıcılar**: şu anda çevrende kaç kişi var
+- **Konum tabanlı akış**: gönderiler kime ait olduğuna göre değil, mesafeye göre sıralı
+- **Harita görünümü**: kendi pinin ve etrafındaki hareket
+- **Profil istatistikleri**: check-in sayısı, arkadaşlar, puan
+- **Oyunlaştırma**: sık gittiğin yerler için puan ve tekrar ziyaret geçmişi
 
 ## Zor Kısım
 
 İki şey, ve ikisi de akış değil.
 
-**GPS hassasiyeti.** Kapalı alanda telefonun konumu onlarca metre kayabiliyor. "Kim yakında" sorusu tam da insanların toplandığı yerlerde sallantıya giriyor — kütüphanenin, kafenin, dersliğin içinde.
+**GPS hassasiyeti.** Kapalı alanda telefonun konumu onlarca metre kayabiliyor. "Kim yakında" sorusu tam da insanların toplandığı yerlerde sallantıya giriyor, kütüphanenin, kafenin, dersliğin içinde.
 
 **Gizlilik.** Konumunu yayınlamak ciddi bir şey. Tasarımdaki cevap şu: check-in bilinçli bir eylem, butona basmadan hiçbir şey paylaşılmıyor. Sürekli takip, nerede olduğunu yayınlamak için değil, mesafe hesaplamak için var.
 
@@ -654,7 +654,7 @@ Bu, "şu an kütüphanede bölümden kimse var mı?" ya da "kampüse yakın hang
 
 Uygulama tarafında React Native ve Expo, kimlik doğrulama ve gerçek zamanlı veri için Firebase, konum için cihazın GPS API'si.
 
-Bu sitede interaktif bir demosu var — hiçbir şey kurmadan deneyebileceğin bir telefon mockup'ı: [Canlı Demo](/demos/geosocial)
+Bu sitede interaktif bir demosu var, hiçbir şey kurmadan deneyebileceğin bir telefon mockup'ı: [Canlı Demo](/demos/geosocial)
 
 ---
 
@@ -678,23 +678,23 @@ Makine Mühendisliği, AGÜ
       content: `
 # What Is DCE-SOFC? A Ship's Digital Twin
 
-**In one sentence:** DCE-SOFC is a live simulation of an ammonia-fuelled hybrid marine propulsion system — a digital twin that lets you watch the system run without building it.
+**In one sentence:** DCE-SOFC is a live simulation of an ammonia-fuelled hybrid marine propulsion system, a digital twin that lets you watch the system run without building it.
 
 ## What Problem Does It Solve?
 
 Shipping runs on heavy fuel oil and accounts for roughly 3% of global CO₂ emissions. Ammonia is a serious candidate to replace it, because the NH₃ molecule contains no carbon at all: burn it correctly and no CO₂ comes out.
 
-But you cannot test a propulsion idea by building a ship. Building one costs millions and takes years. So the idea gets tested somewhere else first — in a model.
+But you cannot test a propulsion idea by building a ship. Building one costs millions and takes years. So the idea gets tested somewhere else first, in a model.
 
 ## What Does It Do?
 
 The simulation models the whole chain and shows it running:
 
-1. **Ammonia tank** — stored as a liquid at -33°C or 8.6 bar
-2. **Cracker** — splits NH₃ into nitrogen and hydrogen at 850°C over a catalyst
-3. **SOFC** — the solid oxide fuel cell turns the hydrogen into electricity, quietly and efficiently
-4. **DCE** — the diesel engine burns leftover ammonia as backup power
-5. **Output** — the combined electrical and mechanical power driving the ship
+1. **Ammonia tank**, stored as a liquid at -33°C or 8.6 bar
+2. **Cracker**, splits NH₃ into nitrogen and hydrogen at 850°C over a catalyst
+3. **SOFC**, the solid oxide fuel cell turns the hydrogen into electricity, quietly and efficiently
+4. **DCE**, the diesel engine burns leftover ammonia as backup power
+5. **Output**, the combined electrical and mechanical power driving the ship
 
 You can change the load, watch the temperatures and efficiency respond, and see where the energy actually goes.
 
@@ -721,23 +721,23 @@ Mechanical Engineering, AGÜ
     content: `
 # DCE-SOFC Nedir? Geminin Dijital İkizi
 
-**Tek cümleyle:** DCE-SOFC, amonyak yakıtlı hibrit bir gemi tahrik sisteminin canlı simülasyonu — sistemi inşa etmeden çalışırken izleyebildiğin bir dijital ikiz.
+**Tek cümleyle:** DCE-SOFC, amonyak yakıtlı hibrit bir gemi tahrik sisteminin canlı simülasyonu, sistemi inşa etmeden çalışırken izleyebildiğin bir dijital ikiz.
 
 ## Hangi Problemi Çözüyor?
 
 Deniz taşımacılığı ağır fuel oil ile çalışıyor ve dünya CO₂ emisyonlarının kabaca %3'ünden sorumlu. Amonyak bunun yerine geçmek için ciddi bir aday, çünkü NH₃ molekülünde hiç karbon yok: doğru yakarsan CO₂ çıkmıyor.
 
-Ama bir tahrik fikrini gemi inşa ederek test edemezsin. Bir gemi milyonlarca dolar ve yıllar demek. O yüzden fikir önce başka bir yerde deneniyor — modelde.
+Ama bir tahrik fikrini gemi inşa ederek test edemezsin. Bir gemi milyonlarca dolar ve yıllar demek. O yüzden fikir önce başka bir yerde deneniyor, modelde.
 
 ## Ne Yapıyor?
 
 Simülasyon zincirin tamamını modelliyor ve çalışırken gösteriyor:
 
-1. **Amonyak tankı** — -33°C'de veya 8.6 bar'da sıvı olarak depolanıyor
-2. **Cracker** — NH₃'ü 850°C'de katalizör üzerinde azot ve hidrojene ayırıyor
-3. **SOFC** — katı oksit yakıt pili hidrojeni sessiz ve verimli şekilde elektriğe çeviriyor
-4. **DCE** — dizel motor artan amonyağı yedek güç olarak yakıyor
-5. **Çıkış** — gemiyi süren birleşik elektrik ve mekanik güç
+1. **Amonyak tankı**, -33°C'de veya 8.6 bar'da sıvı olarak depolanıyor
+2. **Cracker**, NH₃'ü 850°C'de katalizör üzerinde azot ve hidrojene ayırıyor
+3. **SOFC**, katı oksit yakıt pili hidrojeni sessiz ve verimli şekilde elektriğe çeviriyor
+4. **DCE**, dizel motor artan amonyağı yedek güç olarak yakıyor
+5. **Çıkış**, gemiyi süren birleşik elektrik ve mekanik güç
 
 Yükü değiştirebiliyor, sıcaklıkların ve verimin nasıl tepki verdiğini izleyebiliyor, enerjinin gerçekte nereye gittiğini görebiliyorsun.
 
@@ -749,7 +749,7 @@ Yükü değiştirebiliyor, sıcaklıkların ve verimin nasıl tepki verdiğini i
 
 ## Dürüst Kısım
 
-Bu bir model, prototip değil ve açık problemleri var: azot oksidasyonundan gelen NOx emisyonu, SOFC yığınlarının maliyeti ve amonyağın toksik olması — ki bu gerçek güvenlik protokolleri gerektiriyor.
+Bu bir model, prototip değil ve açık problemleri var: azot oksidasyonundan gelen NOx emisyonu, SOFC yığınlarının maliyeti ve amonyağın toksik olması, ki bu gerçek güvenlik protokolleri gerektiriyor.
 
 Bunların çözülemez olduğunu düşünmüyorum. Ama bunları saklayan bir simülasyon, daha kötü bir simülasyon olurdu.
 
@@ -782,7 +782,7 @@ Makine Mühendisliği, AGÜ
       content: `
 # What Is ConcreteWeb? A Device That Speaks from Under Rubble
 
-**In one sentence:** ConcreteWeb is a network of small devices installed in homes that, after an earthquake, tells rescue teams which building, floor and room to search — without the trapped person having to do anything.
+**In one sentence:** ConcreteWeb is a network of small devices installed in homes that, after an earthquake, tells rescue teams which building, floor and room to search, without the trapped person having to do anything.
 
 ## What Problem Does It Solve?
 
@@ -796,15 +796,15 @@ So the search depends on the one thing the victim may be least able to provide.
 
 The system has three tiers:
 
-**1. Beacon** — a small device installed in a room. It sleeps for years drawing almost no power. When its accelerometer detects an earthquake it wakes itself up and starts transmitting a report. The report carries the building, floor and room recorded when it was installed.
+**1. Beacon**, a small device installed in a room. It sleeps for years drawing almost no power. When its accelerometer detects an earthquake it wakes itself up and starts transmitting a report. The report carries the building, floor and room recorded when it was installed.
 
-**2. HUB** — one per building. It receives the beacon reports and forwards them to neighbouring HUBs over an 868 MHz LoRa store-and-forward mesh. If one path is broken, the packet travels another.
+**2. HUB**, one per building. It receives the beacon reports and forwards them to neighbouring HUBs over an 868 MHz LoRa store-and-forward mesh. If one path is broken, the packet travels another.
 
-**3. Station** — the command point. Reports collect here, duplicates are merged by Beacon ID, and what the team sees is a prioritised list: which address, which floor, and how strong the life sign is.
+**3. Station**, the command point. Reports collect here, duplicates are merged by Beacon ID, and what the team sees is a prioritised list: which address, which floor, and how strong the life sign is.
 
 ## Two Design Decisions Worth Explaining
 
-**No GPS in the beacon.** GPS doesn't work under rubble, and adding it to every unit would wreck both the cost and the battery life. Location comes from the installation record instead — "BLD-04, 3rd floor, bedroom" is more actionable in a collapsed building than a coordinate anyway.
+**No GPS in the beacon.** GPS doesn't work under rubble, and adding it to every unit would wreck both the cost and the battery life. Location comes from the installation record instead, "BLD-04, 3rd floor, bedroom" is more actionable in a collapsed building than a coordinate anyway.
 
 **Silence is not an answer.** A beacon that reports nothing doesn't mean nobody is there. It can mean the HUB was crushed or the battery died. So silent nodes stay on the list, marked for review, rather than quietly disappearing.
 
@@ -829,7 +829,7 @@ Mechanical Engineering, AGÜ
     content: `
 # ConcreteWeb Nedir? Enkaz Altından Konuşan Cihaz
 
-**Tek cümleyle:** ConcreteWeb, evlere kurulan küçük cihazlardan oluşan bir ağ; deprem sonrası kurtarma ekibine hangi binayı, hangi katı ve hangi odayı arayacağını söylüyor — enkaz altındaki kişinin hiçbir şey yapmasına gerek kalmadan.
+**Tek cümleyle:** ConcreteWeb, evlere kurulan küçük cihazlardan oluşan bir ağ; deprem sonrası kurtarma ekibine hangi binayı, hangi katı ve hangi odayı arayacağını söylüyor, enkaz altındaki kişinin hiçbir şey yapmasına gerek kalmadan.
 
 ## Hangi Problemi Çözüyor?
 
@@ -843,15 +843,15 @@ Yani arama, kazazedenin sağlamakta en zorlanacağı şeye bağlı kalıyor.
 
 Sistem üç katmanlı:
 
-**1. Beacon** — odaya kurulan küçük bir cihaz. Neredeyse hiç güç çekmeden yıllarca uyuyor. İvmeölçeri depremi algılayınca kendini uyandırıp rapor yayınlamaya başlıyor. Rapor, kurulum sırasında kaydedilen bina, kat ve oda bilgisini taşıyor.
+**1. Beacon**, odaya kurulan küçük bir cihaz. Neredeyse hiç güç çekmeden yıllarca uyuyor. İvmeölçeri depremi algılayınca kendini uyandırıp rapor yayınlamaya başlıyor. Rapor, kurulum sırasında kaydedilen bina, kat ve oda bilgisini taşıyor.
 
-**2. HUB** — bina başına bir tane. Beacon raporlarını alıp 868 MHz LoRa store-and-forward mesh üzerinden komşu HUB'lara aktarıyor. Bir yol kırılmışsa paket başka yoldan gidiyor.
+**2. HUB**, bina başına bir tane. Beacon raporlarını alıp 868 MHz LoRa store-and-forward mesh üzerinden komşu HUB'lara aktarıyor. Bir yol kırılmışsa paket başka yoldan gidiyor.
 
-**3. Station** — komuta noktası. Raporlar burada toplanıyor, kopyalar Beacon ID'ye göre birleştiriliyor ve ekibin gördüğü şey öncelik sıralı bir liste oluyor: hangi adres, hangi kat ve canlılık sinyali ne kadar güçlü.
+**3. Station**, komuta noktası. Raporlar burada toplanıyor, kopyalar Beacon ID'ye göre birleştiriliyor ve ekibin gördüğü şey öncelik sıralı bir liste oluyor: hangi adres, hangi kat ve canlılık sinyali ne kadar güçlü.
 
 ## Açıklamaya Değer İki Tasarım Kararı
 
-**Beacon'da GPS yok.** GPS enkaz altında çalışmıyor ve her birime eklemek hem maliyeti hem pil ömrünü mahvederdi. Konum bunun yerine kurulum kaydından geliyor — çöken bir binada "BLD-04, 3. kat, yatak odası" zaten bir koordinattan daha kullanışlı.
+**Beacon'da GPS yok.** GPS enkaz altında çalışmıyor ve her birime eklemek hem maliyeti hem pil ömrünü mahvederdi. Konum bunun yerine kurulum kaydından geliyor, çöken bir binada "BLD-04, 3. kat, yatak odası" zaten bir koordinattan daha kullanışlı.
 
 **Sessizlik bir cevap değil.** Rapor vermeyen bir beacon, orada kimse yok demek değil. HUB'ın ezilmiş ya da pilinin bitmiş olması demek olabilir. Bu yüzden sessiz düğümler sessizce kaybolmuyor, incelenmek üzere işaretli halde listede kalıyor.
 
@@ -948,20 +948,20 @@ Takaslat is a marketplace for swapping items, books or equipment without money. 
 
 ## The Problem
 
-On second-hand platforms everyone talks about price. But what most people need isn't money — it's to hand over what they have and get something else in return.
+On second-hand platforms everyone talks about price. But what most people need isn't money, it's to hand over what they have and get something else in return.
 
 ## What We Built
 
 Takaslat's main features:
 
-- **Listings** — photo, description, swap preference
-- **AI assistant** — automatic description suggestions and price estimates for a listing
-- **Swap offer system** — propose a trade directly to the other side
-- **Negotiation simulator** — the accept / reject / counter-offer loop
-- **Map view** — show nearby listings
-- **Trust score** — user ratings and a badge system
-- **Bundle offers** — put several items into a single offer
-- **Comparison** — evaluate two listings side by side
+- **Listings**: photo, description, swap preference
+- **AI assistant**: automatic description suggestions and price estimates for a listing
+- **Swap offer system**: propose a trade directly to the other side
+- **Negotiation simulator**: the accept / reject / counter-offer loop
+- **Map view**: show nearby listings
+- **Trust score**: user ratings and a badge system
+- **Bundle offers**: put several items into a single offer
+- **Comparison**: evaluate two listings side by side
 
 ## Tech Stack
 
@@ -987,20 +987,20 @@ Takaslat, para kullanmadan eşya, kitap veya ekipman takası yapabileceğin bir 
 
 ## Problem
 
-İkinci el platformlarda herkes fiyat konuşuyor. Ama çoğu insanın ihtiyacı para değil — elindekini vermek, karşılığında başka bir şey almak.
+İkinci el platformlarda herkes fiyat konuşuyor. Ama çoğu insanın ihtiyacı para değil, elindekini vermek, karşılığında başka bir şey almak.
 
 ## Ne Yaptık?
 
 Takaslat'ın öne çıkan özellikleri:
 
-- **İlan listeleme** — fotoğraf, açıklama, takas tercihi
-- **AI Asistan** — ilan için otomatik açıklama önerisi, fiyat tahmini
-- **Takas Teklifi Sistemi** — karşı tarafa doğrudan takas öner
-- **Müzakere Simülatörü** — teklifleri kabul/ret/karşı teklif döngüsü
-- **Harita Görünümü** — yakındaki ilanları göster
-- **Güven Puanı** — kullanıcı değerlendirme ve rozet sistemi
-- **Paket Teklifi** — birden fazla ürünü tek teklife ekle
-- **Karşılaştırma** — iki ilanı yan yana değerlendir
+- **İlan listeleme**: fotoğraf, açıklama, takas tercihi
+- **AI Asistan**: ilan için otomatik açıklama önerisi, fiyat tahmini
+- **Takas Teklifi Sistemi**: karşı tarafa doğrudan takas öner
+- **Müzakere Simülatörü**: teklifleri kabul/ret/karşı teklif döngüsü
+- **Harita Görünümü**: yakındaki ilanları göster
+- **Güven Puanı**: kullanıcı değerlendirme ve rozet sistemi
+- **Paket Teklifi**: birden fazla ürünü tek teklife ekle
+- **Karşılaştırma**: iki ilanı yan yana değerlendir
 
 ## Teknik Stack
 
@@ -1227,7 +1227,7 @@ System efficiency: **65-70%** (diesel: 45-50%)
 - SOFC cost is high
 - Ammonia is toxic (safety protocols required)
 
-These challenges are solvable. The future of green shipping is heading this way — at least that's what I think.
+These challenges are solvable. The future of green shipping is heading this way, at least that's what I think.
 
 ---
 
