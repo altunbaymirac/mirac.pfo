@@ -10,7 +10,7 @@ export const translations = {
     },
     home: {
       subtitle: 'Engineering Student',
-      bio: 'Built ConcreteWeb (rubble LoRa beacon), DCE-SOFC digital twin, Takaslat marketplace and FedaGrup corporate site. 1st-year Mechanical Engineering at AGÜ — learning by building.',
+      bio: 'I am a first-year Mechanical Engineering student at AGÜ, building practical web, simulation, and engineering projects while learning through real work.',
       btnProjects: 'VIEW PROJECTS',
       btnContact: 'CONTACT',
       featuredTitle: 'Featured Projects',
@@ -20,7 +20,7 @@ export const translations = {
       ctaBtn: 'GET IN TOUCH',
       cvBtn: 'DOWNLOAD CV',
       stats: [
-        { label: 'Projects', value: '5' },
+        { label: 'Projects', value: '6' },
         { label: 'Technologies', value: '15+' },
         { label: 'Lines of Code', value: '10k+' },
         { label: 'Coffee Consumed', value: '∞' }
@@ -62,7 +62,7 @@ export const translations = {
     },
     home: {
       subtitle: 'Engineering Student',
-      bio: 'ConcreteWeb (enkaz altı LoRa beacon), DCE-SOFC dijital ikiz, Takaslat marketplace ve FedaGrup kurumsal sitesi üzerinde çalıştım. AGÜ Makine Mühendisliği 1. sınıf, yaparak öğreniyorum.',
+      bio: 'AGÜ Makine Mühendisliği 1. sınıf öğrencisiyim. Web, simülasyon ve mühendislik projeleri geliştirerek öğreniyor; fikirleri çalışan ürünlere dönüştürmeye odaklanıyorum.',
       btnProjects: 'PROJELERİ GÖR',
       btnContact: 'İLETİŞİM',
       featuredTitle: 'Öne Çıkan Projeler',
@@ -72,7 +72,7 @@ export const translations = {
       ctaBtn: 'İLETİŞİME GEÇ',
       cvBtn: 'CV İNDİR',
       stats: [
-        { label: 'Proje', value: '5' },
+        { label: 'Proje', value: '6' },
         { label: 'Teknoloji', value: '15+' },
         { label: 'Kod Satırı', value: '10k+' },
         { label: 'Kahve', value: '∞' }

@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Terminal, Rocket, ArrowRight, Download } from 'lucide-react'
-import FlareBeacon3D from '../components/FlareBeacon3D'
 import LiveProjectDemos from '../components/LiveProjectDemos'
 import { useLanguage } from '../contexts/LanguageContext'
 
@@ -11,7 +10,7 @@ export default function Home() {
   // İngilizce alan yoksa Türkçesine düş
   const pick = (item, key) => (lang === 'en' ? item[`${key}En`] ?? item[key] : item[key])
   const [terminalText, setTerminalText] = useState('')
-  const fullText = 'mirac@portfolio:~$ ./deploy_future.sh'
+  const fullText = 'mirac@portfolio:~$ real_projects'
 
   useEffect(() => {
     let index = 0
@@ -65,6 +64,16 @@ export default function Home() {
       link: 'https://www.fedagrupinsaat.com',
       external: true,
       stats: ['Production', 'Responsive', 'Client Project']
+    },
+    {
+      name: 'Arfdaon',
+      tag: 'Client Website',
+      description: 'Arfdaon için hazırlanan modern ve responsive web sitesi.',
+      descriptionEn: 'A modern, responsive website built for Arfdaon.',
+      color: 'terminal-text',
+      link: 'https://arfdaon.com',
+      external: true,
+      stats: ['Live Site', 'Responsive', 'Client Project']
     },
     {
       name: 'GeoSocial',
@@ -274,14 +283,6 @@ export default function Home() {
                 <Link key={project.name} to={project.link}>{card}</Link>
               )
             })}
-          </div>
-
-          {/* 3D Showcase */}
-          <div className="mb-12">
-            <h3 className="text-2xl font-bold text-terminal-secondary mb-6 text-center">
-              Interactive 3D Model
-            </h3>
-            <FlareBeacon3D />
           </div>
 
           {/* Live Simulations */}

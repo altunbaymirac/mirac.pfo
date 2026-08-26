@@ -44,6 +44,16 @@ const PROJECTS = [
     color: 'terminal-accent'
   },
   {
+    title: 'Arfdaon',
+    type: 'Client Website',
+    description: 'Arfdaon için hazırlanmış modern, responsive canlı web sitesi.',
+    descriptionEn: 'A modern, responsive live website built for Arfdaon.',
+    tech: ['Web Design', 'Responsive', 'Production'],
+    href: 'https://arfdaon.com',
+    external: true,
+    color: 'terminal-text'
+  },
+  {
     title: 'Takaslat',
     type: 'Marketplace Platform',
     description: 'Para kullanmadan eşya takası yapabileceğin, AI destekli öneri ve müzakere sistemli marketplace.',
