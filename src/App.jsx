@@ -8,7 +8,6 @@ import Home from './pages/Home'
 import Blog from './pages/Blog'
 import BlogPost from './pages/BlogPost'
 import Projects from './pages/Projects'
-import Analytics from './pages/Analytics'
 import Contact from './pages/Contact'
 import ConcreteWebDemo from './pages/ConcreteWebDemo'
 import DCESOFCDemo from './pages/DCESOFCDemo'
@@ -53,7 +52,7 @@ function App() {
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/projects" element={<Projects />} />
-            <Route path="/analytics" element={<Analytics />} />
+            <Route path="/analytics" element={<Navigate to="/#analytics" replace />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/demos/concreteweb" element={<ConcreteWebDemo />} />
             <Route path="/demos/flare" element={<Navigate to={`/demos/concreteweb${location.search}`} replace />} />

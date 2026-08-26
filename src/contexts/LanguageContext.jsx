@@ -10,7 +10,7 @@ export const translations = {
     },
     home: {
       subtitle: 'Engineering Student',
-      bio: 'I am a first-year Mechanical Engineering student at AGÜ, building practical web, simulation, and engineering projects while learning through real work.',
+      bio: 'I am a Mechanical Engineering student at AGÜ, currently interning at Altuntas Machinery and building practical web, simulation, and engineering projects.',
       btnProjects: 'VIEW PROJECTS',
       btnContact: 'CONTACT',
       featuredTitle: 'Featured Projects',
@@ -18,7 +18,7 @@ export const translations = {
       ctaTitle: "Let's Talk Projects",
       ctaDesc: 'Reach out if you want to chat about ConcreteWeb, DCE-SOFC or anything else.',
       ctaBtn: 'GET IN TOUCH',
-      cvBtn: 'DOWNLOAD CV',
+      cvBtn: 'VIEW CV',
       stats: [
         { label: 'Projects', value: '6' },
         { label: 'Technologies', value: '15+' },
@@ -35,8 +35,6 @@ export const translations = {
       contactType: 'CONTACT TYPE',
       types: ['Collaboration Inquiry', 'Investor Contact', 'Job Opportunity', 'General Question'],
       submit: 'SEND MESSAGE', submitted: 'MESSAGE SENT!',
-      downloadCv: 'Download CV', downloadDesc: 'Get my full resume with project details, technical skills, and academic background',
-      downloadBtn: 'DOWNLOAD PDF',
       direct: 'Direct Contact', social: 'Social & Professional',
       response: 'Response time: Usually within 24 hours'
     },
@@ -62,7 +60,7 @@ export const translations = {
     },
     home: {
       subtitle: 'Engineering Student',
-      bio: 'AGÜ Makine Mühendisliği 1. sınıf öğrencisiyim. Web, simülasyon ve mühendislik projeleri geliştirerek öğreniyor; fikirleri çalışan ürünlere dönüştürmeye odaklanıyorum.',
+      bio: 'AGÜ Makine Mühendisliği öğrencisiyim. Altuntas Machinery stajımın yanında web, simülasyon ve mühendislik projeleri geliştirerek fikirleri çalışan ürünlere dönüştürüyorum.',
       btnProjects: 'PROJELERİ GÖR',
       btnContact: 'İLETİŞİM',
       featuredTitle: 'Öne Çıkan Projeler',
@@ -70,7 +68,7 @@ export const translations = {
       ctaTitle: 'Projeler Hakkında Konuşalım',
       ctaDesc: 'ConcreteWeb, DCE-SOFC veya başka bir proje hakkında sohbet etmek istersen yazabilirsin.',
       ctaBtn: 'İLETİŞİME GEÇ',
-      cvBtn: 'CV İNDİR',
+      cvBtn: 'CV\'Yİ GÖR',
       stats: [
         { label: 'Proje', value: '6' },
         { label: 'Teknoloji', value: '15+' },
@@ -87,8 +85,6 @@ export const translations = {
       contactType: 'İLETİŞİM TÜRÜ',
       types: ['İş Birliği', 'Yatırımcı', 'İş Teklifi', 'Genel Soru'],
       submit: 'MESAJ GÖNDER', submitted: 'MESAJ GÖNDERİLDİ!',
-      downloadCv: 'CV İndir', downloadDesc: 'Proje detayları, teknik beceriler ve akademik geçmişimle tam özgeçmişimi indir',
-      downloadBtn: 'PDF İNDİR',
       direct: 'Direkt İletişim', social: 'Sosyal & Profesyonel',
       response: 'Yanıt süresi: Genellikle 24 saat içinde'
     },

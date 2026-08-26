@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Mail, Send, Download, Github, Linkedin, Instagram, CheckCircle } from 'lucide-react'
+import { Mail, Send, Github, Linkedin, Instagram, CheckCircle } from 'lucide-react'
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -18,14 +18,6 @@ export default function Contact() {
     console.log('Form submitted:', formData)
     setSubmitted(true)
     setTimeout(() => setSubmitted(false), 3000)
-  }
-
-  const handleDownloadCV = () => {
-    // In production, link to actual PDF
-    const link = document.createElement('a')
-    link.href = '/cv/Mirac_Altunbay_CV.pdf'
-    link.download = 'Mirac_Altunbay_CV.pdf'
-    link.click()
   }
 
   return (
@@ -160,31 +152,12 @@ export default function Contact() {
             </form>
           </motion.div>
 
-          {/* Contact Info & CV */}
+          {/* Contact Info */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             className="space-y-6"
           >
-            {/* CV Download */}
-            <div className="bg-terminal-darker border-2 border-terminal-accent p-6">
-              <h2 className="text-xl font-bold text-terminal-accent mb-4">
-                Download CV
-              </h2>
-              <p className="text-gray-400 text-sm mb-6">
-                Get my full resume with project details, technical skills, and academic background
-              </p>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={handleDownloadCV}
-                className="w-full bg-terminal-accent border-2 border-terminal-accent text-white py-3 font-bold font-mono flex items-center justify-center space-x-2 hover:bg-transparent hover:text-terminal-accent transition-all"
-              >
-                <Download size={20} />
-                <span>DOWNLOAD PDF</span>
-              </motion.button>
-            </div>
-
             {/* Direct Contact */}
             <div className="bg-terminal-darker border-2 border-terminal-secondary p-6">
               <h2 className="text-xl font-bold text-terminal-secondary mb-4">

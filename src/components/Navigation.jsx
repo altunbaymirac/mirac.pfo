@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Home, BookOpen, Briefcase, BarChart3, Mail, Github, Linkedin, Instagram, Menu, X, Gamepad2, FileText } from 'lucide-react'
+import { Home, BookOpen, Briefcase, Mail, Github, Linkedin, Instagram, Menu, X, Gamepad2, FileText } from 'lucide-react'
 import { useState } from 'react'
 import { useLanguage } from '../contexts/LanguageContext'
 
@@ -14,7 +14,6 @@ export default function Navigation() {
     { path: '/blog', icon: BookOpen, label: t.nav.blog },
     { path: '/projects', icon: Briefcase, label: t.nav.projects },
     { path: '/games', icon: Gamepad2, label: t.nav.games },
-    { path: '/analytics', icon: BarChart3, label: t.nav.analytics },
     { path: '/contact', icon: Mail, label: t.nav.contact },
     { path: '/cv', icon: FileText, label: t.nav.cv },
   ]

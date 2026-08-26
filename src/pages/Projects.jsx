@@ -44,10 +44,10 @@ const PROJECTS = [
     color: 'terminal-accent'
   },
   {
-    title: 'Arfdao',
+    title: 'ArfDAO',
     type: 'Client Website',
-    description: 'Arfdao topluluğu için hazırlanmış modern, responsive canlı web sitesi.',
-    descriptionEn: 'A modern, responsive live website built for the Arfdao community.',
+    description: 'ArfDAO topluluğu için hazırlanmış modern, responsive canlı web sitesi.',
+    descriptionEn: 'A modern, responsive live website built for the ArfDAO community.',
     tech: ['Web Design', 'Responsive', 'Production'],
     href: 'https://arfdao.dev',
     external: true,

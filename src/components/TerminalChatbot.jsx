@@ -17,7 +17,7 @@ const RESPONSES_TR = {
     all: "Mirac 3 büyük proje üzerinde çalışıyor:\n\n1. ConcreteWeb - Acil durum LoRa sistemi\n2. DCE-SOFC - Amonyak hibrid motor\n3. GeoSocial - Lokasyon sosyal app\n\nHangisi hakkında detay istersin?"
   },
   
-  education: "🎓 Mirac, Abdullah Gül Üniversitesi (AGÜ) Makine Mühendisliği 1. sınıf öğrencisi. Kayseri'de okuyor.",
+  education: "Mirac, Abdullah Gül Üniversitesi (AGÜ) Makine Mühendisliği öğrencisi ve şu anda Altuntas Machinery'de staj yapıyor.",
   
   skills: "💻 Beceriler:\n• React, React Native, Firebase\n• Java, JavaScript, Full-stack\n• LoRa, GPS, Mesh Networks\n• Termodinamik, Arrhenius kimyası\n• Mobile app geliştirme",
   
@@ -25,7 +25,7 @@ const RESPONSES_TR = {
   
   games: "🎮 Portfolio'da 2 retro oyun var! Snake ve Pong. /games sayfasından oynayabilirsin. Terminal aesthetic, pixel-perfect!",
   
-  cv: "📄 CV indirmek için /contact sayfasına git. Orada download butonu var. PDF formatında detaylı CV'yi indirebilirsin.",
+  cv: "Güncel özgeçmişi /cv sayfasında görüntüleyebilir ve yazdırma seçeneğiyle PDF olarak kaydedebilirsin.",
   
   default: [
     "Hmm, tam anlayamadım. Şunları sorabilirsin:\n• Projeler hakkında\n• Eğitim/okul\n• İletişim bilgileri\n• Oyunlar\n• CV indirme",
@@ -50,7 +50,7 @@ const RESPONSES_EN = {
     all: "Mirac is working on 3 major projects:\n\n1. ConcreteWeb - emergency LoRa system\n2. DCE-SOFC - ammonia hybrid engine\n3. GeoSocial - location-based social app\n\nWhich one would you like to hear more about?"
   },
 
-  education: "🎓 Mirac is a first-year Mechanical Engineering student at Abdullah Gül University (AGÜ), studying in Kayseri.",
+  education: "Mirac is a Mechanical Engineering student at Abdullah Gül University (AGÜ) and is currently interning at Altuntas Machinery.",
 
   skills: "💻 Skills:\n• React, React Native, Firebase\n• Java, JavaScript, full-stack\n• LoRa, GPS, mesh networks\n• Thermodynamics, Arrhenius chemistry\n• Mobile app development",
 
@@ -58,7 +58,7 @@ const RESPONSES_EN = {
 
   games: "🎮 There are 2 retro games in the portfolio! Snake and Pong, playable on the /games page. Terminal aesthetic, pixel-perfect!",
 
-  cv: "📄 To download the CV, go to the /contact page. There's a download button there for the detailed PDF.",
+  cv: "You can view the current resume at /cv and save it as a PDF using the print option.",
 
   default: [
     "Hmm, I didn't quite get that. You could ask about:\n• The projects\n• Education/school\n• Contact details\n• Games\n• Downloading the CV",

@@ -1,5 +1,5 @@
 import { initializeApp, getApps, getApp } from 'firebase/app'
-import { getDatabase, ref, get, set, increment } from 'firebase/database'
+import { getDatabase, ref, get, runTransaction } from 'firebase/database'
 import { useState, useEffect } from 'react'
 
 // Firebase config
@@ -31,12 +31,16 @@ export function useVisitorCounter() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    const visitKey = 'mirac_portfolio_visit_counted'
+    const alreadyCounted = sessionStorage.getItem(visitKey) === '1'
+
     if (!database) {
       // Fallback to localStorage if Firebase not configured
       try {
         let visitors = parseInt(localStorage.getItem('visitor_count') || '0')
-        visitors += 1
+        if (!alreadyCounted) visitors += 1
         localStorage.setItem('visitor_count', visitors.toString())
+        sessionStorage.setItem(visitKey, '1')
         setCount(visitors)
         setLoading(false)
       } catch (error) {
@@ -49,26 +53,20 @@ export function useVisitorCounter() {
     // Firebase implementation
     const visitorRef = ref(database, 'visitors/total')
     
-    // Get current count
-    get(visitorRef)
-      .then((snapshot) => {
-        const currentCount = snapshot.val() || 0
-        const newCount = currentCount + 1
-        
-        // Increment
-        set(visitorRef, newCount)
-          .then(() => {
-            setCount(newCount)
-            setLoading(false)
-          })
-          .catch((error) => {
-            console.error('Firebase set error:', error)
-            setCount(currentCount)
-            setLoading(false)
-          })
+    const request = alreadyCounted
+      ? get(visitorRef)
+      : runTransaction(visitorRef, current => (current || 0) + 1)
+
+    if (!alreadyCounted) sessionStorage.setItem(visitKey, '1')
+
+    request
+      .then((result) => {
+        const snapshot = result.snapshot || result
+        setCount(snapshot.val() || 0)
+        setLoading(false)
       })
       .catch((error) => {
-        console.error('Firebase get error:', error)
+        console.error('Firebase visitor counter error:', error)
         setLoading(false)
       })
   }, [])

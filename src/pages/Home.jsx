@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Terminal, Rocket, ArrowRight, Download } from 'lucide-react'
+import { Terminal, Rocket, ArrowRight, FileText } from 'lucide-react'
 import LiveProjectDemos from '../components/LiveProjectDemos'
+import VisitorCounter from './VisitorCounter'
 import { useLanguage } from '../contexts/LanguageContext'
 
 export default function Home() {
@@ -66,10 +67,10 @@ export default function Home() {
       stats: ['Production', 'Responsive', 'Client Project']
     },
     {
-      name: 'Arfdao',
+      name: 'ArfDAO',
       tag: 'Client Website',
-      description: 'Arfdao topluluğu için hazırlanan modern ve responsive web sitesi.',
-      descriptionEn: 'A modern, responsive website built for the Arfdao community.',
+      description: 'ArfDAO topluluğu için hazırlanan modern ve responsive web sitesi.',
+      descriptionEn: 'A modern, responsive website built for the ArfDAO community.',
       color: 'terminal-text',
       link: 'https://arfdao.dev',
       external: true,
@@ -401,7 +402,7 @@ export default function Home() {
                   whileTap={{ scale: 0.95 }}
                   className="px-8 py-3 border-2 border-terminal-accent text-terminal-accent font-bold font-mono hover:bg-terminal-accent hover:text-white transition-all flex items-center space-x-2"
                 >
-                  <Download size={20} />
+                  <FileText size={20} />
                   <span>{t.home.cvBtn}</span>
                 </motion.button>
               </Link>
@@ -409,6 +410,8 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
+
+      <VisitorCounter embedded />
     </div>
   )
 }

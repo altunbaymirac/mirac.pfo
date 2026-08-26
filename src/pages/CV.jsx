@@ -1,40 +1,75 @@
 import { motion } from 'framer-motion'
-import { Download, Mail, Github, Linkedin, MapPin, GraduationCap, Briefcase, Code, Award } from 'lucide-react'
+import { Download, Mail, Github, Linkedin, Globe, MapPin, GraduationCap, Briefcase, Code, Award, Trophy, ExternalLink } from 'lucide-react'
 import { useLanguage } from '../contexts/LanguageContext'
 
 const CV_CONTENT = {
   tr: {
     pageTitle: 'Özgeçmiş',
     print: 'YAZDIR / İNDİR',
-    role: 'Makine Mühendisliği Öğrencisi & Yazılım Geliştirici',
+    role: 'Makine Mühendisliği Öğrencisi ve Yazılım Geliştirici',
     location: 'Kayseri, Türkiye',
-    aboutTitle: 'Hakkımda',
-    about: 'Abdullah Gül Üniversitesi Makine Mühendisliği 1. sınıf öğrencisiyim. Yazılım geliştirme ve mühendislik simülasyonlarına ilgi duyuyorum. 6 Şubat depreminden ilham alarak ConcreteWeb adlı enkaz altı LoRa beacon sistemini tasarladım; amonyak yakıtlı gemi tahrik sistemleri için termodinamik simülasyon geliştirdim. Öğrenirken yapmayı, yaparken öğrenmeyi tercih ediyorum.',
+    aboutTitle: 'Profesyonel Özet',
+    about: 'Makine mühendisliği eğitimiyle yazılım geliştirme deneyimini birleştiriyorum. React, TypeScript, SQL ve gömülü sistemlerle çalışan ürünler geliştiriyor; müşteri sitelerini fikirden canlı yayına kadar yönetiyorum. LoRa tabanlı acil iletişim, yapay zeka destekli platformlar ve termodinamik simülasyonlar üzerine çalışıyorum.',
     educationTitle: 'Eğitim',
     education: [
       {
         title: 'Makine Mühendisliği',
-        subtitle: 'Abdullah Gül Üniversitesi (AGÜ) — Kayseri',
-        date: 'Eyl 2024 – Devam ediyor',
-        details: ['1. Sınıf öğrencisi', 'Odak: termodinamik simülasyon, IoT ve mühendislik tasarımı']
+        subtitle: 'Abdullah Gül Üniversitesi (AGÜ), Kayseri',
+        date: 'Eyl 2024 - Devam ediyor',
+        details: ['İngilizce lisans programı', 'Odak: mühendislik tasarımı, termodinamik, IoT ve yazılım geliştirme']
+      },
+      {
+        title: 'Kerem Aydınlar Fen Lisesi',
+        subtitle: 'Fen Bilimleri',
+        date: '2023 mezunu',
+        details: ['Arapgir, Malatya']
+      }
+    ],
+    experienceTitle: 'Deneyim',
+    experience: [
+      {
+        title: 'Mühendislik Stajyeri',
+        subtitle: 'Altuntas Machinery',
+        date: 'Ağu 2026 - Devam ediyor',
+        details: ['Makine mühendisliği stajı kapsamında üretim ve mühendislik süreçlerinde görev alıyorum.']
+      },
+      {
+        title: 'Web Geliştirici (Serbest)',
+        subtitle: 'Adil Usta, gıda üretim ve perakende işletmesi',
+        date: '2025 - Devam ediyor',
+        details: ['Kurumsal web sitesini sıfırdan geliştirip yayına aldım ve bakımını sürdürüyorum.', 'React, Vite, JavaScript ve Vercel ile üretim ortamını yönetiyorum.']
+      },
+      {
+        title: 'Web Geliştirici (Proje Bazlı)',
+        subtitle: 'FedaGrup İnşaat ve diğer müşteriler',
+        date: '2025',
+        details: ['Kurumsal web sitelerini ihtiyaç analizinden canlı yayına kadar geliştirdim.', 'Mobil uyum, performans ve güven odaklı arayüzler oluşturdum.']
+      },
+      {
+        title: 'Mekanik Tasarım Ekibi Üyesi',
+        subtitle: 'ENCELADUS Roket Takımı, TEKNOFEST',
+        date: 'Kas 2024 - Mar 2025',
+        details: ['Roketin stabilizasyon kanatçıkları ve motor yatağı üzerinde SolidWorks ile çalıştım.']
       }
     ],
     projectsTitle: 'Projeler',
     projects: [
       {
-        title: 'ConcreteWeb — Enkaz Altı Acil İletişim Sistemi',
-        date: 'Şub 2025 – Devam ediyor',
+        title: 'ConcreteWeb | Enkaz Altı Acil İletişim Sistemi',
+        date: '2024 - Devam ediyor',
         details: [
-          'Bina başına tek HUB ile 868 MHz LoRa store-and-forward mesh mimarisi',
-          'Beacon ID, bina, kat ve yatak odası kurulum konumunu eşleştiren GPSsiz kayıt modeli',
-          'React + Leaflet ile bina HUB haritası ve Station triyaj simülasyonu',
-          'Confirmed alive, vibration detected, broadcast only, safe ve silent node önceliklendirmesi',
-          'James Dyson Award 2026 başvurusu'
+          'Baz istasyonları çöktüğünde enkaz altındaki cihazlardan arama kurtarma ekiplerine ulaşmayı amaçlayan LoRa haberleşme ağı.',
+          'ESP32, LoRa 868 MHz, C/C++, Python, React ve Leaflet.'
+        ],
+        links: [
+          { label: 'Canlı Demo', href: '/demos/concreteweb' },
+          { label: 'Proje Yazısı', href: '/blog/concreteweb-nedir' },
+          { label: 'James Dyson Award', href: 'https://www.jamesdysonaward.org/tr-TR/2026/project/concreteweb', external: true }
         ]
       },
       {
-        title: 'DCE-SOFC Dijital İkiz — Hibrit Gemi Tahrik Sistemi',
-        date: 'Mar 2025 – Devam ediyor',
+        title: 'DCE-SOFC Dijital İkiz | Hibrit Gemi Tahrik Sistemi',
+        date: 'Mar 2025 - Devam ediyor',
         details: [
           'Amonyak (NH₃) yakıtlı SOFC + Dual-Cycle Engine hibrit sistemi',
           'Arrhenius kinetikleri: k = A·exp(-Ea/RT), dönüşüm hesabı',
@@ -43,41 +78,42 @@ const CV_CONTENT = {
         ]
       },
       {
-        title: 'Takaslat — Takas Marketplace',
-        date: 'May 2025',
+        title: 'Takaslat | Takas Marketplace',
+        date: '2026 - Devam ediyor',
         details: [
-          'React + TypeScript + Vite + Zustand full-stack marketplace',
-          'AI destekli ilan açıklaması ve fiyat tahmini',
-          'Takas teklifi, müzakere simülatörü, güven puanı sistemi',
-          'Harita görünümü, paket teklifi, ürün karşılaştırma'
+          'Araç, elektronik ve gayrimenkul için yapay zeka destekli takas platformunu fikirden canlı ürüne geliştirdim.',
+          'React, TypeScript, PostgreSQL, Supabase, Claude API, Docker ve Vercel.'
         ]
       },
       {
-        title: 'FedaGrup İnşaat — Kurumsal Web Sitesi',
-        date: 'Nis 2025',
+        title: 'ArfDAO Topluluk Web Sitesi',
+        date: '2026 - Devam ediyor',
         details: [
-          'Müşteri projesi — production\'da canlı: fedagrupinsaat.com',
-          'Mobil uyumlu, hızlı yüklenen kurumsal site',
-          'Güven odaklı tasarım, net hizmet mimarisi'
-        ]
+          'Geliştirici topluluğunun iki dilli kurumsal sitesini tasarımdan yayına kadar geliştirdim ve bakımını sürdürüyorum.',
+          'Modern, mobil uyumlu ve performans odaklı web deneyimi.'
+        ],
+        links: [{ label: 'arfdao.dev', href: 'https://arfdao.dev', external: true }]
       },
       {
-        title: 'GeoSocial — Konuma Dayalı Sosyal Ağ',
-        date: '2024',
+        title: 'GeoSocial | Konuma Dayalı Sosyal Ağ',
+        date: '2025 - Devam ediyor',
         details: [
-          'React Native + Firebase + GPS tracking',
-          'Gamification, yakın kullanıcıları bulma, sosyal akış'
+          'Konum tabanlı sosyal uygulamanın veri katmanını ve mobil ürün akışlarını geliştirdim.',
+          'React Native, Flutter, PostgreSQL, Supabase ve SQL.'
         ]
       }
     ],
     skillsTitle: 'Teknik Beceriler',
     skills: [
-      { label: 'Frontend', items: ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'Framer Motion'] },
-      { label: 'Backend & DB', items: ['Node.js', 'Express', 'Firebase', 'Zustand'] },
-      { label: 'Mobil', items: ['React Native', 'Expo'] },
-      { label: 'Mühendislik', items: ['Termodinamik', 'LoRa / IoT', 'Arrhenius Kinetik', 'P&ID Diyagram'] },
-      { label: 'Araçlar', items: ['Git', 'Vercel', 'Recharts', 'Leaflet', 'Figma'] },
-      { label: 'Diller', items: ['JavaScript', 'TypeScript', 'Python', 'Java', 'Dart (öğreniyorum)'] }
+      { label: 'Yazılım', items: ['React', 'TypeScript', 'JavaScript', 'Vite', 'React Native', 'Flutter', 'Dart', 'REST API'] },
+      { label: 'Veritabanı', items: ['SQL', 'PostgreSQL', 'Supabase', 'Firebase'] },
+      { label: 'Gömülü ve Mühendislik', items: ['ESP32', 'Arduino', 'LoRa', 'C/C++', 'SolidWorks', 'MATLAB'] },
+      { label: 'Araçlar', items: ['Git', 'GitHub', 'Vercel', 'Claude Code', 'Codex', 'Excel', 'Python', 'Docker'] }
+    ],
+    achievementsTitle: 'Başarılar',
+    achievements: [
+      { title: 'James Dyson Award 2026', details: ['ConcreteWeb ile ulusal başvuru ve jüri sunumu; MVP ile tekrar başvuru daveti.'] },
+      { title: 'TÜBİTAK 4006 Bilim Fuarları', details: ['2018 ve 2022 yıllarında giyilebilir titreşim sistemi, Arduino tabanlı atık kutusu ve dosya şifreleme projeleri.'] }
     ],
     languagesTitle: 'Diller',
     languages: [
@@ -88,35 +124,70 @@ const CV_CONTENT = {
   en: {
     pageTitle: 'Curriculum Vitae',
     print: 'PRINT / DOWNLOAD',
-    role: 'Mechanical Engineering Student & Software Developer',
+    role: 'Mechanical Engineering Student and Software Developer',
     location: 'Kayseri, Türkiye',
-    aboutTitle: 'About',
-    about: 'I am a first-year Mechanical Engineering student at Abdullah Gül University, interested in software development and engineering simulation. Inspired by the February 6th earthquake I designed ConcreteWeb, an under-rubble LoRa beacon system, and built a thermodynamic simulation for ammonia-fuelled marine propulsion. I prefer building while learning, and learning while building.',
+    aboutTitle: 'Professional Summary',
+    about: 'I combine mechanical engineering education with practical software development. I build products with React, TypeScript, SQL and embedded systems, and manage client websites from concept to production. My current work focuses on LoRa emergency communication, AI-assisted platforms and thermodynamic simulation.',
     educationTitle: 'Education',
     education: [
       {
         title: 'Mechanical Engineering',
-        subtitle: 'Abdullah Gül University (AGÜ) — Kayseri',
-        date: 'Sep 2024 – Present',
-        details: ['First-year student', 'Focus: thermodynamic simulation, IoT and engineering design']
+        subtitle: 'Abdullah Gül University (AGÜ), Kayseri',
+        date: 'Sep 2024 - Present',
+        details: ['English-medium degree programme', 'Focus: engineering design, thermodynamics, IoT and software development']
+      },
+      {
+        title: 'Kerem Aydınlar Science High School',
+        subtitle: 'Science',
+        date: 'Graduated 2023',
+        details: ['Arapgir, Malatya']
+      }
+    ],
+    experienceTitle: 'Experience',
+    experience: [
+      {
+        title: 'Engineering Intern',
+        subtitle: 'Altuntas Machinery',
+        date: 'Aug 2026 - Present',
+        details: ['Contributing to production and engineering processes as part of my mechanical engineering internship.']
+      },
+      {
+        title: 'Freelance Web Developer',
+        subtitle: 'Adil Usta, food production and retail business',
+        date: '2025 - Present',
+        details: ['Built and launched the corporate website from scratch and continue to maintain it.', 'Manage the production stack with React, Vite, JavaScript and Vercel.']
+      },
+      {
+        title: 'Project-based Web Developer',
+        subtitle: 'FedaGrup İnşaat and other clients',
+        date: '2025',
+        details: ['Delivered corporate websites from requirements analysis to production launch.', 'Created mobile-friendly, performant and trust-focused interfaces.']
+      },
+      {
+        title: 'Mechanical Design Team Member',
+        subtitle: 'ENCELADUS Rocket Team, TEKNOFEST',
+        date: 'Nov 2024 - Mar 2025',
+        details: ['Worked on the rocket stabilisation fins and motor mount using SolidWorks.']
       }
     ],
     projectsTitle: 'Projects',
     projects: [
       {
-        title: 'ConcreteWeb — Under-Rubble Emergency Communication System',
-        date: 'Feb 2025 – Present',
+        title: 'ConcreteWeb | Under-Rubble Emergency Communication System',
+        date: '2024 - Present',
         details: [
-          '868 MHz LoRa store-and-forward mesh architecture with a single HUB per building',
-          'GPS-free registry model mapping Beacon ID to building, floor and installed room',
-          'Building HUB map and Station triage simulation with React + Leaflet',
-          'Prioritisation across confirmed alive, vibration detected, broadcast only, safe and silent node',
-          'Submitted to the James Dyson Award 2026'
+          'A LoRa communication network designed to connect under-rubble devices with search and rescue teams when base stations fail.',
+          'ESP32, 868 MHz LoRa, C/C++, Python, React and Leaflet.'
+        ],
+        links: [
+          { label: 'Live Demo', href: '/demos/concreteweb' },
+          { label: 'Project Article', href: '/blog/concreteweb-nedir' },
+          { label: 'James Dyson Award', href: 'https://www.jamesdysonaward.org/tr-TR/2026/project/concreteweb', external: true }
         ]
       },
       {
-        title: 'DCE-SOFC Digital Twin — Hybrid Marine Propulsion System',
-        date: 'Mar 2025 – Present',
+        title: 'DCE-SOFC Digital Twin | Hybrid Marine Propulsion System',
+        date: 'Mar 2025 - Present',
         details: [
           'Ammonia (NH₃) fuelled SOFC + Dual-Cycle Engine hybrid system',
           'Arrhenius kinetics: k = A·exp(-Ea/RT), with conversion calculation',
@@ -125,41 +196,42 @@ const CV_CONTENT = {
         ]
       },
       {
-        title: 'Takaslat — Barter Marketplace',
-        date: 'May 2025',
+        title: 'Takaslat | Barter Marketplace',
+        date: '2026 - Present',
         details: [
-          'Full-stack marketplace in React + TypeScript + Vite + Zustand',
-          'AI-assisted listing descriptions and price estimation',
-          'Swap offers, negotiation simulator, trust score system',
-          'Map view, bundle offers, item comparison'
+          'Built an AI-assisted barter platform for vehicles, electronics and real estate from concept to live product.',
+          'React, TypeScript, PostgreSQL, Supabase, Claude API, Docker and Vercel.'
         ]
       },
       {
-        title: 'FedaGrup İnşaat — Corporate Website',
-        date: 'Apr 2025',
+        title: 'ArfDAO Community Website',
+        date: '2026 - Present',
         details: [
-          'Client project — live in production: fedagrupinsaat.com',
-          'Mobile-friendly, fast-loading corporate site',
-          'Trust-focused design with a clear service architecture'
-        ]
+          'Designed, developed and continue to maintain the bilingual corporate website for a developer community.',
+          'Modern, mobile-friendly and performance-focused web experience.'
+        ],
+        links: [{ label: 'arfdao.dev', href: 'https://arfdao.dev', external: true }]
       },
       {
-        title: 'GeoSocial — Location-Based Social Network',
-        date: '2024',
+        title: 'GeoSocial | Location-Based Social Network',
+        date: '2025 - Present',
         details: [
-          'React Native + Firebase + GPS tracking',
-          'Gamification, nearby user discovery, social feed'
+          'Developed the data layer and mobile product flows for a location-based social application.',
+          'React Native, Flutter, PostgreSQL, Supabase and SQL.'
         ]
       }
     ],
     skillsTitle: 'Technical Skills',
     skills: [
-      { label: 'Frontend', items: ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'Framer Motion'] },
-      { label: 'Backend & DB', items: ['Node.js', 'Express', 'Firebase', 'Zustand'] },
-      { label: 'Mobile', items: ['React Native', 'Expo'] },
-      { label: 'Engineering', items: ['Thermodynamics', 'LoRa / IoT', 'Arrhenius Kinetics', 'P&ID Diagrams'] },
-      { label: 'Tools', items: ['Git', 'Vercel', 'Recharts', 'Leaflet', 'Figma'] },
-      { label: 'Languages', items: ['JavaScript', 'TypeScript', 'Python', 'Java', 'Dart (learning)'] }
+      { label: 'Software', items: ['React', 'TypeScript', 'JavaScript', 'Vite', 'React Native', 'Flutter', 'Dart', 'REST API'] },
+      { label: 'Databases', items: ['SQL', 'PostgreSQL', 'Supabase', 'Firebase'] },
+      { label: 'Embedded and Engineering', items: ['ESP32', 'Arduino', 'LoRa', 'C/C++', 'SolidWorks', 'MATLAB'] },
+      { label: 'Tools', items: ['Git', 'GitHub', 'Vercel', 'Claude Code', 'Codex', 'Excel', 'Python', 'Docker'] }
+    ],
+    achievementsTitle: 'Achievements',
+    achievements: [
+      { title: 'James Dyson Award 2026', details: ['National submission and jury presentation with ConcreteWeb; invited to apply again with an MVP.'] },
+      { title: 'TÜBİTAK 4006 Science Fairs', details: ['Projects in 2018 and 2022 covering wearable vibration, an Arduino-based waste bin and file encryption.'] }
     ],
     languagesTitle: 'Languages',
     languages: [
@@ -178,13 +250,16 @@ export default function CV() {
     <div className="min-h-screen pt-24 px-4 pb-12">
       <div className="max-w-4xl mx-auto">
 
-        {/* Action bar — hidden on print */}
+        {/* Action bar, hidden on print */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           className="flex items-center justify-between mb-8 print:hidden"
         >
-          <h1 className="text-4xl font-bold text-terminal-text neon-glow">📄 {cv.pageTitle}</h1>
+          <h1 className="flex items-center gap-3 text-3xl md:text-4xl font-bold text-terminal-text neon-glow">
+            <Briefcase size={32} />
+            {cv.pageTitle}
+          </h1>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -197,7 +272,7 @@ export default function CV() {
         </motion.div>
 
         {/* CV Content */}
-        <div className="bg-terminal-darker border-2 border-terminal-text p-8 print:border-0 print:p-0 print:bg-white print:text-black space-y-8">
+        <div className="cv-sheet bg-terminal-darker border-2 border-terminal-text p-8 print:border-0 print:p-0 print:bg-white print:text-black space-y-8">
 
           {/* Header */}
           <div className="border-b-2 border-terminal-text pb-6 print:border-black">
@@ -212,6 +287,10 @@ export default function CV() {
                 <Mail size={14} className="text-terminal-accent print:text-gray-500" />
                 mirac.altunbay@agu.edu.tr
               </span>
+              <a href="https://miracaltunbay.com.tr" className="flex items-center gap-1.5 hover:text-terminal-text transition-colors print:text-gray-600" target="_blank" rel="noopener noreferrer">
+                <Globe size={14} className="text-terminal-text print:text-gray-500" />
+                miracaltunbay.com.tr
+              </a>
               <a
                 href="https://github.com/altunbaymirac"
                 className="flex items-center gap-1.5 hover:text-terminal-text transition-colors print:text-gray-600"
@@ -249,6 +328,13 @@ export default function CV() {
             ))}
           </Section>
 
+          {/* Experience */}
+          <Section icon={<Briefcase size={18} />} title={cv.experienceTitle}>
+            {cv.experience.map((item) => (
+              <CVItem key={item.title} {...item} />
+            ))}
+          </Section>
+
           {/* Projects */}
           <Section icon={<Briefcase size={18} />} title={cv.projectsTitle}>
             {cv.projects.map((item) => (
@@ -263,6 +349,13 @@ export default function CV() {
                 <SkillGroup key={group.label} label={group.label} items={group.items} />
               ))}
             </div>
+          </Section>
+
+          {/* Achievements */}
+          <Section icon={<Trophy size={18} />} title={cv.achievementsTitle}>
+            {cv.achievements.map((item) => (
+              <CVItem key={item.title} {...item} />
+            ))}
           </Section>
 
           {/* Languages */}
@@ -281,6 +374,7 @@ export default function CV() {
       </div>
 
       <style>{`
+        @page { size: A4; margin: 10mm; }
         @media print {
           .print\\:hidden { display: none !important; }
           .print\\:border-0 { border: none !important; }
@@ -291,8 +385,15 @@ export default function CV() {
           .print\\:text-gray-700 { color: #374151 !important; }
           .print\\:border-black { border-color: black !important; }
           .print\\:border-gray-300 { border-color: #d1d5db !important; }
+          .cv-sheet { font-size: 10px; line-height: 1.32; }
+          .cv-sheet > * { margin-bottom: 12px !important; }
+          .cv-section { break-inside: avoid; }
+          .cv-section h3 { font-size: 13px !important; margin-bottom: 7px !important; padding-bottom: 4px !important; }
+          .cv-section > div { gap: 6px !important; }
+          .cv-item { break-inside: avoid; margin-bottom: 7px !important; }
+          .cv-item li, .cv-item p { font-size: 9px !important; line-height: 1.3 !important; }
           .neon-glow { text-shadow: none !important; }
-          nav, .terminal-chatbot { display: none !important; }
+          nav, .terminal-chatbot, canvas { display: none !important; }
         }
       `}</style>
     </div>
@@ -301,7 +402,7 @@ export default function CV() {
 
 function Section({ icon, title, children }) {
   return (
-    <div>
+    <div className="cv-section">
       <h3 className="flex items-center gap-2 text-terminal-secondary font-mono font-bold text-lg mb-4 pb-2 border-b border-terminal-border print:text-gray-800 print:border-gray-300">
         <span className="text-terminal-accent print:text-gray-500">{icon}</span>
         {title}
@@ -311,9 +412,9 @@ function Section({ icon, title, children }) {
   )
 }
 
-function CVItem({ title, subtitle, date, details }) {
+function CVItem({ title, subtitle, date, details, links = [] }) {
   return (
-    <div className="mb-4">
+    <div className="cv-item mb-4">
       <div className="flex items-start justify-between gap-3 flex-wrap mb-1">
         <span className="text-terminal-text font-mono font-bold print:text-black">{title}</span>
         <span className="text-terminal-accent text-xs font-mono border border-terminal-accent px-2 py-0.5 print:text-gray-500 print:border-gray-400">
@@ -329,6 +430,22 @@ function CVItem({ title, subtitle, date, details }) {
           </li>
         ))}
       </ul>
+      {links.length > 0 && (
+        <div className="flex flex-wrap gap-2 mt-3 print:hidden">
+          {links.map(link => (
+            <a
+              key={link.href}
+              href={link.href}
+              target={link.external ? '_blank' : undefined}
+              rel={link.external ? 'noopener noreferrer' : undefined}
+              className="inline-flex items-center gap-1.5 px-2 py-1 border border-terminal-secondary text-terminal-secondary text-xs font-mono hover:bg-terminal-secondary hover:text-terminal-bg transition-colors"
+            >
+              {link.label}
+              <ExternalLink size={12} />
+            </a>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
