@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { ExternalLink, ArrowRight } from 'lucide-react'
+import { ExternalLink, ArrowRight, Briefcase } from 'lucide-react'
 import LiveProjectDemos from '../components/LiveProjectDemos'
 import FlareBeacon3D from '../components/FlareBeacon3D'
 import { useLanguage } from '../contexts/LanguageContext'
@@ -75,8 +75,9 @@ export default function Projects() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <h1 className="text-5xl font-bold text-terminal-text neon-glow mb-3">
-            💼 {t.projects.title}
+          <h1 className="text-5xl font-bold text-terminal-text neon-glow mb-3 flex items-center gap-3">
+            <Briefcase size={28} aria-hidden="true" />
+            <span>{t.projects.title}</span>
           </h1>
           <p className="text-gray-400">
             {t.projects.subtitle}

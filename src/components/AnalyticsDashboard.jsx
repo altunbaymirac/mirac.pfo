@@ -169,7 +169,7 @@ export default function AnalyticsDashboard() {
     <div className="space-y-6">
       <div>
         <h2 className="text-3xl font-bold text-terminal-text neon-glow">
-          📊 Real-Time Analytics
+          Real-Time Analytics
         </h2>
         <p className="text-sm text-gray-500 mt-1">
           Live visitor statistics
@@ -296,7 +296,7 @@ export default function AnalyticsDashboard() {
 
       <div className="bg-terminal-bg border-2 border-terminal-secondary p-4">
         <p className="text-xs text-gray-400 font-mono text-center">
-          💡 Analytics use localStorage. Enable Vercel Analytics for production.
+          Analytics use localStorage. Enable Vercel Analytics for production.
         </p>
       </div>
     </div>

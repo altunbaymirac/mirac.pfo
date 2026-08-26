@@ -146,8 +146,8 @@ export default function DCESOFCSimulator() {
       <div className="bg-terminal-bg border-2 border-terminal-secondary p-4">
         <p className="text-terminal-secondary font-mono text-sm">
           {isRunning 
-            ? `⚡ Hybrid propulsion active. SOFC + DCE generating ${power.toFixed(1)} kW at ${efficiency.toFixed(1)}% efficiency` 
-            : '⏸️ Engine stopped. Adjust parameters and press START ENGINE.'}
+            ? `Hybrid propulsion active. SOFC + DCE generating ${power.toFixed(1)} kW at ${efficiency.toFixed(1)}% efficiency`
+            : 'Engine stopped. Adjust parameters and press START ENGINE.'}
         </p>
       </div>
     </div>

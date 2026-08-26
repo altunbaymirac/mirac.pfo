@@ -12,28 +12,28 @@ const RESPONSES_TR = {
   
   projects: {
     concreteweb: "ConcreteWeb: Building-level LoRa HUB mesh and rescue triage simulation. Beacons are registered to rooms during installation and do not report GPS. /demos/concreteweb has the live demo.",
-    dce: "⚡ DCE-SOFC: Amonyak yakıtlı hibrid deniz taşıtı. Sıfır CO₂ emisyonu! Arrhenius kimyası ve yakıt hücresi teknolojisi. /demos/dce-sofc'de simülasyon var!",
-    geosocial: "📱 GeoSocial: Lokasyon tabanlı sosyal network. React Native + Firebase. GPS tracking ve check-in sistemi. /demos/geosocial'da mockup var!",
+    dce: "DCE-SOFC: Amonyak yakıtlı hibrid deniz taşıtı. Sıfır CO₂ emisyonu! Arrhenius kimyası ve yakıt hücresi teknolojisi. /demos/dce-sofc'de simülasyon var!",
+    geosocial: "GeoSocial: Lokasyon tabanlı sosyal network. React Native + Firebase. GPS tracking ve check-in sistemi. /demos/geosocial'da mockup var!",
     all: "Mirac 3 büyük proje üzerinde çalışıyor:\n\n1. ConcreteWeb - Acil durum LoRa sistemi\n2. DCE-SOFC - Amonyak hibrid motor\n3. GeoSocial - Lokasyon sosyal app\n\nHangisi hakkında detay istersin?"
   },
   
   education: "Mirac, Abdullah Gül Üniversitesi (AGÜ) Makine Mühendisliği öğrencisi ve şu anda Altuntas Machinery'de staj yapıyor.",
   
-  skills: "💻 Beceriler:\n• React, React Native, Firebase\n• Java, JavaScript, Full-stack\n• LoRa, GPS, Mesh Networks\n• Termodinamik, Arrhenius kimyası\n• Mobile app geliştirme",
+  skills: "Beceriler:\n• React, React Native, Firebase\n• Java, JavaScript, Full-stack\n• LoRa, GPS, Mesh Networks\n• Termodinamik, Arrhenius kimyası\n• Mobile app geliştirme",
   
-  contact: "📧 İletişim:\n• Email: mirac.altunbay@agu.edu.tr\n• GitHub: github.com/altunbaymirac\n• LinkedIn: Miraç Altunbay\n• Instagram: @altunbay.mirac\n\n/contact sayfasından form da doldurabilirsin!",
+  contact: "İletişim:\n• Email: mirac.altunbay@agu.edu.tr\n• GitHub: github.com/altunbaymirac\n• LinkedIn: Miraç Altunbay\n• Instagram: @altunbay.mirac\n\n/contact sayfasından form da doldurabilirsin!",
   
-  games: "🎮 Portfolio'da 2 retro oyun var! Snake ve Pong. /games sayfasından oynayabilirsin. Terminal aesthetic, pixel-perfect!",
+  games: "Portfolio'da 2 retro oyun var! Snake ve Pong. /games sayfasından oynayabilirsin. Terminal aesthetic, pixel-perfect!",
   
   cv: "Güncel özgeçmişi /cv sayfasında görüntüleyebilir ve yazdırma seçeneğiyle PDF olarak kaydedebilirsin.",
   
   default: [
     "Hmm, tam anlayamadım. Şunları sorabilirsin:\n• Projeler hakkında\n• Eğitim/okul\n• İletişim bilgileri\n• Oyunlar\n• CV indirme",
     "Bu konuda bilgim yok. 'projeler', 'iletişim', 'eğitim', 'cv' veya 'oyunlar' hakkında soru sorabilirsin!",
-    "Anlamadım 🤔 'help' yaz, sana yardımcı olayım!"
+    "Anlamadım. 'help' yaz, sana yardımcı olayım!"
   ],
   
-  help: "💡 Şunları sorabilirsin:\n\n• 'projeler' - ConcreteWeb, DCE, GeoSocial\n• 'concreteweb' - ConcreteWeb projesi detay\n• 'eğitim' veya 'okul' - Üniversite bilgisi\n• 'iletişim' - Email, sosyal medya\n• 'beceriler' veya 'skills' - Teknik yetenekler\n• 'oyunlar' - Mini games\n• 'cv' - CV indirme"
+  help: "Şunları sorabilirsin:\n\n• 'projeler' - ConcreteWeb, DCE, GeoSocial\n• 'concreteweb' - ConcreteWeb projesi detay\n• 'eğitim' veya 'okul' - Üniversite bilgisi\n• 'iletişim' - Email, sosyal medya\n• 'beceriler' veya 'skills' - Teknik yetenekler\n• 'oyunlar' - Mini games\n• 'cv' - CV sayfası"
 }
 
 const RESPONSES_EN = {
@@ -45,40 +45,40 @@ const RESPONSES_EN = {
 
   projects: {
     concreteweb: "ConcreteWeb: Building-level LoRa HUB mesh and rescue triage simulation. Beacons are registered to rooms during installation and do not report GPS. /demos/concreteweb has the live demo.",
-    dce: "⚡ DCE-SOFC: An ammonia-fuelled hybrid marine vessel. Zero CO₂ emissions! Arrhenius chemistry and fuel cell technology. There's a simulation at /demos/dce-sofc!",
-    geosocial: "📱 GeoSocial: A location-based social network. React Native + Firebase, with GPS tracking and a check-in system. There's a mockup at /demos/geosocial!",
+    dce: "DCE-SOFC: An ammonia-fuelled hybrid marine vessel. Zero CO₂ emissions! Arrhenius chemistry and fuel cell technology. There's a simulation at /demos/dce-sofc!",
+    geosocial: "GeoSocial: A location-based social network. React Native + Firebase, with GPS tracking and a check-in system. There's a mockup at /demos/geosocial!",
     all: "Mirac is working on 3 major projects:\n\n1. ConcreteWeb - emergency LoRa system\n2. DCE-SOFC - ammonia hybrid engine\n3. GeoSocial - location-based social app\n\nWhich one would you like to hear more about?"
   },
 
   education: "Mirac is a Mechanical Engineering student at Abdullah Gül University (AGÜ) and is currently interning at Altuntas Machinery.",
 
-  skills: "💻 Skills:\n• React, React Native, Firebase\n• Java, JavaScript, full-stack\n• LoRa, GPS, mesh networks\n• Thermodynamics, Arrhenius chemistry\n• Mobile app development",
+  skills: "Skills:\n• React, React Native, Firebase\n• Java, JavaScript, full-stack\n• LoRa, GPS, mesh networks\n• Thermodynamics, Arrhenius chemistry\n• Mobile app development",
 
-  contact: "📧 Contact:\n• Email: mirac.altunbay@agu.edu.tr\n• GitHub: github.com/altunbaymirac\n• LinkedIn: Miraç Altunbay\n• Instagram: @altunbay.mirac\n\nYou can also use the form on the /contact page!",
+  contact: "Contact:\n• Email: mirac.altunbay@agu.edu.tr\n• GitHub: github.com/altunbaymirac\n• LinkedIn: Miraç Altunbay\n• Instagram: @altunbay.mirac\n\nYou can also use the form on the /contact page!",
 
-  games: "🎮 There are 2 retro games in the portfolio! Snake and Pong, playable on the /games page. Terminal aesthetic, pixel-perfect!",
+  games: "There are 2 retro games in the portfolio! Snake and Pong, playable on the /games page. Terminal aesthetic, pixel-perfect!",
 
   cv: "You can view the current resume at /cv and save it as a PDF using the print option.",
 
   default: [
     "Hmm, I didn't quite get that. You could ask about:\n• The projects\n• Education/school\n• Contact details\n• Games\n• Downloading the CV",
     "I don't know about that one. Try asking about 'projects', 'contact', 'education', 'cv' or 'games'!",
-    "I didn't understand 🤔 Type 'help' and I'll show you what I can do!"
+    "I didn't understand. Type 'help' and I'll show you what I can do!"
   ],
 
-  help: "💡 You can ask me about:\n\n• 'projects' - ConcreteWeb, DCE, GeoSocial\n• 'concreteweb' - ConcreteWeb project details\n• 'education' or 'school' - university info\n• 'contact' - email, social media\n• 'skills' - technical abilities\n• 'games' - mini games\n• 'cv' - downloading the CV"
+  help: "You can ask me about:\n\n• 'projects' - ConcreteWeb, DCE, GeoSocial\n• 'concreteweb' - ConcreteWeb project details\n• 'education' or 'school' - university info\n• 'contact' - email, social media\n• 'skills' - technical abilities\n• 'games' - mini games\n• 'cv' - CV page"
 }
 
 const UI = {
   tr: {
-    welcome: "Merhaba! Ben Mirac'ın portfolio asistanıyım 🤖\n\n✨ Hızlı komutlar:\n• 'projeler' - Tüm projeler\n• 'iletişim' - Email/sosyal medya\n• 'cv' - CV indirme\n• 'help' - Tüm komutlar",
+    welcome: "Merhaba! Ben Mirac'ın portfolio asistanıyım.\n\nHızlı komutlar:\n• 'projeler' - Tüm projeler\n• 'iletişim' - Email/sosyal medya\n• 'cv' - CV sayfası\n• 'help' - Tüm komutlar",
     suggestions: ['projeler', 'ConcreteWeb nedir?', 'iletişim', 'cv', 'oyunlar'],
     typing: 'Yazıyor...',
     placeholder: 'Bir şey sor...',
     hint: "'help' yazarak komutları görebilirsin"
   },
   en: {
-    welcome: "Hi! I'm Mirac's portfolio assistant 🤖\n\n✨ Quick commands:\n• 'projects' - all projects\n• 'contact' - email/social media\n• 'cv' - download the CV\n• 'help' - all commands",
+    welcome: "Hi! I'm Mirac's portfolio assistant.\n\nQuick commands:\n• 'projects' - all projects\n• 'contact' - email/social media\n• 'cv' - CV page\n• 'help' - all commands",
     suggestions: ['projects', 'What is ConcreteWeb?', 'contact', 'cv', 'games'],
     typing: 'Typing...',
     placeholder: 'Ask me something...',

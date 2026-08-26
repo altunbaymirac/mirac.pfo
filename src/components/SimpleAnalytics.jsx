@@ -67,7 +67,7 @@ export default function SimpleAnalytics() {
     <div className="space-y-8">
       <div>
         <h2 className="text-3xl font-bold text-terminal-text neon-glow">
-          📊 Analytics Dashboard
+          Analytics Dashboard
         </h2>
         <p className="text-sm text-gray-500 mt-1">
           Simple visitor statistics using localStorage
@@ -85,7 +85,7 @@ export default function SimpleAnalytics() {
       {/* Top Pages */}
       <div className="bg-terminal-darker border-2 border-terminal-text p-6">
         <h3 className="text-xl font-bold text-terminal-text mb-6">
-          📄 Top Pages
+          Top Pages
         </h3>
         <div className="space-y-3">
           {Object.keys(stats.pageViews).length > 0 ? (
@@ -121,7 +121,7 @@ export default function SimpleAnalytics() {
       {/* Info */}
       <div className="bg-terminal-bg border-2 border-terminal-secondary p-4">
         <p className="text-xs text-gray-400 font-mono text-center">
-          💡 Analytics use browser localStorage. Data resets when you clear browser data.
+          Analytics use browser localStorage. Data resets when you clear browser data.
         </p>
       </div>
     </div>

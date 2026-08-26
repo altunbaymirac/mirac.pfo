@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Terminal, Rocket, ArrowRight, FileText } from 'lucide-react'
+import { Terminal, Rocket, ArrowRight, FileText, Monitor } from 'lucide-react'
 import LiveProjectDemos from '../components/LiveProjectDemos'
 import VisitorCounter from './VisitorCounter'
 import { useLanguage } from '../contexts/LanguageContext'
@@ -95,18 +95,18 @@ export default function Home() {
       titleEn: 'Mechanical Engineering at AGÜ',
       desc: "Abdullah Gül Üniversitesi'nde Makine Mühendisliği'ne başladım. Mühendislik düşüncesiyle tanıştım.",
       descEn: 'I started Mechanical Engineering at Abdullah Gül University and met engineering thinking for the first time.',
-      tag: '🎓 Eğitim',
-      tagEn: '🎓 Education',
+      tag: 'Eğitim',
+      tagEn: 'Education',
       active: true
     },
     {
       date: 'Şub 2025',
       dateEn: 'Feb 2025',
-      title: 'ConcreteWeb — İlk Prototip',
-      titleEn: 'ConcreteWeb — First Prototype',
+      title: 'ConcreteWeb - İlk Prototip',
+      titleEn: 'ConcreteWeb - First Prototype',
       desc: '6 Şubat depreminden ilham aldım. LoRa 868 MHz ile enkaz altı beacon simülasyonu geliştirdim.',
       descEn: 'Inspired by the February 6th earthquake, I built an under-rubble beacon simulation on 868 MHz LoRa.',
-      tag: '📡 LoRa / IoT',
+      tag: 'LoRa / IoT',
       active: true
     },
     {
@@ -116,8 +116,8 @@ export default function Home() {
       titleEn: 'DCE-SOFC Digital Twin',
       desc: 'Amonyak yakıtlı hibrit gemi tahrik sistemi için Arrhenius kinetikleriyle çalışan dijital ikiz simülasyonu.',
       descEn: 'A digital twin simulation of an ammonia-fuelled hybrid marine propulsion system, driven by Arrhenius kinetics.',
-      tag: '⚗️ Termodinamik',
-      tagEn: '⚗️ Thermodynamics',
+      tag: 'Termodinamik',
+      tagEn: 'Thermodynamics',
       active: true
     },
     {
@@ -125,9 +125,9 @@ export default function Home() {
       dateEn: 'Apr 2025',
       title: 'FedaGrup İnşaat Web Sitesi',
       titleEn: 'FedaGrup İnşaat Website',
-      desc: "İlk müşteri projem. Mobil uyumlu, hızlı kurumsal web sitesi — production'da yayında.",
-      descEn: 'My first client project. A fast, mobile-friendly corporate website — live in production.',
-      tag: '🌐 Client Project',
+      desc: "İlk müşteri projem. Mobil uyumlu, hızlı kurumsal web sitesi - production'da yayında.",
+      descEn: 'My first client project. A fast, mobile-friendly corporate website - live in production.',
+      tag: 'Client Project',
       active: true
     },
     {
@@ -136,7 +136,7 @@ export default function Home() {
       title: 'Takaslat Marketplace',
       desc: 'React + TypeScript ile AI destekli takas marketplace. Müzakere sistemi ve harita entegrasyonu.',
       descEn: 'An AI-assisted barter marketplace in React + TypeScript, with a negotiation system and map integration.',
-      tag: '🛒 Full-Stack',
+      tag: 'Full-Stack',
       active: true
     },
     {
@@ -146,8 +146,8 @@ export default function Home() {
       titleEn: 'ConcreteWeb Hardware Prototype',
       desc: 'ESP32 + LoRa modülü ile fiziksel prototip. AGÜ kampüsünde menzil testi planlanıyor.',
       descEn: 'A physical prototype with an ESP32 + LoRa module. A range test on the AGÜ campus is planned.',
-      tag: '🔩 Sonraki Adım',
-      tagEn: '🔩 Next Step',
+      tag: 'Sonraki Adım',
+      tagEn: 'Next Step',
       active: false
     }
   ]
@@ -288,11 +288,12 @@ export default function Home() {
 
           {/* Live Simulations */}
           <div className="mt-16">
-            <h3 className="text-2xl font-bold text-terminal-text neon-glow mb-6 text-center">
-              🚀 Live Project Simulations
+            <h3 className="text-2xl font-bold text-terminal-text neon-glow mb-6 flex items-center justify-center gap-3">
+              <Monitor size={24} aria-hidden="true" />
+              <span>Live Project Simulations</span>
             </h3>
             <p className="text-gray-400 text-center mb-8">
-              {lang === 'en' ? 'ConcreteWeb beacon tracker and DCE-SOFC engine simulations — running in real time!' : 'ConcreteWeb beacon tracker ve DCE-SOFC motor simülasyonları - gerçek zamanlı çalışıyor!'}
+              {lang === 'en' ? 'ConcreteWeb beacon tracker and DCE-SOFC engine simulations - running in real time!' : 'ConcreteWeb beacon tracker ve DCE-SOFC motor simülasyonları - gerçek zamanlı çalışıyor!'}
             </p>
             <LiveProjectDemos />
           </div>

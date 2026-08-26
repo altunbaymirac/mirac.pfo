@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Calendar, Clock, Tag, ArrowRight } from 'lucide-react'
+import { Calendar, Clock, Tag, ArrowRight, FileText } from 'lucide-react'
 import { blogPosts, localizePost } from '../data/blogPosts'
 import { useLanguage } from '../contexts/LanguageContext'
 
@@ -16,8 +16,9 @@ export default function Blog() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-12"
         >
-          <h1 className="text-5xl font-bold text-terminal-text neon-glow mb-3">
-            📝 {t.blog.title}
+          <h1 className="text-5xl font-bold text-terminal-text neon-glow mb-3 flex items-center gap-3">
+            <FileText size={28} aria-hidden="true" />
+            <span>{t.blog.title}</span>
           </h1>
           <p className="text-gray-400">
             {t.blog.subtitle}

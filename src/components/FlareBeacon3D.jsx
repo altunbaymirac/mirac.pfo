@@ -138,7 +138,7 @@ export default function FlareBeacon3D() {
                 : 'border-terminal-border text-terminal-text hover:border-terminal-text'
             }`}
           >
-            {isTransmitting ? '📡 TRANSMITTING' : '⏸ STANDBY'}
+            {isTransmitting ? 'TRANSMITTING' : 'STANDBY'}
           </motion.button>
         </div>
       </div>

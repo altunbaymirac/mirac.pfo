@@ -1083,10 +1083,10 @@ Even if the person does **nothing at all**, the device automatically:
 
 ## Next Steps
 
-1. ✅ Simulation complete
-2. 🔄 Prototype development (ESP32 + LoRa)
-3. ⏳ Range test on the AGÜ campus
-4. ⏳ Technology transfer office application
+1. [Done] Simulation complete
+2. [In progress] Prototype development (ESP32 + LoRa)
+3. [Planned] Range test on the AGÜ campus
+4. [Planned] Technology transfer office application
 
 This project started as an idea, but I believe it could work in real life. Let's be ready for the next earthquake.
 
@@ -1142,10 +1142,10 @@ if (accelerometer.detectEarthquake()) {
 
 ## Sonraki Adımlar
 
-1. ✅ Simülasyon tamamlandı
-2. 🔄 Prototip geliştirme (ESP32 + LoRa)
-3. ⏳ AGÜ kampüsünde menzil testi
-4. ⏳ TTO başvurusu
+1. [Tamamlandı] Simülasyon tamamlandı
+2. [Devam ediyor] Prototip geliştirme (ESP32 + LoRa)
+3. [Planlandı] AGÜ kampüsünde menzil testi
+4. [Planlandı] TTO başvurusu
 
 Bu proje bir fikir olarak başladı, ama gerçek hayatta işe yarayabileceğine inanıyorum. Bir sonraki depremde hazır olalım.
 
@@ -1323,7 +1323,7 @@ I wrote the GeoSocial location-based social network **twice**:
 2. Second attempt: React Native (pure)
 3. Experimental: Flutter (a 10-day sprint)
 
-## React Native ✅
+## React Native
 
 **Pros:**
 - If you know JavaScript you start immediately
@@ -1347,7 +1347,7 @@ useEffect(() => {
 }, []);
 \`\`\`
 
-## Flutter 🚀
+## Flutter
 
 **Pros:**
 - **Performance is incredible** (60 FPS guaranteed)
@@ -1393,7 +1393,7 @@ GeoSocial location-based sosyal ağ uygulamasını **iki kere** yazdım:
 2. İkinci deneme: React Native (pure)
 3. Deneysel: Flutter (10 günlük sprint)
 
-## React Native ✅
+## React Native
 
 **Artıları:**
 - JavaScript biliyorsan hemen başlarsın
@@ -1417,7 +1417,7 @@ useEffect(() => {
 }, []);
 \`\`\`
 
-## Flutter 🚀
+## Flutter
 
 **Artıları:**
 - **Performance inanılmaz** (60 FPS garanti)

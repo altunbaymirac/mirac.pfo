@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Home, BookOpen, Briefcase, Mail, Github, Linkedin, Instagram, Menu, X, Gamepad2, FileText } from 'lucide-react'
+import { Home, BookOpen, Briefcase, Mail, Github, Linkedin, Instagram, Menu, X, Gamepad2, FileText, Languages } from 'lucide-react'
 import { useState } from 'react'
 import { useLanguage } from '../contexts/LanguageContext'
 
@@ -154,9 +154,10 @@ export default function Navigation() {
               {/* Mobile Language Toggle */}
               <button
                 onClick={toggle}
-                className="w-full text-center py-3 border-2 border-terminal-secondary text-terminal-secondary font-mono font-bold hover:bg-terminal-secondary hover:text-terminal-bg transition-all"
+                className="w-full py-3 border-2 border-terminal-secondary text-terminal-secondary font-mono font-bold hover:bg-terminal-secondary hover:text-terminal-bg transition-all flex items-center justify-center gap-2"
               >
-                {lang === 'tr' ? '🌐 Switch to English' : '🌐 Türkçeye Geç'}
+                <Languages size={18} />
+                <span>{lang === 'tr' ? 'Switch to English' : 'Türkçeye Geç'}</span>
               </button>
 
               {/* Mobile Social */}

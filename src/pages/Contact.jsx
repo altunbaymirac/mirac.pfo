@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Mail, Send, Github, Linkedin, Instagram, CheckCircle } from 'lucide-react'
+import { Mail, Send, Github, Linkedin, Instagram, CheckCircle, MessageSquare, Clock } from 'lucide-react'
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -28,8 +28,9 @@ export default function Contact() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-12"
         >
-          <h1 className="text-5xl font-bold text-terminal-text neon-glow mb-3">
-            📬 Get In Touch
+          <h1 className="text-5xl font-bold text-terminal-text neon-glow mb-3 flex items-center gap-3">
+            <MessageSquare size={28} aria-hidden="true" />
+            <span>Get In Touch</span>
           </h1>
           <p className="text-gray-400">
             Let's collaborate on projects, discuss opportunities, or just chat about engineering
@@ -225,8 +226,9 @@ export default function Contact() {
 
             {/* Response Time */}
             <div className="bg-terminal-bg border-2 border-terminal-border p-4">
-              <p className="text-xs text-gray-500 font-mono">
-                ⏱️ <strong className="text-terminal-text">Response time:</strong> Usually within 24 hours
+              <p className="text-xs text-gray-500 font-mono flex items-center gap-2">
+                <Clock size={18} aria-hidden="true" />
+                <span><strong className="text-terminal-text">Response time:</strong> Usually within 24 hours</span>
               </p>
             </div>
           </motion.div>

@@ -34,7 +34,7 @@ const S = {
 const LABELS = {
   tr: {
     electric: 'ELEKTRİK', heat: 'ISI',
-    stop: '[■ SİSTEMİ DURDUR]', start: '[▶ SİSTEMİ BAŞLAT]',
+    stop: '[SİSTEMİ DURDUR]', start: '[SİSTEMİ BAŞLAT]',
     controlPanel: 'KONTROL PANELİ',
     motorLoad: 'MOTOR YÜKÜ', residence: 'REZİDANS SÜRESİ (τ)', tempTarget: 'SICAKLIK HEDEFİ',
     sofcCell: 'SOFC YAKIT PİLİ', whr: 'ATIK ISI GERİ KAZANIMI',
@@ -53,7 +53,7 @@ const LABELS = {
   },
   en: {
     electric: 'ELECTRIC', heat: 'HEAT',
-    stop: '[■ STOP SYSTEM]', start: '[▶ START SYSTEM]',
+    stop: '[STOP SYSTEM]', start: '[START SYSTEM]',
     controlPanel: 'CONTROL PANEL',
     motorLoad: 'ENGINE LOAD', residence: 'RESIDENCE TIME (τ)', tempTarget: 'TEMPERATURE TARGET',
     sofcCell: 'SOFC FUEL CELL', whr: 'WASTE HEAT RECOVERY',

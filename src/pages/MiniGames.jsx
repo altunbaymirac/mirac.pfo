@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Gamepad2, Trophy, RotateCcw, Zap } from 'lucide-react'
+import { Gamepad2, Trophy, RotateCcw, Zap, CircleDot } from 'lucide-react'
 
 const GRID_SIZE = 20
 const CELL_SIZE = 20
@@ -219,11 +219,6 @@ export default function MiniGames() {
     }))
   }
 
-  const games = [
-    { id: 'snake', name: 'SNAKE', color: 'terminal-accent', icon: '🐍', component: SnakeGame },
-    { id: 'pong', name: 'PONG', color: 'terminal-secondary', icon: '🏓', component: PongGame }
-  ]
-
   return (
     <div className="min-h-screen bg-terminal-bg pt-20 pb-12">
       <div className="max-w-7xl mx-auto px-4">
@@ -250,7 +245,7 @@ export default function MiniGames() {
               onClick={() => setActiveGame('snake')}
               className="bg-terminal-darker border-2 border-terminal-accent p-8 cursor-pointer hover:scale-105 transition-transform"
             >
-              <div className="text-6xl mb-4 text-center">🐍</div>
+              <Gamepad2 size={56} className="mx-auto mb-4 text-terminal-accent" aria-hidden="true" />
               <h3 className="text-2xl font-bold text-terminal-accent text-center mb-4">SNAKE</h3>
               <div className="text-center">
                 <div className="flex items-center justify-center gap-2 text-yellow-500 mb-2">
@@ -270,7 +265,7 @@ export default function MiniGames() {
               onClick={() => setActiveGame('pong')}
               className="bg-terminal-darker border-2 border-terminal-secondary p-8 cursor-pointer hover:scale-105 transition-transform"
             >
-              <div className="text-6xl mb-4 text-center">🏓</div>
+              <CircleDot size={56} className="mx-auto mb-4 text-terminal-secondary" aria-hidden="true" />
               <h3 className="text-2xl font-bold text-terminal-secondary text-center mb-4">PONG</h3>
               <div className="text-center">
                 <div className="flex items-center justify-center gap-2 text-yellow-500 mb-2">

@@ -1,7 +1,6 @@
-import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Maximize2, Minimize2, ExternalLink, Code } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { ExternalLink, Code, Monitor } from 'lucide-react'
 
 const DEMOS = [
   {
@@ -48,13 +47,24 @@ const DEMOS = [
   {
     id: 'takasla',
     title: 'Takaslat',
-    description: 'Swap items without money — a marketplace with AI-assisted suggestions and negotiation',
+    description: 'Swap items without money - a marketplace with AI-assisted suggestions and negotiation',
     tech: ['React', 'TypeScript', 'Node.js', 'AI'],
     url: 'https://takaslat.vercel.app',
     external: true,
     color: 'terminal-secondary',
     features: ['Item Listings', 'Match Score', 'Trust Badges', 'Chat Flow'],
     status: 'Live'
+  },
+  {
+    id: 'arfdao',
+    title: 'ArfDAO',
+    description: 'Bilingual website built for an interdisciplinary developer community',
+    tech: ['JavaScript', 'Responsive UI', 'i18n'],
+    url: 'https://arfdao.dev',
+    external: true,
+    color: 'terminal-text',
+    features: ['Turkish and English', 'Community Projects', 'Event Showcase', 'Live Domain'],
+    status: 'Live Site'
   }
 ]
 
@@ -63,8 +73,9 @@ export default function LiveProjectDemos() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold text-terminal-text neon-glow">
-            🎮 Live Project Demos
+          <h2 className="flex items-center gap-3 text-3xl font-bold text-terminal-text neon-glow">
+            <Monitor size={30} />
+            Live Projects
           </h2>
           <p className="text-sm text-gray-500 mt-1">
             Interactive simulations running in real-time
