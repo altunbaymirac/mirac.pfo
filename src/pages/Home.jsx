@@ -66,12 +66,12 @@ export default function Home() {
       stats: ['Production', 'Responsive', 'Client Project']
     },
     {
-      name: 'Arfdaon',
+      name: 'Arfdao',
       tag: 'Client Website',
-      description: 'Arfdaon için hazırlanan modern ve responsive web sitesi.',
-      descriptionEn: 'A modern, responsive website built for Arfdaon.',
+      description: 'Arfdao topluluğu için hazırlanan modern ve responsive web sitesi.',
+      descriptionEn: 'A modern, responsive website built for the Arfdao community.',
       color: 'terminal-text',
-      link: 'https://arfdaon.com',
+      link: 'https://arfdao.dev',
       external: true,
       stats: ['Live Site', 'Responsive', 'Client Project']
     },
