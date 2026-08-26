@@ -10,7 +10,7 @@ export const translations = {
     },
     home: {
       subtitle: 'Engineering Student',
-      bio: 'I am a Mechanical Engineering student at AGÜ, currently interning at Altuntas Machinery and building practical web, simulation, and engineering projects.',
+      bio: 'I am a first-year Mechanical Engineering student at AGÜ, building practical web, simulation, and engineering projects while learning through real work.',
       btnProjects: 'VIEW PROJECTS',
       btnContact: 'CONTACT',
       featuredTitle: 'Featured Projects',
@@ -60,7 +60,7 @@ export const translations = {
     },
     home: {
       subtitle: 'Engineering Student',
-      bio: 'AGÜ Makine Mühendisliği öğrencisiyim. Altuntas Machinery stajımın yanında web, simülasyon ve mühendislik projeleri geliştirerek fikirleri çalışan ürünlere dönüştürüyorum.',
+      bio: 'AGÜ Makine Mühendisliği 1. sınıf öğrencisiyim. Web, simülasyon ve mühendislik projeleri geliştirerek öğreniyor; fikirleri çalışan ürünlere dönüştürmeye odaklanıyorum.',
       btnProjects: 'PROJELERİ GÖR',
       btnContact: 'İLETİŞİM',
       featuredTitle: 'Öne Çıkan Projeler',
