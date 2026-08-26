@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Users, Wifi } from 'lucide-react'
+import { Users } from 'lucide-react'
 import { useVisitorCounter } from '../utils/firebase'
 import { useLanguage } from '../contexts/LanguageContext'
 
@@ -7,8 +7,8 @@ export default function VisitorCounter({ embedded = false }) {
   const { count, loading } = useVisitorCounter()
   const { lang } = useLanguage()
   const copy = lang === 'en'
-    ? { title: 'Visitor Analytics', subtitle: 'Live visitor count', loading: 'Loading...', total: 'Total Visitors', info: 'Firebase Realtime DB · Privacy-friendly · Live' }
-    : { title: 'Ziyaretçi Analitiği', subtitle: 'Canlı ziyaretçi sayısı', loading: 'Yükleniyor...', total: 'Toplam Ziyaretçi', info: 'Firebase Realtime DB · Gizlilik odaklı · Canlı' }
+    ? { title: 'Visitor Analytics', subtitle: 'Live visitor count', loading: 'Loading...', total: 'Total Visitors' }
+    : { title: 'Ziyaretçi Analitiği', subtitle: 'Canlı ziyaretçi sayısı', loading: 'Yükleniyor...', total: 'Toplam Ziyaretçi' }
 
   return (
     <section id="analytics" className={embedded ? 'py-20 px-4' : 'min-h-screen pt-24 px-4 pb-12'}>
@@ -49,12 +49,6 @@ export default function VisitorCounter({ embedded = false }) {
               {copy.total}
             </p>
           </motion.div>
-
-          {/* Info */}
-          <div className="bg-terminal-bg border-2 border-terminal-secondary p-5 inline-flex items-center gap-3">
-            <Wifi className="text-terminal-secondary shrink-0" size={20} />
-            <span className="text-sm text-gray-400 font-mono">{copy.info}</span>
-          </div>
         </motion.div>
       </div>
     </section>
