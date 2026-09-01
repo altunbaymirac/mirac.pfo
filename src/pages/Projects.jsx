@@ -25,7 +25,7 @@ const PROJECTS = [
     color: 'terminal-secondary'
   },
   {
-    title: 'GeoSocial',
+    title: 'Puls',
     type: 'Mobile App',
     description: 'Konum tabanlı sosyal ağ fikri için React Native tarzı interaktif demo.',
     descriptionEn: 'An interactive React Native style demo of a location-based social network.',

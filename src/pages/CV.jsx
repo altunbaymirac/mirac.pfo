@@ -95,7 +95,7 @@ const CV_CONTENT = {
         links: [{ label: 'arfdao.dev', href: 'https://arfdao.dev', external: true }]
       },
       {
-        title: 'GeoSocial | Konuma Dayalı Sosyal Ağ',
+        title: 'Puls | Konuma Dayalı Sosyal Ağ',
         date: '2025 - Devam ediyor',
         details: [
           'Konum tabanlı sosyal uygulamanın veri katmanını ve mobil ürün akışlarını geliştirdim.',
@@ -213,7 +213,7 @@ const CV_CONTENT = {
         links: [{ label: 'arfdao.dev', href: 'https://arfdao.dev', external: true }]
       },
       {
-        title: 'GeoSocial | Location-Based Social Network',
+        title: 'Puls | Location-Based Social Network',
         date: '2025 - Present',
         details: [
           'Developed the data layer and mobile product flows for a location-based social application.',

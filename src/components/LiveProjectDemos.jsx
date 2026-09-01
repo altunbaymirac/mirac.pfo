@@ -25,7 +25,7 @@ const DEMOS = [
   },
   {
     id: 'geosocial',
-    title: 'GeoSocial Mobile App',
+    title: 'Puls Mobile App',
     description: 'Location-based social network with real-time GPS tracking',
     tech: ['React Native', 'Firebase', 'GPS'],
     url: '/demos/geosocial',

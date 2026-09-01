@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { MapPin, Users, Zap, TrendingUp, Clock, Heart, MessageCircle, Navigation, Home, Search, Plus } from 'lucide-react'
+import { MapPin, Users, Zap, TrendingUp, Heart, MessageCircle, Navigation, Home, Search, Plus, Download, ShieldCheck } from 'lucide-react'
+
+const ANDROID_APK_URL = 'https://github.com/altunbaymirac/mirac.pfo/releases/download/puls-v0.1.0/puls-android.apk'
 
 export default function GeoSocialDemo() {
   const [currentLocation, setCurrentLocation] = useState({ lat: 38.7225, lng: 35.4864, name: 'AGÜ Kampüs' })
@@ -46,7 +48,7 @@ export default function GeoSocialDemo() {
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-4xl md:text-5xl font-bold text-white neon-glow mb-4">
-            GeoSocial App
+            Puls App
           </h1>
           <p className="text-gray-300 text-lg">
             Location-Based Social Network • React Native + Firebase
@@ -78,7 +80,7 @@ export default function GeoSocialDemo() {
                   <div className="bg-gradient-to-r from-purple-600 to-blue-600 p-4 text-white">
                     <h2 className="text-xl font-bold flex items-center gap-2">
                       <MapPin size={24} />
-                      GeoSocial
+                      Puls
                     </h2>
                     <p className="text-xs text-white/80 flex items-center gap-2">
                       <Navigation size={12} />
@@ -331,10 +333,44 @@ export default function GeoSocialDemo() {
 
           {/* Info Panel */}
           <div className="space-y-6">
+            <div className="bg-gradient-to-br from-purple-500/20 to-blue-500/20 backdrop-blur-sm border border-purple-300/40 rounded-xl p-6 shadow-xl">
+              <div className="flex items-start gap-4">
+                <div className="shrink-0 rounded-xl bg-white/10 p-3 text-purple-200">
+                  <Download size={28} />
+                </div>
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-purple-200">
+                    Android test build
+                  </p>
+                  <h3 className="mt-1 text-2xl font-bold text-white">Try Puls on your phone</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-gray-300">
+                    Download the Expo-built APK and explore Puls on a physical Android device.
+                  </p>
+                </div>
+              </div>
+
+              <a
+                href={ANDROID_APK_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-purple-500 to-blue-500 px-5 py-3 font-bold text-white shadow-lg transition hover:from-purple-400 hover:to-blue-400 focus:outline-none focus:ring-2 focus:ring-purple-300"
+              >
+                <Download size={19} />
+                Download Android APK
+              </a>
+
+              <div className="mt-4 flex items-start gap-2 text-xs leading-relaxed text-gray-400">
+                <ShieldCheck size={16} className="mt-0.5 shrink-0 text-green-400" />
+                <p>
+                  Prototype build · Approx. 119 MB. Android may ask you to allow installation from your browser.
+                </p>
+              </div>
+            </div>
+
             <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6">
               <h3 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
                 <MapPin size={24} />
-                About GeoSocial
+                About Puls
               </h3>
               <p className="text-gray-300 mb-4">
                 Location-based social networking app built with React Native, Firebase, and real-time GPS tracking.

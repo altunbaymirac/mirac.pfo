@@ -13,8 +13,8 @@ const RESPONSES_TR = {
   projects: {
     concreteweb: "ConcreteWeb: Building-level LoRa HUB mesh and rescue triage simulation. Beacons are registered to rooms during installation and do not report GPS. /demos/concreteweb has the live demo.",
     dce: "DCE-SOFC: Amonyak yakıtlı hibrid deniz taşıtı. Sıfır CO₂ emisyonu! Arrhenius kimyası ve yakıt hücresi teknolojisi. /demos/dce-sofc'de simülasyon var!",
-    geosocial: "GeoSocial: Lokasyon tabanlı sosyal network. React Native + Firebase. GPS tracking ve check-in sistemi. /demos/geosocial'da mockup var!",
-    all: "Mirac 3 büyük proje üzerinde çalışıyor:\n\n1. ConcreteWeb - Acil durum LoRa sistemi\n2. DCE-SOFC - Amonyak hibrid motor\n3. GeoSocial - Lokasyon sosyal app\n\nHangisi hakkında detay istersin?"
+    geosocial: "Puls: Lokasyon tabanlı sosyal network. React Native + Firebase. GPS tracking ve check-in sistemi. /demos/geosocial'da mockup var!",
+    all: "Mirac 3 büyük proje üzerinde çalışıyor:\n\n1. ConcreteWeb - Acil durum LoRa sistemi\n2. DCE-SOFC - Amonyak hibrid motor\n3. Puls - Lokasyon sosyal app\n\nHangisi hakkında detay istersin?"
   },
   
   education: "Mirac, Abdullah Gül Üniversitesi (AGÜ) Makine Mühendisliği öğrencisi ve şu anda Altuntas Machinery'de staj yapıyor.",
@@ -33,7 +33,7 @@ const RESPONSES_TR = {
     "Anlamadım. 'help' yaz, sana yardımcı olayım!"
   ],
   
-  help: "Şunları sorabilirsin:\n\n• 'projeler' - ConcreteWeb, DCE, GeoSocial\n• 'concreteweb' - ConcreteWeb projesi detay\n• 'eğitim' veya 'okul' - Üniversite bilgisi\n• 'iletişim' - Email, sosyal medya\n• 'beceriler' veya 'skills' - Teknik yetenekler\n• 'oyunlar' - Mini games\n• 'cv' - CV sayfası"
+  help: "Şunları sorabilirsin:\n\n• 'projeler' - ConcreteWeb, DCE, Puls\n• 'concreteweb' - ConcreteWeb projesi detay\n• 'eğitim' veya 'okul' - Üniversite bilgisi\n• 'iletişim' - Email, sosyal medya\n• 'beceriler' veya 'skills' - Teknik yetenekler\n• 'oyunlar' - Mini games\n• 'cv' - CV sayfası"
 }
 
 const RESPONSES_EN = {
@@ -46,8 +46,8 @@ const RESPONSES_EN = {
   projects: {
     concreteweb: "ConcreteWeb: Building-level LoRa HUB mesh and rescue triage simulation. Beacons are registered to rooms during installation and do not report GPS. /demos/concreteweb has the live demo.",
     dce: "DCE-SOFC: An ammonia-fuelled hybrid marine vessel. Zero CO₂ emissions! Arrhenius chemistry and fuel cell technology. There's a simulation at /demos/dce-sofc!",
-    geosocial: "GeoSocial: A location-based social network. React Native + Firebase, with GPS tracking and a check-in system. There's a mockup at /demos/geosocial!",
-    all: "Mirac is working on 3 major projects:\n\n1. ConcreteWeb - emergency LoRa system\n2. DCE-SOFC - ammonia hybrid engine\n3. GeoSocial - location-based social app\n\nWhich one would you like to hear more about?"
+    geosocial: "Puls: A location-based social network. React Native + Firebase, with GPS tracking and a check-in system. There's a mockup at /demos/geosocial!",
+    all: "Mirac is working on 3 major projects:\n\n1. ConcreteWeb - emergency LoRa system\n2. DCE-SOFC - ammonia hybrid engine\n3. Puls - location-based social app\n\nWhich one would you like to hear more about?"
   },
 
   education: "Mirac is a Mechanical Engineering student at Abdullah Gül University (AGÜ) and is currently interning at Altuntas Machinery.",
@@ -66,7 +66,7 @@ const RESPONSES_EN = {
     "I didn't understand. Type 'help' and I'll show you what I can do!"
   ],
 
-  help: "You can ask me about:\n\n• 'projects' - ConcreteWeb, DCE, GeoSocial\n• 'concreteweb' - ConcreteWeb project details\n• 'education' or 'school' - university info\n• 'contact' - email, social media\n• 'skills' - technical abilities\n• 'games' - mini games\n• 'cv' - CV page"
+  help: "You can ask me about:\n\n• 'projects' - ConcreteWeb, DCE, Puls\n• 'concreteweb' - ConcreteWeb project details\n• 'education' or 'school' - university info\n• 'contact' - email, social media\n• 'skills' - technical abilities\n• 'games' - mini games\n• 'cv' - CV page"
 }
 
 const UI = {
@@ -108,7 +108,7 @@ const getResponse = (message, lang = 'tr') => {
   if (/(dce|sofc|amonyak|ammonia|yakıt|fuel|hibrid)/i.test(msg)) {
     return RESPONSES.projects.dce
   }
-  if (/(geosocial|geo|gps|lokasyon|location|harita)/i.test(msg)) {
+  if (/(puls|geosocial|geo|gps|lokasyon|location|harita)/i.test(msg)) {
     return RESPONSES.projects.geosocial
   }
   if (/(proje|project|çalışma|work)/i.test(msg)) {

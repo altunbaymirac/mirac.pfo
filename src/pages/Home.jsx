@@ -77,7 +77,7 @@ export default function Home() {
       stats: ['Live Site', 'Responsive', 'Client Project']
     },
     {
-      name: 'GeoSocial',
+      name: 'Puls',
       tag: 'Mobile App',
       description: 'Konuma dayalı sosyal ağ. React Native ile yaptım, GPS tracking ve gamification var',
       descriptionEn: 'A location-based social network built with React Native, with GPS tracking and gamification',
